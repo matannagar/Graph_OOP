@@ -1,8 +1,6 @@
 package ex1;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 
 public class WGraph_Algo implements weighted_graph_algorithms {
@@ -90,7 +88,22 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     @Override
     public boolean save(String file) {
+        System.out.println("Starting serialize to "+ file + "\n");
         try {
+            FileOutputStream fileOutput = new FileOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(fileOutput);
+            out.writeObject((WGraph_DS)getGraph());
+            out.close();
+            fileOutput.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        System.out.println("Serialized data is saved in "+ file);
+        return true;
+
+        /*try {
             File f = new File(file);
             if (!f.exists()) {
                 f.createNewFile();
@@ -102,16 +115,16 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        /*else {
+        else {
             throw new RuntimeException("save should not rewrite on existing file. Do choose a new log file name");
-        }*/
-        return false;
+        }
+        return false*/
+
 }
 
     @Override
     public boolean load(String file) {
-        try{
+        /*try{
             Scanner x = new Scanner(new File (file));
             while (x.hasNext()){
                 String a= x.next();
@@ -120,12 +133,21 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         }
         catch (Exception e){
             System.out.println("Couldn't find the file");
+        } return false;*/
+        try {
+            System.out.println("start" + "\n");
+            FileInputStream fileIn = new FileInputStream(file);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            weighted_graph wgraph = (WGraph_DS) in.readObject();
+            in.close();
+            fileIn.close();
+            init(wgraph);
+            System.out.println("end");
+        } catch (Exception i) {
+            i.printStackTrace();
+            return false;
         }
-
-
-
-
-        return false;
+        return true;
     }
 
     private int bfsInt(int key) {

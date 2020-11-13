@@ -2,9 +2,16 @@ package ex1;
 
 import org.junit.jupiter.api.BeforeEach;
 
+import java.util.*;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,13 +89,13 @@ class WGraph_DSTest {
         g.connect(3, 1, 3.4);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getNode() {
         assertEquals(g.getNode(10), null);
         assertEquals(g.getNode(3), g.getNode(3));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void hasEdge() {
         assertEquals(false, g.hasEdge(1, 20));
         assertEquals(true, g.hasEdge(2, 1));
@@ -99,7 +106,7 @@ class WGraph_DSTest {
         assertEquals(false, g.hasEdge(2, 1));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getEdge() {
         assertEquals(0.1, g.getEdge(1, 2));
         assertEquals(-1, g.getEdge(1, 0));
@@ -113,12 +120,12 @@ class WGraph_DSTest {
         g.addNode(10);
         g.addNode(11);
         g.addNode(12);
-        g.connect(10,11,1.2);
-        g.connect(11,12,1.2);
-        assertEquals(g.getEdge(10,11),g.getEdge(11,12));
+        g.connect(10, 11, 1.2);
+        g.connect(11, 12, 1.2);
+        assertEquals(g.getEdge(10, 11), g.getEdge(11, 12));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void addNode() {
         int a = g.getMC();
         Collection c = g.getV(4);
@@ -131,7 +138,7 @@ class WGraph_DSTest {
         assertEquals(s + 1, g.nodeSize());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void connect() {
         int a = g.getMC();
         int s = g.edgeSize();
@@ -147,13 +154,13 @@ class WGraph_DSTest {
         try {
             g.connect(0, 2, -3);
             //check that we don't go in and throw Exception.
-            assertEquals(true, -1>0);
+            assertEquals(true, -1 > 0);
         } catch (Exception e) {
             assertEquals(1, 1);
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getV() {
         weighted_graph g10 = new WGraph_DS();
         assertEquals(true, g10.getV().isEmpty());
@@ -169,7 +176,7 @@ class WGraph_DSTest {
         assertEquals("[0, 2, 3, 4, 5, 10]", g.getV().toString());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void GetVKey() {
         assertEquals(g.getV(10), null);
         assertEquals(g.getV(3).toString(), "[1, 4]");
@@ -177,7 +184,7 @@ class WGraph_DSTest {
         assertEquals(g.getV(3).toString(), "[0, 1, 4]");
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void removeNode() {
         int m = g.getMC();
         g.removeNode(4);
@@ -191,13 +198,13 @@ class WGraph_DSTest {
         m = g.getMC();
         assertEquals(n, g.removeNode(0));
         assertEquals(m + 1, g.getMC());
-        for(int i=1; i<=4; i++){
+        for (int i = 1; i <= 4; i++) {
             g.removeNode(i);
         }
-        assertEquals(0,g.nodeSize());
+        assertEquals(0, g.nodeSize());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void removeEdge() {
         int m = g.getMC();
         int s = g.edgeSize();
@@ -219,7 +226,7 @@ class WGraph_DSTest {
         assertEquals(s - 1, g.edgeSize());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void nodeSize() {
         weighted_graph g1 = new WGraph_DS();
         assertEquals(0, g1.nodeSize());
@@ -236,7 +243,7 @@ class WGraph_DSTest {
         assertEquals(s - 1, g.nodeSize());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void edgeSize() {
         weighted_graph g1 = new WGraph_DS();
         assertEquals(0, g1.edgeSize());
@@ -257,7 +264,7 @@ class WGraph_DSTest {
         assertEquals(s - 2, g.edgeSize());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getMC() {
         weighted_graph g1 = new WGraph_DS();
         assertEquals(0, g1.getMC());
@@ -275,5 +282,37 @@ class WGraph_DSTest {
         assertEquals(m, g.getMC());
         g.removeEdge(4, 5);
         assertEquals(m, g.getMC());
+    }
+
+    @Test
+    void runTime() {
+        long start = new Date().getTime();
+
+        weighted_graph gr = new WGraph_DS();
+        double w = 0.1;
+
+        for (int i = 0; i < 1000000; i++) {
+            gr.addNode(i);
+        }
+        for (int i = 0, j = 1; i < 1000000; i++, w++) {
+            gr.connect(i, j, w);
+            gr.connect(0, j, w);
+            gr.connect(1, i, w);
+            gr.connect(2, j, w);
+            gr.connect(3, i, w);
+            gr.connect(4, j, w);
+            gr.connect(5, i, w);
+            gr.connect(6, j, w);
+            gr.connect(7, i, w);
+            gr.connect(8, j, w);
+            gr.connect(9, i, w);
+            gr.connect(10, j, w);
+            j += 2;
+        }
+        long end = new Date().getTime();
+        double dt = (end - start) / 1000.0;
+        System.out.println("runTime " + dt);
+        System.out.println("\n edges " + gr.edgeSize());
+        System.out.println("\n nodes " + gr.nodeSize());
     }
 }

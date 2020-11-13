@@ -1,6 +1,7 @@
 package ex1;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class main {
@@ -110,9 +111,11 @@ public class main {
         System.out.println(g0.getGraph());
         weighted_graph g3= g0.copy();
         System.out.println(g3);
+        System.out.println("equals "+g0.getGraph().equals(g3));
         g0.getGraph().removeEdge(5,6);
         System.out.println(g0.getGraph());
         System.out.println(g3);
+        System.out.println("Not equals "+g0.getGraph().equals(g3));
         //
 
 
@@ -125,7 +128,6 @@ public class main {
 
             while (x.hasNext()){
                 String a= x.next();
-                System.out.println(a);
             }
         }
         catch (Exception e){

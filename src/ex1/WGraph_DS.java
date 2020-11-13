@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class WGraph_DS implements weighted_graph {
+public class WGraph_DS implements weighted_graph, java.io.Serializable {
     private HashMap<Integer, node_info> nodes;
     private HashMap<String, Edge> edges;
     private int mc;
@@ -157,6 +157,17 @@ public class WGraph_DS implements weighted_graph {
         return mc;
     }
 
+    @Override
+    public boolean equals(Object o){
+        if(!(o instanceof WGraph_DS)) return false;
+        if(getMC()!=((WGraph_DS) o).getMC()) return false;
+        HashMap n= ((WGraph_DS) o).nodes;
+        if(!(nodes.equals(n))) return false;
+        HashMap e= ((WGraph_DS) o).edges;
+        if(!(edges.equals(e))) return false;
+        return true;
+    }
+
     private String getPair(int node1, int node2) {
         if (node1 < node2)
             return String.valueOf(node1) + "," + String.valueOf(node2);
@@ -173,7 +184,7 @@ public class WGraph_DS implements weighted_graph {
     }
 
     //Node_Info class
-    private class Node_Info implements node_info {
+    private class Node_Info implements node_info, java.io.Serializable {
         private int idNode;
         private HashMap<Integer, node_info> neighbor;
         private String info;
@@ -230,10 +241,22 @@ public class WGraph_DS implements weighted_graph {
         public String toString() {
             return "" + idNode;
         }
+
+
+        @Override
+        public boolean equals(Object o){
+            if(!(o instanceof node_info)) return false;
+            int k= ((node_info)o).getKey();
+            if(getKey()!=k) return false;
+            if(!(getV(getKey()).equals(getV(k))))return false;
+            if(getTag()!=((node_info) o).getTag()) return false;
+            if(!(getInfo().equals(((node_info) o).getInfo()))) return false;
+            return true;
+        }
     }
 
     //Edge class
-    private class Edge {
+    private class Edge implements java.io.Serializable{
 
         private String pair;
         private double weight;
@@ -244,6 +267,14 @@ public class WGraph_DS implements weighted_graph {
         }
         public void setWeight(double w){
             this.weight=w;
+        }
+
+        @Override
+        public boolean equals(Object o){
+            if(!(o instanceof Edge)) return false;
+            if(weight!=((Edge)o).weight) return false;
+            if(!(pair.equals(((Edge)o).pair))) return false;
+            return true;
         }
 
         @Override
