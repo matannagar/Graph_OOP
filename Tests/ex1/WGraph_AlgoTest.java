@@ -161,7 +161,7 @@ class WGraph_AlgoTest {
         assertEquals(l, li);
 
 
-        //new graph
+        //new graph g4
         g.init(g4);
 
         l = new LinkedList<node_info>();
