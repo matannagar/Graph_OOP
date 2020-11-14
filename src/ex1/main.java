@@ -54,6 +54,8 @@ public class main {
         System.out.println(g);
         System.out.println(g0.shortestPathDist(2,6));
 
+
+        System.out.println("\t\thereeeee");
         WGraph_DS g1 = new WGraph_DS();
         g1.addNode(1);
         g1.addNode(2);
@@ -98,6 +100,7 @@ public class main {
         g2.connect(4,6,10.1);
         g2.connect(5,6,15.1);
         System.out.println(g2);
+
         System.out.println("1,2: "+g0.shortestPathDist(1,2));
         System.out.println("1,3: "+g0.shortestPathDist(1,3));
         System.out.println("1,4: "+g0.shortestPathDist(1,4));
