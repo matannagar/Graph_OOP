@@ -15,7 +15,8 @@ class WGraph_AlgoTest {
 
     @BeforeEach
     void generateGraph() {
-        g = new WGraph_Algo();
+        g = new WGraph_Algo(); 
+        //new graph g1
         g1 = new WGraph_DS();
         for (int i = 0; i < 5; i++)
             g1.addNode(i);
@@ -24,7 +25,7 @@ class WGraph_AlgoTest {
         g1.connect(4, 1, 2.3);
         g1.connect(3, 1, 3.4);
 
-        // new graph
+        // new graph g2
         g2 = new WGraph_DS();
         for (int i = 0; i < 5; i++)
             g2.addNode(i);
@@ -33,7 +34,7 @@ class WGraph_AlgoTest {
         g2.connect(1, 3, 1.2);
         g2.connect(1, 4, 2.3);
 
-        //new graph
+        //new graph g3
         g3 = new WGraph_DS();
         for (int i = 1; i < 7; i++)
             g3.addNode(i);
@@ -47,7 +48,7 @@ class WGraph_AlgoTest {
         g3.connect(4, 6, 10.1);
         g3.connect(5, 6, 15.1);
 
-        //new graph
+        //new graph g4
         g4 = new WGraph_DS();
         for (int i = 1; i < 6; i++)
             g4.addNode(i);
