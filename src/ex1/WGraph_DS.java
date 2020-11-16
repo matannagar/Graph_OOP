@@ -90,7 +90,7 @@ public class WGraph_DS implements weighted_graph, java.io.Serializable {
 
     /**
      * Add a new node to the graph with the given key.
-     * */
+     */
     @Override
     public void addNode(int key) {
         if(nodes.containsKey(key)) return;
@@ -182,11 +182,10 @@ public class WGraph_DS implements weighted_graph, java.io.Serializable {
     }
 
     /**
-     * Delete the edge from the graph between the vertexes,
+     * Delete the edge from the graph between the vertexes.
      *
      * @param node1
      * @param node2
-     * @return the data of the removed edge (null if none).
      */
     @Override
     public void removeEdge(int node1, int node2) {
@@ -368,6 +367,7 @@ public class WGraph_DS implements weighted_graph, java.io.Serializable {
             this.weight = w;
             pair=getPair(node1,node2);
         }
+
         public void setWeight(double w){
             this.weight=w;
         }

@@ -8,64 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Date;
 
 public class RunTimeTest {
-
-    /*private static Random rnd_n = null;
-    private static Random rnd_e = null;
-
-    public static weighted_graph graph_create(int v_size, int e_size, int seed_n, int seed_e) {
-        weighted_graph g = new WGraph_DS();
-        rnd_n = new Random(seed_n);
-        rnd_e = new Random(seed_e);
-
-        for (int i = 0; i < v_size; i++) {
-            g.addNode(i);
-        }
-
-        int[] nodes = nodes(g);
-        while (g.edgeSize() < e_size) {
-            int a = nextRnd(0, v_size);
-            int b = nextRnd(0, v_size);
-            int i = nodes[a];
-            int j = nodes[b];
-
-            double w = nextRndE(0, 200);
-            g.connect(i, j, w);
-        }
-        return g;
-    }
-
-    private static int nextRnd(int min, int max) {
-        double v = nextRnd(0.0 + min, (double) max);
-        int ans = (int) v;
-        return ans;
-    }
-
-    private static double nextRnd(double min, double max) {
-        double d = rnd_n.nextDouble();
-        double dx = max - min;
-        double ans = d * dx + min;
-        return ans;
-    }
-
-    private static double nextRndE(double min, double max) {
-        double d = rnd_e.nextDouble();
-        double dx = max - min;
-        double ans = d * dx + min;
-        return ans;
-    }
-
-    private static int[] nodes(weighted_graph g) {
-        int size = g.nodeSize();
-        Collection<node_info> V = g.getV();
-        node_info[] nodes = new node_info[size];
-        V.toArray(nodes);
-        int[] ans = new int[size];
-        for (int i = 0; i < size; i++) {
-            ans[i] = nodes[i].getKey();
-        }
-        Arrays.sort(ans);
-        return ans;
-    }*/
+    
     @Test
     void runTime1000000() {
         long start = new Date().getTime();

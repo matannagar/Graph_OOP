@@ -5,13 +5,13 @@ import java.util.*;
 
 /**
  * This class represents an Undirected (positive) Weighted Graph Theory algorithms including:
- * 0. clone(); (copy)
- * 1. init(graph);
- * 2. isConnected();
- * 3. double shortestPathDist(int src, int dest);
- * 4. List<node_data> shortestPath(int src, int dest);
- * 5. Save(file);
- * 6. Load(file);
+ *      0. clone();
+ *      1. init(graph);
+ *      2. isConnected();
+ *      3. double shortestPathDist(int src, int dest);
+ *      4. List<node_data> shortestPath(int src, int dest);
+ *      5. Save(file);
+ *      6. Load(file);
  *
  * @param: gr- a graph on which We'll operates the algorithms.
  *
@@ -58,6 +58,15 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     /**
      * Returns true if and only if there is a valid path from EVREY node to each other node.
+     *
+     * this method based on BFS Algorithm.
+     * We use the private function- bfsInt-
+     * that will return the number of times we changed the vertex info,
+     * and thus we will know if during the iterations we went over the amount of vertices that exist in the graph.
+     *
+     * In this operation, of comparing the counter with the number of vertices in the graph -
+     * we saved another pass over all the vertices in the graph.
+     *
      * @return
      */
     @Override
@@ -87,7 +96,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
      * This method based on Dijkstra Algorithm.
      * The data of this algorithm will save in a temporal Node-
      * 1. The shortest weight from the source vertex to this vertex.
-     * 2. The vertex neighbor that connect this vertex and through him this value of weight accepted.
+     * 2. The vertex neighbor that connect this vertex and update him this value of weight accepted.
      *
      */
     @Override
@@ -105,6 +114,24 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return temp.get(dest).tag;
     }
 
+    /**
+     * returns the the shortest path between src to dest - as an ordered List of nodes:
+     * src--> n1-->n2-->...dest
+     *
+     * Note if no such path --> returns null;
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     *
+     *
+     * This method based on Dijkstra Algorithm.
+     * We use the private function- dij- that will return a HashMap.
+     *
+     * In this HasMap, the data of this algorithm will save in a temporal Node- contains:
+     *      1. The shortest weight from the source vertex to this vertex.
+     *      2. The vertex neighbor that connect this vertex and update him this value of weight accepted.
+     *
+     */
     @Override
     public List<node_info> shortestPath(int src, int dest) {
         if (gr == null) return null;
@@ -122,7 +149,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
         if (src == dest) return list;
 
-        // loop: check who is the "parent" node of each node.
+        // loop: check who is the "parent node" of each node.
 
         Node_Temp nt, parent;
 
@@ -135,6 +162,13 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return list;
     }
 
+    /**
+     * Saves this weighted (undirected) graph to the given file name.
+     *
+     * @param file - the file name (may include a relative path).
+     * @return true - if the file was successfully saved
+     *
+     */
     @Override
     public boolean save(String file) {
         System.out.println("Starting serialize to " + file + "\n");
@@ -154,6 +188,15 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     }
 
+    /**
+     * This method load a graph to this graph algorithm.
+     * if the file was successfully loaded - the underlying graph
+     * of this class will be changed (to the loaded one), in case the
+     * graph was not loaded the original graph should remain "as is".
+     *
+     * @param file - file name
+     * @return true - if the graph was successfully loaded.
+     */
     @Override
     public boolean load(String file) {
 
@@ -173,6 +216,18 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return true;
     }
 
+    /**
+     * bfsInt will pass over the nodes.
+     *
+     * @Return how many nodes we marked- then we will know if we pass all the nodes in the graph.
+     *
+     * The function receives a vertex key from which we will perform the test on the graph connected test.
+     * During the test we will mark the vertices in the graph in the "info" that each vertex holds.
+     * At the end we will return the number of times we changed the vertex info,
+     * and thus we will know if during the iterations we went over the amount of vertices that exist in the graph.
+     * In this operation, of comparing the counter with the number of vertices in the graph -
+     * we saved another pass over all the vertices in the graph - in a loop of o(v) where v is the number of vertices in the graph.
+     */
     private int bfsInt(int key) {
 
         //reset info&tag
@@ -217,6 +272,25 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return count;
     }
 
+    /**
+     * This algorithm based on Dijkstra Algorithm.
+     *
+     * The data of this algorithm will save in a temporal Node-
+     *      1. tag- The shortest weight from the source vertex to this vertex.
+     *      2. parent- The vertex neighbor that connect this vertex and update him this value of weight accepted.
+     *      (By default the vertex tag contains Max_Value_Int and the vertex parent points as a vertex with key -1).
+     *
+     * The function goes through all the neighbors of the source vertex and does them "weight relief" if necessary-
+     * that is, if we have reached a vertex whose weight can be reduced relative to its current weight,
+     * we will update the information contained the temporal vertex.
+     *
+     *
+     * The implementation of the algorithm is done by a priority queue,
+     * which is implementation by a function of comparing the weights (tag) of the temporal vertexes in the queue.
+     *
+     * @return a HashMap with all the temporal vertexes respectively-
+     * so that we can retrieve the information about each vertex in the most efficient and convenient way.
+     */
     private HashMap<Integer, Node_Temp> dij(int src, int dest) {
 
         HashMap<Integer, Node_Temp> temp = new HashMap<>();
@@ -264,6 +338,11 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return temp;
     }
 
+    /**
+     * Node_Temp class
+     *
+     * this class will help implement Dijkstra Algorithm.
+     * */
     private class Node_Temp {
         private int idNode;
         private int visit;

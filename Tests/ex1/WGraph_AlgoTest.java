@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class WGraph_AlgoTest {
 
     private static weighted_graph_algorithms g;
-    private static weighted_graph g1, g2, g3, g4;
+    private static weighted_graph g1, g2, g3, g4, g5;
 
     @BeforeEach
     void generateGraph() {
@@ -58,6 +58,14 @@ class WGraph_AlgoTest {
         g4.connect(2, 5, 3.1);
         g4.connect(2, 4, 12.1);
         g4.connect(4, 5, 2.1);
+
+        //new graph g5
+        g5 = new WGraph_DS();
+        for (int i = 0; i < 10; i++)
+            g5.addNode(i);
+        double w = 0.1;
+        for (int i = 1; i < 10; i++, w++)
+            g5.connect(0, i, w);
     }
 
     @Test
@@ -83,6 +91,8 @@ class WGraph_AlgoTest {
         assertEquals(true, g.getGraph().equals(g0));
         g.getGraph().removeEdge(1, 2);
         assertEquals(false, g.getGraph().equals(g0));
+        g.init(new WGraph_DS());
+        assertEquals(new WGraph_DS(),g.copy());
     }
 
     @Test
@@ -114,6 +124,12 @@ class WGraph_AlgoTest {
         assertTrue(g.isConnected());
         g1.addNode(0);
         assertTrue(g.isConnected());
+
+        //graph g5
+        g.init(g5);
+        assertTrue(g.isConnected());
+        g5.removeNode(0);
+        assertFalse(g.isConnected());
     }
 
     @Test
@@ -121,7 +137,7 @@ class WGraph_AlgoTest {
 
         g.init(g3);
 
-        assertEquals(20.299999999999997, g.shortestPathDist(1, 2));
+        assertEquals(20.3, g.shortestPathDist(1, 2),0.01);
         assertEquals(11.2, g.shortestPathDist(1, 3));
         assertEquals(9.1, g.shortestPathDist(1, 4));
         assertEquals(20.2, g.shortestPathDist(1, 5));
@@ -129,13 +145,21 @@ class WGraph_AlgoTest {
         assertEquals(0, g.shortestPathDist(1, 1));
         assertEquals(-1, g.shortestPathDist(8, 8));
 
-        //new graph
+        //new graph g4
         g.init(g4);
         assertEquals(5.1, g.shortestPathDist(1, 2));
         assertEquals(7.1, g.shortestPathDist(1, 3));
-        assertEquals(10.299999999999999, g.shortestPathDist(1, 4));
+        assertEquals(10.3, g.shortestPathDist(1, 4),0.01);
         assertEquals(8.2, g.shortestPathDist(1, 5));
         assertEquals(-1, g.shortestPathDist(1, 8));
+
+        //new graph g5
+        g.init(g5);
+        assertEquals(8.1,g.shortestPathDist(0,9));
+        g5.connect(2,9,0.4);
+        assertEquals(1.5,g.shortestPathDist(0,9));
+        g5.removeNode(0);
+        assertEquals(-1,g.shortestPathDist(2,3));
     }
 
     @Test
@@ -193,14 +217,6 @@ class WGraph_AlgoTest {
     }
 
     @Test
-    void save() {
-    }
-
-    @Test
-    void load() {
-    }
-
-    @Test
     void equalSaveLoad() {
         g.init(g1);
         g.save("filename.ser");
@@ -210,5 +226,11 @@ class WGraph_AlgoTest {
         assertEquals(g.getGraph(), loaded);
         loaded.removeNode(1);
         assertNotEquals(g.getGraph(), loaded);
+        g.init(g2);
+        g.save("filename.ser");
+        algo.load("filename.ser");
+        loaded = algo.getGraph();
+        assertNotEquals(g1, loaded);
+        assertEquals(g.getGraph(), loaded);
     }
 }
