@@ -155,6 +155,35 @@ public class main {
         System.out.println(g0.shortestPath(0,2));
         //
 
+
+
+        /*try {
+            File f = new File(file);
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+            PrintWriter pw = new PrintWriter(f);
+            pw.print(gr);
+            pw.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        else {
+            throw new RuntimeException("save should not rewrite on existing file. Do choose a new log file name");
+        }
+        return false*/
+
+        /*try{
+            Scanner x = new Scanner(new File (file));
+            while (x.hasNext()){
+                String a= x.next();
+                String b= x.next();
+            }
+        }
+        catch (Exception e){
+            System.out.println("Couldn't find the file");
+        } return false;*/
     }
 
 }

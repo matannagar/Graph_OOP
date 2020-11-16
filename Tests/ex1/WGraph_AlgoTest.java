@@ -15,7 +15,7 @@ class WGraph_AlgoTest {
 
     @BeforeEach
     void generateGraph() {
-        g = new WGraph_Algo(); 
+        g = new WGraph_Algo();
         //new graph g1
         g1 = new WGraph_DS();
         for (int i = 0; i < 5; i++)

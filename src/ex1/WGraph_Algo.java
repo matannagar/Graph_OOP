@@ -3,6 +3,20 @@ package ex1;
 import java.io.*;
 import java.util.*;
 
+/**
+ * This class represents an Undirected (positive) Weighted Graph Theory algorithms including:
+ * 0. clone(); (copy)
+ * 1. init(graph);
+ * 2. isConnected();
+ * 3. double shortestPathDist(int src, int dest);
+ * 4. List<node_data> shortestPath(int src, int dest);
+ * 5. Save(file);
+ * 6. Load(file);
+ *
+ * @param: gr- a graph on which We'll operates the algorithms.
+ *
+ * @author Reut-Maslansky
+ */
 public class WGraph_Algo implements weighted_graph_algorithms {
     private weighted_graph gr;
 
@@ -13,24 +27,43 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         this.gr = new WGraph_DS();
     }
 
+    /**
+     * Init the graph on which this set of algorithms operates on.
+     * @param g
+     */
     @Override
     public void init(weighted_graph g) {
         this.gr = g;
     }
 
+    /**
+     * Return the underlying graph of which this class works.
+     * @return
+     */
     @Override
     public weighted_graph getGraph() {
         return gr;
     }
 
+    /**
+     * Compute a deep copy of this weighted graph.
+     * @return
+     */
     @Override
     public weighted_graph copy() {
+        if (gr == null) return null;
         weighted_graph g = new WGraph_DS(this.gr);
         return g;
     }
 
+    /**
+     * Returns true if and only if there is a valid path from EVREY node to each other node.
+     * @return
+     */
     @Override
     public boolean isConnected() {
+        if (gr == null) return false;
+
         //if graph contain N vertexes and less than N-1 edges the graph can't be connect.
         if (this.gr.edgeSize() < (this.gr.getV().size() - 1)) return false;
         if (this.gr.getV().size() < 2) return true;
@@ -43,8 +76,23 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return (count == gr.getV().size());
     }
 
+    /**
+     * Returns the length of the shortest path between src to dest
+     * if no such path, returns -1
+     *
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     *
+     * This method based on Dijkstra Algorithm.
+     * The data of this algorithm will save in a temporal Node-
+     * 1. The shortest weight from the source vertex to this vertex.
+     * 2. The vertex neighbor that connect this vertex and through him this value of weight accepted.
+     *
+     */
     @Override
     public double shortestPathDist(int src, int dest) {
+        if (gr == null) return -1;
         if (!(this.gr.getV().contains(gr.getNode(src))) || !(this.gr.getV().contains(gr.getNode(dest)))) return -1;
         if (src == dest) return 0;
 
@@ -59,6 +107,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     @Override
     public List<node_info> shortestPath(int src, int dest) {
+        if (gr == null) return null;
         if (!(this.gr.getV().contains(gr.getNode(src))) || !(this.gr.getV().contains(gr.getNode(dest)))) return null;
 
         HashMap<Integer, Node_Temp> temp = dij(src, dest);
@@ -88,11 +137,11 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     @Override
     public boolean save(String file) {
-        System.out.println("Starting serialize to "+ file + "\n");
+        System.out.println("Starting serialize to " + file + "\n");
         try {
             FileOutputStream fileOutput = new FileOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fileOutput);
-            out.writeObject((WGraph_DS)getGraph());
+            out.writeObject((WGraph_DS) getGraph());
             out.close();
             fileOutput.close();
 
@@ -100,40 +149,14 @@ public class WGraph_Algo implements weighted_graph_algorithms {
             e.printStackTrace();
             return false;
         }
-        System.out.println("Serialized data is saved in "+ file);
+        System.out.println("Serialized data is saved in " + file);
         return true;
 
-        /*try {
-            File f = new File(file);
-            if (!f.exists()) {
-                f.createNewFile();
-            }
-            PrintWriter pw = new PrintWriter(f);
-            pw.print(gr);
-            pw.close();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        else {
-            throw new RuntimeException("save should not rewrite on existing file. Do choose a new log file name");
-        }
-        return false*/
-
-}
+    }
 
     @Override
     public boolean load(String file) {
-        /*try{
-            Scanner x = new Scanner(new File (file));
-            while (x.hasNext()){
-                String a= x.next();
-                String b= x.next();
-            }
-        }
-        catch (Exception e){
-            System.out.println("Couldn't find the file");
-        } return false;*/
+
         try {
             System.out.println("start" + "\n");
             FileInputStream fileIn = new FileInputStream(file);
@@ -157,6 +180,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
             n.setInfo("");
             n.setTag(0);
         }
+
         // init counter
         // When we pass over a node we will do count++ and then we could check if we pass all the nodes.
         int count = 0;
@@ -240,27 +264,27 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return temp;
     }
 
-private class Node_Temp {
-    private int idNode;
-    private int visit;
-    private double tag;
-    private int parentId;
+    private class Node_Temp {
+        private int idNode;
+        private int visit;
+        private double tag;
+        private int parentId;
 
-    public Node_Temp(int key) {
-        this.idNode = key;
-        this.visit = 0;
-        this.tag = Integer.MAX_VALUE;
-        this.parentId = -1;
+        public Node_Temp(int key) {
+            this.idNode = key;
+            this.visit = 0;
+            this.tag = Integer.MAX_VALUE;
+            this.parentId = -1;
+        }
     }
-}
 
-private class NodeComparator implements Comparator<Node_Temp> {
-    public int compare(Node_Temp n1, Node_Temp n2) {
-        if (n1.tag < n2.tag)
-            return -1;
-        else if (n1.tag > n2.tag)
-            return 1;
-        return 0;
+    private class NodeComparator implements Comparator<Node_Temp> {
+        public int compare(Node_Temp n1, Node_Temp n2) {
+            if (n1.tag < n2.tag)
+                return -1;
+            else if (n1.tag > n2.tag)
+                return 1;
+            return 0;
+        }
     }
-}
 }

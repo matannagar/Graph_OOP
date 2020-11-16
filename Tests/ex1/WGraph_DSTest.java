@@ -2,81 +2,15 @@ package ex1;
 
 import org.junit.jupiter.api.BeforeEach;
 
-import java.util.*;
-
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class WGraph_DSTest {
 
     private static weighted_graph g;
-
-    /*private static Random rnd_n = null;
-    private static Random rnd_e = null;
-
-    public static weighted_graph graph_create(int v_size, int e_size, int seed_n, int seed_e) {
-        weighted_graph g = new WGraph_DS();
-        rnd_n = new Random(seed_n);
-        rnd_e = new Random(seed_e);
-
-        for (int i = 0; i < v_size; i++) {
-            g.addNode(i);
-        }
-
-        int[] nodes = nodes(g);
-        while (g.edgeSize() < e_size) {
-            int a = nextRnd(0, v_size);
-            int b = nextRnd(0, v_size);
-            int i = nodes[a];
-            int j = nodes[b];
-
-            double w = nextRndE(0, 200);
-            g.connect(i, j, w);
-        }
-        return g;
-    }
-
-    private static int nextRnd(int min, int max) {
-        double v = nextRnd(0.0 + min, (double) max);
-        int ans = (int) v;
-        return ans;
-    }
-
-    private static double nextRnd(double min, double max) {
-        double d = rnd_n.nextDouble();
-        double dx = max - min;
-        double ans = d * dx + min;
-        return ans;
-    }
-
-    private static double nextRndE(double min, double max) {
-        double d = rnd_e.nextDouble();
-        double dx = max - min;
-        double ans = d * dx + min;
-        return ans;
-    }
-
-    private static int[] nodes(weighted_graph g) {
-        int size = g.nodeSize();
-        Collection<node_info> V = g.getV();
-        node_info[] nodes = new node_info[size];
-        V.toArray(nodes);
-        int[] ans = new int[size];
-        for (int i = 0; i < size; i++) {
-            ans[i] = nodes[i].getKey();
-        }
-        Arrays.sort(ans);
-        return ans;
-    }*/
-
 
     @BeforeEach
     void generateGraph() {
@@ -282,37 +216,5 @@ class WGraph_DSTest {
         assertEquals(m, g.getMC());
         g.removeEdge(4, 5);
         assertEquals(m, g.getMC());
-    }
-
-    @Test
-    void runTime() {
-        long start = new Date().getTime();
-
-        weighted_graph gr = new WGraph_DS();
-        double w = 0.1;
-
-        for (int i = 0; i < 1000000; i++) {
-            gr.addNode(i);
-        }
-        for (int i = 0, j = 1; i < 1000000; i++, w++) {
-            gr.connect(i, j, w);
-            gr.connect(0, j, w);
-            gr.connect(1, i, w);
-            gr.connect(2, j, w);
-            gr.connect(3, i, w);
-            gr.connect(4, j, w);
-            gr.connect(5, i, w);
-            gr.connect(6, j, w);
-            gr.connect(7, i, w);
-            gr.connect(8, j, w);
-            gr.connect(9, i, w);
-            gr.connect(10, j, w);
-            j += 2;
-        }
-        long end = new Date().getTime();
-        double dt = (end - start) / 1000.0;
-        System.out.println("runTime " + dt);
-        System.out.println("\n edges " + gr.edgeSize());
-        System.out.println("\n nodes " + gr.nodeSize());
     }
 }
