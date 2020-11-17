@@ -8,12 +8,25 @@ This project represents an implementation of an undirectional unweighted graph w
 - shortestPathDist- return the length of the shortest path between source vertex to the target vertex.
 - shortestPath- returns the the shortest path between source vertex to the target vertex-
       as an ordered List of nodes: source--> n1-->n2-->...target
-- save- saves this weighted (undirected) graph to the given file name.
-- load- load a graph from the given file name to to a graph  on which We'll operates the algorithms above.
+- save- saves this weighted graph to the given file name.
+- load- load a graph from the given file name to to a graph on which We'll operates the algorithms above.
 
 ## **Dijkstra's algorithm**
-In the development of the algorithm of shortestPath in the weighted graph I base on Dijkstra's algorithm.
+In the development of the algorithm of shortestPath in the weighted graph, I base on Dijkstra's algorithm.
 More about- https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 
-## Example of Weighted Graph:
-![Example of Weighted Graph](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Chinespostman_1.png/1280px-Chinespostman_1.png)
+
+
+## **Installation**
+
+OOP-Ex1 (Weighted Graph) requires---------------to run.
+
+Write in your command prompt the following:
+
+```
+$ git clone https://github.com/Reut-Maslansky/OOP-Ex1.git
+$ 
+```
+
+## **Example of Weighted Graph:**
+![Example of Weighted Graph](https://media.geeksforgeeks.org/wp-content/uploads/graphhh.png)
