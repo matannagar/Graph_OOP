@@ -11,5 +11,9 @@ This project represents an implementation of an undirectional unweighted graph w
 - save- saves this weighted (undirected) graph to the given file name.
 - load- load a graph from the given file name to to a graph  on which We'll operates the algorithms above.
 
+## **Dijkstra's algorithm**
+In the development of the algorithm of shortestPath in the weighted graph I base on Dijkstra's algorithm.
+More about- https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+
 ## Example of Weighted Graph:
 ![Example of Weighted Graph](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Chinespostman_1.png/1280px-Chinespostman_1.png)
