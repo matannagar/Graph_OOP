@@ -233,7 +233,6 @@ public class WGraph_DS implements weighted_graph, java.io.Serializable {
     @Override
     public boolean equals(Object o){
         if(!(o instanceof WGraph_DS)) return false;
-        /*if(getMC()!=((WGraph_DS) o).getMC()) return false;*/
         HashMap n= ((WGraph_DS) o).nodes;
         if(!(nodes.equals(n))) return false;
         HashMap e= ((WGraph_DS) o).edges;
