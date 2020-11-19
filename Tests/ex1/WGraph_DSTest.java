@@ -136,6 +136,7 @@ class WGraph_DSTest {
             g.removeNode(i);
         }
         assertEquals(0, g.nodeSize());
+        assertEquals(null,g.removeNode(1));
     }
 
     @Test
