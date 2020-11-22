@@ -1,4 +1,4 @@
-package api;
+package ex2.src.api;
 /**
  * This interface represents the set of operations applicable on a 
  * directional edge(src,dest) in a (directional) weighted graph.
