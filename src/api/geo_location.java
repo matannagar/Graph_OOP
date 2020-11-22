@@ -1,4 +1,4 @@
-package api;
+package ex2.src.api;
 /**
  * This interface represents a geo location <x,y,z>, aka Point3D
  */

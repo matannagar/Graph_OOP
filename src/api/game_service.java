@@ -1,4 +1,4 @@
-package api;
+package ex2.src.api;
 
 import java.io.Serializable;
 /**
