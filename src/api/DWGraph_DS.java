@@ -1,7 +1,5 @@
 package ex2.src.api;
 
-import ex1.src.node_info;
-
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -65,7 +63,7 @@ public class DWGraph_DS implements directed_weighted_graph {
         private int idNode;
         private double weight;
         private geo_location geo;
-        private HashMap<Integer, node_info> neighbor;
+        private HashMap<Integer, node_data> neighbor;
         private String info;
         private int tag;
 
@@ -94,11 +92,11 @@ public class DWGraph_DS implements directed_weighted_graph {
             this.geo= new Geo_Location(n.getLocation());
         }
 
-        public Collection<node_info> getNi() {
+        public Collection<node_data> getNi() {
             return neighbor.values();
         }
 
-        public void removeNei(node_info node) {
+        public void removeNei(node_data node) {
             this.neighbor.remove(node.getKey());
         }
 
@@ -166,6 +164,8 @@ public class DWGraph_DS implements directed_weighted_graph {
             if(!(getInfo().equals(((node_info) o).getInfo()))) return false;
             return true;
         }*/
+            return true;
+        }
 
         private class Geo_Location implements geo_location {
             private double x;
