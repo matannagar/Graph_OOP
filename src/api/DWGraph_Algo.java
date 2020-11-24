@@ -6,6 +6,11 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.PrintWriter;
 import java.lang.reflect.Type;
 
 import java.util.Iterator;
@@ -108,14 +113,41 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 
     @Override
     public boolean save(String file) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        /*JsonElement json= new
-        JsonObject jsonObject = json.getAsJsonObject();*/
-        return false;
+   
+      //Make JSON
+      		Gson gson = new Gson();
+      		String json = gson.toJson(gr);		
+//      		System.out.println(json);
+
+      		//Write JSON to file
+      		try 
+      		{
+      			PrintWriter pw = new PrintWriter(new File("myGraph.json"));
+      			pw.write(json);
+      			pw.close();
+      		} 
+      		catch (FileNotFoundException e) 
+      		{
+      			e.printStackTrace();
+      			return false;
+      		}
+        return true;
     }
 
     @Override
     public boolean load(String file) {
+    	Gson gson = new Gson();
+    	//Option 2: from JSON file to Object
+    			try 
+    			{			
+    				FileReader reader = new FileReader("myGraph.json");
+    				directed_weighted_graph g = gson.fromJson(reader,directed_weighted_graph.class);
+    				System.out.println(g);
+    			} 
+    			catch (FileNotFoundException e) {
+    				e.printStackTrace();
+    			}
+    		
         return false;
     }
 }
