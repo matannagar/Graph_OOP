@@ -1,6 +1,8 @@
 package ex2.src.api;
 
 
+import ex1.src.WGraph_DS;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -171,6 +173,15 @@ public class DWGraph_DS implements directed_weighted_graph {
 				"mc: " + mc;
 
 	}
+	@Override
+	public boolean equals(Object o){
+		if(!(o instanceof DWGraph_DS)) return false;
+		HashMap v= ((DWGraph_DS) o).vertex;
+		if(!(vertex.equals(v))) return false;
+		HashMap e= ((DWGraph_DS) o).edges;
+		if(!(edges.equals(e))) return false;
+		return true;
+	}
 
 	public class Edge_DS implements edge_data  {
 		private int src;
@@ -236,6 +247,14 @@ public class DWGraph_DS implements directed_weighted_graph {
 			return "Edge_DS{" +
 					"src=" + src +
 					", dest=" + dest;
+		}
+		@Override
+		public boolean equals(Object o){
+			if(!(o instanceof edge_data)) return false;
+			if(weight!=(((edge_data) o).getWeight())) return false;
+			if(this.src!=((edge_data) o).getSrc()) return false;
+			if(this.dest!=((edge_data) o).getDest()) return false;
+			return true;
 		}
 	}
 }
