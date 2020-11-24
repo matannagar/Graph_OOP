@@ -1,6 +1,5 @@
 package ex2.src.api;
 
-import org.w3c.dom.Node;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,24 +20,24 @@ public class DWGraph_DS implements directed_weighted_graph {
 		this.vertex=new HashMap<>();
 		this.edges=new HashMap<>();
 	}
-	//	public DWGraph_DS(directed_weighted_graph g) {
-	//		if(g==null) return;
-	//
-	//		this.vertex = new HashMap<>();
-	//		this.edges= new HashMap<>();
-	//
-	//		for (node_data n : g.getV()) {
-	//			node_data no = new Node_Data(n);
-	//			addNode(no);
-	//		}
-	//		for (node_data n : g.getV()) {
-	//			for (node_data ni : g.getV(n.getKey())) {
-	//				connect();
-	//			}
-	//		}
-	//
-	//		this.mc=g.nodeSize()+g.edgeSize();
-	//	}
+		public DWGraph_DS(directed_weighted_graph g) {
+			if(g==null) return;
+
+	this.vertex = new HashMap<>();
+	this.edges= new HashMap<>();
+
+			for (node_data n : g.getV()) {
+				node_data no = new NodeData(n);
+				addNode(no);
+			}
+			for (node_data n : g.getV()) {
+				for (edge_data e : g.getE(n.getKey())) {
+					connect(e.getSrc(),e.getDest(),e.getWeight());
+				}
+			}
+
+			this.mc=g.nodeSize()+g.edgeSize();
+		}
 	@Override
 	public edge_data getEdge(int src, int dest) {
 		String pair = getPair(src,dest);
@@ -162,6 +161,15 @@ public class DWGraph_DS implements directed_weighted_graph {
 	}
 	private String getPair(int src, int dest) {
 		return String.valueOf(src) + "," + String.valueOf(dest);
+	}
+
+	@Override
+	public String toString() {
+		return "DWGraph_DS: "+"\n"+ "\t"+
+				"vertex=" + getV() +"\n"+"\t"+
+				", edges=" + edges.values() +"\n"+"\t"+
+				"mc: " + mc;
+
 	}
 
 	public class Edge_DS implements edge_data  {

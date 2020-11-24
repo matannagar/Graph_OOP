@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DWGraph_DSTest {
     private static directed_weighted_graph g1;
@@ -16,7 +15,7 @@ class DWGraph_DSTest {
     @BeforeEach
     void generateGraph() {
         g1 = new DWGraph_DS();
-        for (int i = 0; i < 5; i++){
+        for (int i = 1; i < 5; i++){
             node_data n= new NodeData(i);
             g1.addNode(n);
         }
