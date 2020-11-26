@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -139,4 +140,47 @@ class DWGraph_DSTest {
     @Test
     void getMC() {
     }
+
+    @Test
+    void runTime(){
+        long start = new Date().getTime();
+
+        directed_weighted_graph gr = new DWGraph_DS();
+        double w = 0.1;
+
+        for (int i = 0; i < 1000000; i++) {
+            gr.addNode(new NodeData(i));
+        }
+        for (int i = 0, j = 1; i < 1000000; i++, w++) {
+            gr.connect(i, j, w);
+            gr.connect(0, j, w);
+            gr.connect(1, i, w);
+            gr.connect(2, j, w);
+            gr.connect(3, i, w);
+            gr.connect(4, j, w);
+            gr.connect(5, i, w);
+            gr.connect(6, j, w);
+            gr.connect(7, i, w);
+            gr.connect(8, j, w);
+            gr.connect(9, i, w);
+            gr.connect(10, j, w);
+            j += 2;
+        }
+        long end = new Date().getTime();
+        double dt = (end - start) / 1000.0;
+        boolean t = dt < 15;
+        assertEquals(true, t);
+        System.out.println("runTime: " + dt);
+        System.out.println("\n edges: " + gr.edgeSize());
+        System.out.println("\n nodes: " + gr.nodeSize());
+        gr.removeEdge(1, 0);
+        long end2 = new Date().getTime();
+        dt = (end2 - end) / 1000.0;
+        System.out.println("runTime remove 1 Edge: " + dt);
+        gr.removeNode(11);
+        long end3 = new Date().getTime();
+        dt = (end3 - end2) / 1000.0;
+        System.out.println("runTime remove 1 Node: " + dt);
+    }
+
 }

@@ -1,8 +1,5 @@
 package ex2.src.api;
 
-
-import ex1.src.WGraph_DS;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -67,8 +64,8 @@ public class DWGraph_DS implements directed_weighted_graph {
 
 		// Update the weight edge between those nodes.
 		if(edges.containsKey(pair)) {
-			if(((Edge_DS)(edges.get(pair))).weight==w) return;
-			((Edge_DS)(edges.get(pair))).weight=w;
+			if(((Edge_DS)(edges.get(pair))).getWeight()==w) return;
+			((Edge_DS)(edges.get(pair))).setWeight(w);
 			mc++;
 			return;
 		}
@@ -146,7 +143,6 @@ public class DWGraph_DS implements directed_weighted_graph {
 		return e;
 	}
 
-
 	@Override
 	public int nodeSize() {
 		return vertex.size();
@@ -169,9 +165,8 @@ public class DWGraph_DS implements directed_weighted_graph {
 	public String toString() {
 		return "DWGraph_DS: "+"\n"+ "\t"+
 				"vertex=" + getV() +"\n"+"\t"+
-				", edges=" + edges.values() +"\n"+"\t"+
+				"edges=" + edges.values() +"\n"+"\t"+
 				"mc: " + mc;
-
 	}
 	@Override
 	public boolean equals(Object o){
@@ -181,80 +176,5 @@ public class DWGraph_DS implements directed_weighted_graph {
 		HashMap e= ((DWGraph_DS) o).edges;
 		if(!(edges.equals(e))) return false;
 		return true;
-	}
-
-	public class Edge_DS implements edge_data  {
-		private int src;
-		private int dest;
-		private String info;
-		private int tag;
-		private double weight;
-
-		public Edge_DS (int src, int dest, double w) {
-			this.src = src;
-			this.dest=dest;
-			this.weight = w;
-			this.info = "";
-			//**********NOTICE ME************
-			this.tag = -1;
-		}
-
-		@Override
-		public int getSrc() {
-			// TODO Auto-generated method stub
-			return this.src;
-		}
-
-		@Override
-		public int getDest() {
-			// TODO Auto-generated method stub
-			return this.dest;
-		}
-
-		@Override
-		public double getWeight() {
-			return this.weight;
-		}
-
-		@Override
-		public String getInfo() {
-			// TODO Auto-generated method stub
-			return this.info;
-		}
-
-		@Override
-		public void setInfo(String s) {
-			this.info = s;
-
-		}
-
-		@Override
-		public int getTag() {
-			// TODO Auto-generated method stub
-			return this.tag;
-		}
-
-		@Override
-		public void setTag(int t) {
-			this.tag=t;
-		}
-		public void setWeight(double w) {
-			this.weight= w;
-		}
-
-		@Override
-		public String toString() {
-			return "Edge_DS{" +
-					"src=" + src +
-					", dest=" + dest;
-		}
-		@Override
-		public boolean equals(Object o){
-			if(!(o instanceof edge_data)) return false;
-			if(weight!=(((edge_data) o).getWeight())) return false;
-			if(this.src!=((edge_data) o).getSrc()) return false;
-			if(this.dest!=((edge_data) o).getDest()) return false;
-			return true;
-		}
 	}
 }

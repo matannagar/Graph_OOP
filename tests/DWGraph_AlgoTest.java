@@ -159,20 +159,26 @@ class DWGraph_AlgoTest {
 
     @Test
     void equalsSaveLoad() {
-        g.init(g1);
+        directed_weighted_graph g10= new DWGraph_DS();
+        g10.addNode(new NodeData(0));
+        g10.addNode(new NodeData(1));
+        g10.addNode(new NodeData(2));
+        g10.connect(0,1,2.3);
+        g10.connect(2,1,0.4);
+        g.init(g10);
         g.save("graph.json");
-       /* dw_graph_algorithms algo = new DWGraph_Algo();
-        algo.load("graph.json");*/
-        /*directed_weighted_graph loaded = algo.getGraph();
+        dw_graph_algorithms algo = new DWGraph_Algo();
+        algo.load("graph.json");
+        directed_weighted_graph loaded = algo.getGraph();
         assertEquals(g.getGraph(), loaded);
         loaded.removeNode(1);
         assertNotEquals(g.getGraph(), loaded);
         g.init(g2);
-        g.save("graph");
-        algo.load("graph");
+        g.save("graph.json");
+        algo.load("graph.json");
         loaded = algo.getGraph();
         assertNotEquals(g1, loaded);
-        assertEquals(g.getGraph(), loaded);*/
+        assertEquals(g.getGraph(), loaded);
 
     }
 }

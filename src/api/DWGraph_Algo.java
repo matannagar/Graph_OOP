@@ -99,7 +99,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
    
       //Make JSON
         //Gson gson = new Gson();
-      	Gson gson= new GsonBuilder().create();
+      	Gson gson= new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(gr);
 
       		//Write JSON to file
@@ -119,9 +119,10 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 
     @Override
     public boolean load(String file) {
-    	Gson gson = new Gson();
-    	//from JSON file to Object
-    			try 
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(DWGraph_DS.class, new DWGraphJsonDeserializer());
+        Gson gson = builder.create();
+    			try
     			{			
     				FileReader reader = new FileReader(file);
 
