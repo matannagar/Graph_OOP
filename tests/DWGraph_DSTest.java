@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,7 +46,7 @@ class DWGraph_DSTest {
         g1.connect(1, 2, 3.4);
         assertEquals(3.4, g1.getEdge(1, 2).getWeight());
         assertEquals(3.7, g1.getEdge(2, 1).getWeight());
-        assertEquals(null, g1.getEdge(0, 0));
+        assertEquals(null, g1.getEdge(0, 0),"there is no edge between 0,0");
 
         g1.addNode( new NodeData(10));
         g1.addNode( new NodeData(11));
@@ -73,41 +74,77 @@ class DWGraph_DSTest {
     }
 
     @Test
-    //need add more tests
     void connect() {
-        int a = g1.getMC();
+        directed_weighted_graph gr= new DWGraph_DS();
+        gr.addNode(new NodeData(1));
+        gr.addNode(new NodeData(2));
+        gr.connect(1,2,3);
+        assertEquals(null,gr.getEdge(2,1), "there is no edge between them");
+        gr.connect(1,2,4);
+        assertNotEquals(3, gr.getEdge(1,2).getWeight());
+        int mc=gr.getMC();
+        gr.connect(1,2,4);
+        assertEquals(mc, gr.getMC());
+
+        //graph g1
+        mc = g1.getMC();
         int s = g1.edgeSize();
         g1.connect(1, 2, 3.2);
         assertEquals(s, g1.edgeSize());
-        assertEquals(a + 1, g1.getMC());
+        assertEquals(mc + 1, g1.getMC());
         assertEquals(3.2, g1.getEdge(1, 2).getWeight());
-        a = g1.getMC();
+        mc = g1.getMC();
         g1.connect(1, 4, 2.3);
-        assertEquals(a+1, g1.getMC());
+        assertEquals(mc+1, g1.getMC());
         assertEquals(s+1, g1.edgeSize());
         g1.connect(10, 2, 0);
         assertEquals(s+1, g1.edgeSize());
+
         try {
-            g1.connect(0, 2, -3);
-            //check that we don't go in and throw Exception.
-            assertEquals(true, -1 > 0);
-        } catch (Exception e) {
-            assertEquals(1, 1);
+            g1.connect(1, 3, -3);
         }
+        catch (Exception e) { }
+        assertEquals(null,g1.getEdge(1,3));
     }
 
     @Test
     void getV() {
+        directed_weighted_graph g10 = new DWGraph_DS();
+        assertEquals(true, g10.getV().isEmpty());
+        assertEquals("[]", g10.getV().toString());
 
+        assertEquals("[1, 2, 3, 4]", g1.getV().toString());
+        g1.addNode(new NodeData(1));
+        assertEquals("[1, 2, 3, 4]", g1.getV().toString());
+        g1.addNode(new NodeData(10));
+        assertEquals("[1, 2, 3, 4, 10]", g1.getV().toString());
+        g1.addNode(new NodeData(5));
+        assertEquals("[1, 2, 3, 4, 5, 10]", g1.getV().toString());
+        g1.removeNode(1);
+        assertEquals("[2, 3, 4, 5, 10]", g1.getV().toString());
     }
 
     @Test
     void getE() {
+
+        directed_weighted_graph g10 = new DWGraph_DS();
+        g10.addNode(new NodeData(1));
+        assertEquals(true, g10.getE(1).isEmpty());
+        assertEquals(null, g10.getE(2));
+
+        //graph g1
+        assertEquals(1, g1.getE(1).size());
+        g1.addNode(new NodeData(5));
+        g1.connect(1,5,4.3);
+
+        assertEquals(0,g1.getE(5).size());
+        assertEquals(2, g1.getE(1).size());
+
     }
 
     @Test
     void removeNode() {
-      g1.removeNode(0);
+      assertEquals(null,g1.removeNode(0));
       assertEquals(4,g1.nodeSize());
       int mc= g1.getMC();
       assertEquals(1,g1.removeNode(1).getKey());
@@ -116,13 +153,24 @@ class DWGraph_DSTest {
       assertEquals(null,g1.removeNode(1));
       assertEquals(mc,g1.getMC());
 
+      for(int i=6; i<20; i++) {
+          g1.addNode(new NodeData(i));
+      }
+
+        Iterator<node_data> it = g1.getV().iterator();
+        while (it.hasNext()) {
+            node_data n = it.next();
+            g1.removeNode(n.getKey());
+            it = g1.getV().iterator();
+        }
+        assertEquals(0,g1.nodeSize());
     }
 
     @Test
     void removeEdge() {
+        assertNotEquals(null,g1.removeEdge(2,1));
         assertEquals(0.1,g1.removeEdge(1,2).getWeight());
         assertEquals(null,g1.removeEdge(1,2));
-        assertNotEquals(null,g1.removeEdge(2,1));
         assertEquals(null,g1.removeEdge(4,3));
         assertEquals(1.2,g1.removeEdge(3,4).getWeight());
         assertEquals(null,g1.removeEdge(1,1));
@@ -131,14 +179,70 @@ class DWGraph_DSTest {
 
     @Test
     void nodeSize() {
+        directed_weighted_graph g= new DWGraph_DS();
+        assertEquals(0, g.nodeSize());
+        g.addNode(new NodeData(1));
+        assertEquals(1, g.nodeSize());
+        g.removeNode(1);
+        assertEquals(0, g.nodeSize());
+        g.addNode(new NodeData(2));
+        g.removeNode(3);
+        assertEquals(1, g.nodeSize());
+
+        //graph g1
+        assertEquals(4,g1.nodeSize());
     }
 
     @Test
     void edgeSize() {
+        directed_weighted_graph g= new DWGraph_DS();
+        assertEquals(0, g.edgeSize());
+        g.addNode(new NodeData(1));
+        g.addNode(new NodeData(2));
+        try{
+            g.connect(1,2,-4);
+
+        }catch (Exception e){ }
+        assertEquals(0, g.edgeSize());
+        g.connect(1,2,2);
+        assertEquals(1,g.edgeSize());
+        g.connect(1,2,3);
+        assertEquals(1,g.edgeSize());
+        g.connect(2,1,4.3);
+        assertEquals(2,g.edgeSize());
+
+        //graph g1
+        assertEquals(5,g1.edgeSize());
+        g1.removeEdge(1,2);
+        assertEquals(4,g1.edgeSize());
+        g1.removeEdge(5,4);
+        assertEquals(4,g1.edgeSize());
     }
 
     @Test
     void getMC() {
+        directed_weighted_graph g= new DWGraph_DS();
+        assertEquals(0, g.getMC());
+
+        //graph g1
+        int mc= g1.getMC();
+        g1.removeEdge(1,2);
+        assertEquals(mc+1,g1.getMC());
+        mc=g1.getMC();
+        g1.connect(4,2,5);
+        g1.connect(4,2,5);
+        assertEquals(mc+1, g1.getMC());
+        mc=g1.getMC();
+        g1.removeNode(4);
+        assertEquals(mc+4,g1.getMC());
+        mc=g1.getMC();
+        g1.addNode(new NodeData(4));
+        g1.connect(4,2,3);
+        try{
+            g.connect(1,4,-4);
+
+        }catch (Exception e){ }
+        assertEquals(mc+2, g1.getMC());
     }
 
     @Test

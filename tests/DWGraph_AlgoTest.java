@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DWGraph_AlgoTest {
 
     private static dw_graph_algorithms g;
-    private static directed_weighted_graph g1, g2, g3, g4, g5, g6;
+    private static directed_weighted_graph g1, g2, g3, g6;
 
     @BeforeEach
     void generateGraph() {
@@ -81,15 +81,36 @@ class DWGraph_AlgoTest {
 
     @Test
     void init() {
+        g.init(g2);
+        assertSame(g2, g.getGraph());
+        g.init(g3);
+        assertSame(g3, g.getGraph());
     }
 
     @Test
     void getGraph() {
+        g.init(g2);
+        assertEquals(g2, g.getGraph());
+        g2.addNode(new NodeData(8));
+        assertEquals(g2, g.getGraph());
+
+        directed_weighted_graph gr= null;
+        g.init(gr);
+        assertEquals(null, g.getGraph());
+
     }
 
     @Test
     void copy() {
-
+        g.init(g1);
+        directed_weighted_graph g0 = g.copy();
+        assertEquals(true, g.getGraph().equals(g0));
+        g.getGraph().removeEdge(1, 2);
+        assertEquals(false, g.getGraph().equals(g0));
+        g.init(new DWGraph_DS());
+        assertEquals(new DWGraph_DS(),g.copy());
+        g.init(null);
+        assertEquals(null, g.copy());
     }
 
     @Test

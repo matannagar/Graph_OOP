@@ -25,6 +25,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 
     @Override
     public directed_weighted_graph copy() {
+        if(gr==null) return null;
         directed_weighted_graph g= new DWGraph_DS(this.gr);
         return g;
     }

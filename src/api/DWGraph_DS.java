@@ -22,8 +22,8 @@ public class DWGraph_DS implements directed_weighted_graph {
 		public DWGraph_DS(directed_weighted_graph g) {
 			if(g==null) return;
 
-	this.vertex = new HashMap<>();
-	this.edges= new HashMap<>();
+			this.vertex = new HashMap<>();
+			this.edges= new HashMap<>();
 
 			for (node_data n : g.getV()) {
 				node_data no = new NodeData(n);
@@ -89,6 +89,7 @@ public class DWGraph_DS implements directed_weighted_graph {
 
 	@Override
 	public Collection<edge_data> getE(int node_id) {
+		if(!(vertex.containsKey(node_id))) return null;
 		return ((NodeData)(getNode(node_id))).getSrc();
 	}
 
