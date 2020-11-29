@@ -58,13 +58,11 @@ public class DWGraph_DS implements directed_weighted_graph {
 		if (src == dest) return;
 		if(w<0) throw new RuntimeException("The weight should be >=0. Do choose a new weight to this edge");
 
-
 		String pair= getPair(src,dest);
-
 
 		// Update the weight edge between those nodes.
 		if(edges.containsKey(pair)) {
-			if(((Edge_DS)(edges.get(pair))).getWeight()==w) return;
+			if(((edges.get(pair))).getWeight()==w) return;
 			((Edge_DS)(edges.get(pair))).setWeight(w);
 			mc++;
 			return;
