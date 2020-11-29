@@ -202,7 +202,12 @@ class DWGraph_AlgoTest {
         assertEquals(g.getGraph(), loaded);
 
         algo.load("A0");
-        loaded = algo.getGraph();
+        algo.load("A1");
+        algo.load("A2");
+        algo.load("A3");
+        algo.load("A4");
+        algo.load("A5");
+
 
     }
 }
