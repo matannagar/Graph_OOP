@@ -97,17 +97,38 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 
     @Override
     public boolean save(String file) {
-   
-      //Make JSON
-        //Gson gson = new Gson();
-      	Gson gson= new GsonBuilder().setPrettyPrinting().create();
-        String json = gson.toJson(gr);
 
-      		//Write JSON to file
+        JsonObject graph= new JsonObject();
+
+        JsonArray no= new JsonArray();
+        JsonArray ed= new JsonArray();
+
+        for(node_data n: gr.getV()) {
+            JsonObject gson= new JsonObject();
+            gson.addProperty("id", n.getKey());
+            String pos= n.getLocation().x()+","+n.getLocation().y()+","+n.getLocation().z();
+            gson.addProperty("pos", pos);
+            no.add(gson);
+        }
+
+        graph.add("Nodes", no);
+
+        for(edge_data n: (((DWGraph_DS)(gr)).getEdgesCollection())) {
+            JsonObject gson= new JsonObject();
+            gson.addProperty("dest", n.getDest());
+            gson.addProperty("w", n.getWeight());
+            gson.addProperty("src", n.getSrc());
+
+            ed.add(gson);
+        }
+
+        graph.add("Edges", ed);
+
       		try 
       		{
+                Gson gson = new Gson();
       			PrintWriter pw = new PrintWriter(new File(file));
-      			pw.write(json);
+      			pw.write(gson.toJson(graph));
       			pw.close();
       		} 
       		catch (FileNotFoundException e) 

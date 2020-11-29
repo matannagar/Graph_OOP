@@ -3,7 +3,6 @@ package ex2.src.api;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 
 public class DWGraphJsonDeserializer implements JsonDeserializer<directed_weighted_graph> {
 
@@ -12,24 +11,23 @@ public class DWGraphJsonDeserializer implements JsonDeserializer<directed_weight
         JsonObject jsonObject = json.getAsJsonObject();
         directed_weighted_graph graph = new DWGraph_DS();
 
-        JsonObject vertexObj = jsonObject.get("vertex").getAsJsonObject();
+        JsonArray vertexObj = jsonObject.get("Nodes").getAsJsonArray();
 
-        for (Map.Entry<String, JsonElement> set : vertexObj.entrySet()) {
+        for (int i=0; i<vertexObj.size(); i++) {
 
-            JsonElement jsonValueElement = set.getValue();
-            int id = jsonValueElement.getAsJsonObject().get("idNode").getAsInt();
+            JsonElement jsonValueElement = vertexObj.get(i);
+            int id = jsonValueElement.getAsJsonObject().get("id").getAsInt();
             node_data n = new NodeData(id);
             graph.addNode(n);
         }
 
-        JsonObject edgesObj = jsonObject.get("edges").getAsJsonObject();
+        JsonArray edgesObj = jsonObject.get("Edges").getAsJsonArray();
+        for (int i=0; i<edgesObj.size(); i++) {
 
-        for (Map.Entry<String, JsonElement> set : edgesObj.entrySet()) {
-
-            JsonElement jsonValueElement = set.getValue();
+            JsonElement jsonValueElement = edgesObj.get(i);
             int src = jsonValueElement.getAsJsonObject().get("src").getAsInt();
             int dest = jsonValueElement.getAsJsonObject().get("dest").getAsInt();
-            double weight = jsonValueElement.getAsJsonObject().get("weight").getAsDouble();
+            double weight = jsonValueElement.getAsJsonObject().get("w").getAsDouble();
             graph.connect(src, dest, weight);
         }
 

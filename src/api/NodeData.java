@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class NodeData implements node_data {
-    private int idNode;
+    private int id;
     private double weight;
     private geo_location geo;
     private HashMap<Integer, edge_data> src;
@@ -15,7 +15,7 @@ public class NodeData implements node_data {
 
     public NodeData(int key) {
 
-        this.idNode = key;
+        this.id = key;
         this.weight = 0;
         this.src= new HashMap<>();
         this.dest= new HashMap<>();
@@ -26,7 +26,7 @@ public class NodeData implements node_data {
 
     public NodeData(int key, double w) {
 
-        this.idNode = key;
+        this.id = key;
         this.weight = w;
         this.src= new HashMap<>();
         this.dest= new HashMap<>();
@@ -36,7 +36,7 @@ public class NodeData implements node_data {
     }
 
     public NodeData(node_data n) {
-        this.idNode = n.getKey();
+        this.id = n.getKey();
         this.src= new HashMap<>();
         this.dest= new HashMap<>();
         this.info = n.getInfo() + "";
@@ -47,7 +47,7 @@ public class NodeData implements node_data {
 
     @Override
     public int getKey() {
-        return this.idNode;
+        return this.id;
     }
 
     public void addSrc(edge_data n){
@@ -114,7 +114,7 @@ public class NodeData implements node_data {
     }
 
     public String toString() {
-        return "" + idNode;
+        return "" + id;
     }
 
     /**

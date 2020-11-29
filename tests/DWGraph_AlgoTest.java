@@ -200,7 +200,9 @@ class DWGraph_AlgoTest {
         loaded = algo.getGraph();
         assertNotEquals(g1, loaded);
         assertEquals(g.getGraph(), loaded);
-        //algo.load("C:\\Users\\user\\IdeaProjects\\OOP Ex presentation\\src\\ex2\\A0");
-        algo.load("A5");
+
+        algo.load("A0");
+        loaded = algo.getGraph();
+
     }
 }

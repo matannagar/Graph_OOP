@@ -5,25 +5,25 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class DWGraph_DS implements directed_weighted_graph {
-	private HashMap<Integer,node_data> vertex;
-	private HashMap<String,edge_data> edges;
+	private HashMap<Integer,node_data> Nodes;
+	private HashMap<String,edge_data> Edges;
 	private int mc;
 
 	@Override
 	public node_data getNode(int key) {
-		return vertex.get(key);
+		return Nodes.get(key);
 	}
 
 	public DWGraph_DS() {
 		this.mc=0;
-		this.vertex=new HashMap<>();
-		this.edges=new HashMap<>();
+		this.Nodes =new HashMap<>();
+		this.Edges =new HashMap<>();
 	}
 		public DWGraph_DS(directed_weighted_graph g) {
 			if(g==null) return;
 
-			this.vertex = new HashMap<>();
-			this.edges= new HashMap<>();
+			this.Nodes = new HashMap<>();
+			this.Edges = new HashMap<>();
 
 			for (node_data n : g.getV()) {
 				node_data no = new NodeData(n);
@@ -40,30 +40,30 @@ public class DWGraph_DS implements directed_weighted_graph {
 	@Override
 	public edge_data getEdge(int src, int dest) {
 		String pair = getPair(src,dest);
-		return edges.get(pair);
+		return Edges.get(pair);
 	}
 
 	@Override
 	////check
 	public void addNode(node_data n) {
-		if (!vertex.containsKey(n.getKey())) {
-			vertex.put(n.getKey(), n);
+		if (!Nodes.containsKey(n.getKey())) {
+			Nodes.put(n.getKey(), n);
 			mc++;
 		}
 	}
 
 	@Override
 	public void connect(int src, int dest, double w) {
-		if (!(this.vertex.containsKey(src)) || !(this.vertex.containsKey(dest))) return;
+		if (!(this.Nodes.containsKey(src)) || !(this.Nodes.containsKey(dest))) return;
 		if (src == dest) return;
 		if(w<0) throw new RuntimeException("The weight should be >=0. Do choose a new weight to this edge");
 
 		String pair= getPair(src,dest);
 
 		// Update the weight edge between those nodes.
-		if(edges.containsKey(pair)) {
-			if(((edges.get(pair))).getWeight()==w) return;
-			((Edge_DS)(edges.get(pair))).setWeight(w);
+		if(Edges.containsKey(pair)) {
+			if(((Edges.get(pair))).getWeight()==w) return;
+			((Edge_DS)(Edges.get(pair))).setWeight(w);
 			mc++;
 			return;
 		}
@@ -76,24 +76,29 @@ public class DWGraph_DS implements directed_weighted_graph {
 		s.addSrc(e);
 		d.addDest(e);
 
-		edges.put(pair, e);
+		Edges.put(pair, e);
 	}
 
 
 	@Override
 	public Collection<node_data> getV() {
-		return vertex.values();
+		return Nodes.values();
 	}
 
 	@Override
 	public Collection<edge_data> getE(int node_id) {
-		if(!(vertex.containsKey(node_id))) return null;
+		if(!(Nodes.containsKey(node_id))) return null;
 		return ((NodeData)(getNode(node_id))).getSrc();
 	}
 
+	public Collection<edge_data> getEdgesCollection() {
+		return Edges.values();
+	}
+
+
 	@Override
 	public node_data removeNode(int key) {
-		if (vertex.containsKey(key)) {
+		if (Nodes.containsKey(key)) {
 			mc++;
 			node_data node = getNode(key);
 
@@ -120,7 +125,7 @@ public class DWGraph_DS implements directed_weighted_graph {
 			}
 
 
-			vertex.remove(key);
+			Nodes.remove(key);
 
 			return node;
 		}
@@ -131,25 +136,25 @@ public class DWGraph_DS implements directed_weighted_graph {
 	public edge_data removeEdge(int src, int dest) {
 		if(src==dest) return null;
 		String pair = getPair(src,dest);
-		if (!(edges.containsKey(pair))) return null;
-		edge_data e = edges.get(pair);
+		if (!(Edges.containsKey(pair))) return null;
+		edge_data e = Edges.get(pair);
 		mc++;
 		node_data s = getNode(src);
 		node_data d = getNode(dest);
 		((NodeData) s).removeSrc(dest);
 		((NodeData) d).removeDest(src);
-		edges.remove(getPair(src,dest));
+		Edges.remove(getPair(src,dest));
 		return e;
 	}
 
 	@Override
 	public int nodeSize() {
-		return vertex.size();
+		return Nodes.size();
 	}
 
 	@Override
 	public int edgeSize() {
-		return edges.size();
+		return Edges.size();
 	}
 
 	@Override
@@ -164,16 +169,16 @@ public class DWGraph_DS implements directed_weighted_graph {
 	public String toString() {
 		return "DWGraph_DS: "+"\n"+ "\t"+
 				"vertex=" + getV() +"\n"+"\t"+
-				"edges=" + edges.values() +"\n"+"\t"+
+				"edges=" + Edges.values() +"\n"+"\t"+
 				"mc: " + mc;
 	}
 	@Override
 	public boolean equals(Object o){
 		if(!(o instanceof DWGraph_DS)) return false;
-		HashMap v= ((DWGraph_DS) o).vertex;
-		if(!(vertex.equals(v))) return false;
-		HashMap e= ((DWGraph_DS) o).edges;
-		if(!(edges.equals(e))) return false;
+		HashMap v= ((DWGraph_DS) o).Nodes;
+		if(!(Nodes.equals(v))) return false;
+		HashMap e= ((DWGraph_DS) o).Edges;
+		if(!(Edges.equals(e))) return false;
 		return true;
 	}
 }
