@@ -1,5 +1,5 @@
-package ex2.src.gameClient.util;
-import ex2.src.api.geo_location;
+package gameClient.util;
+import api.geo_location;
 
 /**
  * This class represents a 2D Range, composed from two 1D Ranges.

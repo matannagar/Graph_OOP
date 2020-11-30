@@ -1,9 +1,9 @@
-package ex2.src.gameClient;
+package gameClient;
 import Server.Game_Server_Ex2;
-import ex2.src.api.directed_weighted_graph;
-import ex2.src.api.edge_data;
-import ex2.src.api.game_service;
-import ex2.src.api.node_data;
+import api.directed_weighted_graph;
+import api.edge_data;
+import api.game_service;
+import api.node_data;
 
 import java.util.Collection;
 import java.util.Iterator;

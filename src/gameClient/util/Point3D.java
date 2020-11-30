@@ -1,9 +1,9 @@
 /**
  * This class represents a 3D point in space.
  */
-package ex2.src.gameClient.util;
+package gameClient.util;
 
-import ex2.src.api.geo_location;
+import api.geo_location;
 
 import java.io.Serializable;
 

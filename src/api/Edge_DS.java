@@ -1,4 +1,4 @@
-package ex2.src.api;
+package api;
 
 public class Edge_DS implements edge_data {
     private int src;

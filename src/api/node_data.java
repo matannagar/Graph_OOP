@@ -1,4 +1,4 @@
-package ex2.src.api;
+package api;
 
 /**
  * This interface represents the set of operations applicable on a 

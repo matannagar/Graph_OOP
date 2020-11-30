@@ -1,4 +1,4 @@
-package ex2.src.api;
+package api;
 import java.util.List;
 /**
  * This interface represents a Directed (positive) Weighted Graph Theory Algorithms including:

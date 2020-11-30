@@ -1,6 +1,6 @@
-package ex2.src.gameClient;
-import ex2.src.api.edge_data;
-import ex2.src.gameClient.util.Point3D;
+package gameClient;
+import api.edge_data;
+import gameClient.util.Point3D;
 import org.json.JSONObject;
 
 public class CL_Pokemon {
