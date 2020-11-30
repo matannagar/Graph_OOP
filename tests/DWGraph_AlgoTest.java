@@ -199,12 +199,12 @@ class DWGraph_AlgoTest {
         assertNotEquals(g1, loaded);
         assertEquals(g.getGraph(), loaded);
 
-        algo.load("A0");
-        algo.load("A1");
-        algo.load("A2");
-        algo.load("A3");
-        algo.load("A4");
-        algo.load("A5");
+        algo.load("data/A0");
+        algo.load("data/A1");
+        algo.load("data/A2");
+        algo.load("data/A3");
+        algo.load("data/A4");
+        algo.load("data/A5");
 
 
     }
