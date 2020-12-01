@@ -33,7 +33,7 @@ public class CL_Pokemon {
 		return ans;
 	}
 
-	public String toString() {return "Pok:{value="+_value+", type="+_type+"}";}
+	public String toString() {return "Pok:{value="+_value+", type="+_type+", edge:"+_edge+"}";}
 
 	public edge_data get_edge() {
 		return _edge;

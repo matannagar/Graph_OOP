@@ -29,11 +29,9 @@ public class Arena {
     private List<String> _info;
     private static Point3D MIN = new Point3D(0, 100, 0);
     private static Point3D MAX = new Point3D(0, 100, 0);
-	private static List<CL_Pokemon> pokemonsInit;
-	private static List<CL_Agent> agentsInit;
+    private static List<CL_Pokemon> pokemonsInit;
 
-
-	public Arena() {
+    public Arena() {
         ;
         _info = new ArrayList<String>();
     }
@@ -44,6 +42,7 @@ public class Arena {
         this.setAgents(r);
     }
 
+
     public void setPokemons(List<CL_Pokemon> f) {
         this._pokemons = f;
         pokemonsInit=f;
@@ -51,12 +50,12 @@ public class Arena {
 
     public void setAgents(List<CL_Agent> f) {
         this._agents = f;
-        agentsInit=f;
     }
 
     public void setGraph(directed_weighted_graph g) {
         this._gg = g;
-    }//init();}
+    }
+    //init();}
 
     private void init() {
         MIN = null;
@@ -112,7 +111,6 @@ public class Arena {
         this._info = _info;
     }
 
-    ////////////////////////////////////////////////////
     public static List<CL_Agent> getAgents(String aa, directed_weighted_graph gg) {
         ArrayList<CL_Agent> ans = new ArrayList<CL_Agent>();
         try {
@@ -120,7 +118,7 @@ public class Arena {
             JSONArray ags = ttt.getJSONArray("Agents");
             for (int i = 0; i < ags.length(); i++) {
                 ////////// נאתר את הצלעות של הפוקימונים, את המקור של הצלע ולשם נשלח את הסוכן על ההתחלה
-                CL_Agent c = new CL_Agent(gg, StartPosAg());
+                CL_Agent c = new CL_Agent(gg, StartPosAg(gg));
                 c.update(ags.get(i).toString());
                 ans.add(c);
             }
@@ -131,14 +129,17 @@ public class Arena {
         return ans;
     }
 
-    public static int StartPosAg() {
-        int sizeP = pokemonsInit.size();
-        int sizeA = agentsInit.size();
-		for (int i =0; i<sizeA;i++){
-			pokemonsInit.get(i).get_edge().getSrc();
-			pokemonsInit.remove(i);
-//			agentsInit.get(i).set
-		}
+    //set agents at best pos to catch poks
+    //only useful for beginning of game
+    public static int StartPosAg(directed_weighted_graph g) {
+        for (int i = 0; i < pokemonsInit.size(); i++) {
+            updateEdge(pokemonsInit.get(i),g);
+            //if (pokemonsInit.get(i).get_edge() != null) {
+                int ans = pokemonsInit.get(i).get_edge().getSrc();
+                pokemonsInit.remove(i);
+                return ans;
+            }
+       // }
         return 0;
     }
 
@@ -154,9 +155,10 @@ public class Arena {
                 double v = pk.getDouble("value");
                 //double s = 0;//pk.getDouble("speed");
                 String p = pk.getString("pos");
-                CL_Pokemon f = new CL_Pokemon(new Point3D(p), t, v, 0, null);
+                CL_Pokemon f = new CL_Pokemon(new Point3D(p), t, v, 0,null );
                 ans.add(f);
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
