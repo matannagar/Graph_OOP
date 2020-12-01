@@ -12,20 +12,28 @@ import java.util.*;
 public class Ex2 implements Runnable{
     private static MyFrame _win;
     private static Arena _ar;
+    private static int id;
+    private static int numGame;
+
     public static void main(String[] args) {
+     /*   Login l= new Login();
+        l.user();
+        numGame=l.getNum();
+        id=l.getId();*/
+
         Thread client = new Thread(new Ex2());
         client.start();
-        System.out.println("start");
+
     }
     @Override
     public void run() {
-      //  Scanner s= new Scanner(System.in);
-       // int scenario_num = s.nextInt();
-        int scenario_num=1;
-        game_service game = Game_Server_Ex2.getServer(scenario_num);
-        //int id= s.nextInt();
+        /*while(numGame==-1 || id==-1) {
+            System.out.println(numGame+" "+id);
+        }*/
+        System.out.println("here");
+        numGame=1;
+        game_service game = Game_Server_Ex2.getServer(numGame);
         //game.login(id);
-
         directed_weighted_graph gg = loadGraph(game.getGraph());
         init(game);
 
@@ -35,9 +43,10 @@ public class Ex2 implements Runnable{
         int ind=0;
         long dt=100;
 
-        SimplePlayer player= new SimplePlayer("data/music.mp3");
+       /* SimplePlayer player= new SimplePlayer("data/music.mp3");
         Thread playerThread= new Thread(player);
-        playerThread.start();
+        playerThread.start();*/
+
         while(game.isRunning()) {
             moveAgents(game, gg);
             try {
@@ -75,6 +84,7 @@ public class Ex2 implements Runnable{
         _ar = new Arena();
         _ar.setGraph(gg);
         _ar.setPokemons(Arena.json2Pokemons(pks));
+
         _win = new MyFrame("Catch Them All");
         _win.setSize(1000, 700);
         _win.update(_ar);
