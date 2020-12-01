@@ -41,12 +41,11 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         //Choose a idNode we will check from him and do on him bfs algo
 
         Iterator<node_data> it = this.gr.getV().iterator();
-        while(it.hasNext()){
         node_data temp = it.next();
-        int count = bfs(temp.getKey());
+        int count = bfs(temp.getKey(),0);
         if ((count < gr.getV().size())) return false;
-        }
-
+        count = bfs(temp.getKey(),1);
+        if ((count < gr.getV().size())) return false;
         return true;
     }
 
@@ -159,7 +158,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
                 }
     		return true;
     }
-    private int bfs(int key) {
+    private int bfs(int key, int flag){
 
         //reset info&tag
         for (node_data n : gr.getV()) {
@@ -179,7 +178,11 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         // Work on start's neighbors.
         // We marked "red" a node that we work on him now.
 
-        for (edge_data e : this.gr.getE(key)) {
+        Collection<edge_data> c=this.gr.getE(key);
+        if(flag==1)
+        c= ((DWGraph_DS)(this.gr)).getEDest(key);
+
+        for (edge_data e : c) {
             gr.getNode(e.getDest()).setInfo("red");
             q.add( gr.getNode(e.getDest()));
         }

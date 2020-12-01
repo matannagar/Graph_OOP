@@ -112,7 +112,7 @@ public class Arena {
 		catch (JSONException e) {e.printStackTrace();}
 		return ans;
 	}
-	public static void updateEdge(CL_Pokemon fr, directed_weighted_graph g) {
+	public static void updateEdge(CL_Pokemon pk, directed_weighted_graph g) {
 		//	oop_edge_data ans = null;
 		Iterator<node_data> itr = g.getV().iterator();
 		while(itr.hasNext()) {
@@ -120,10 +120,26 @@ public class Arena {
 			Iterator<edge_data> iter = g.getE(v.getKey()).iterator();
 			while(iter.hasNext()) {
 				edge_data e = iter.next();
-				boolean f = isOnEdge(fr.getLocation(), e, fr.getType(), g);
-				if(f) {fr.set_edge(e);}
+				boolean f = isOnEdge(pk.getLocation(), e, pk.getType(), g);
+				if(f) {pk.set_edge(e);}
 			}
 		}
+	}
+
+	private static boolean isOnEdge(geo_location p, edge_data e, int type, directed_weighted_graph g) {
+		int src = g.getNode(e.getSrc()).getKey();
+		int dest = g.getNode(e.getDest()).getKey();
+		//yellow type<0 src<dest- up
+		//green type>0 src>dest- down
+		if(type<0 && dest>src) {return false;}
+		if(type>0 && src>dest) {return false;}
+		return isOnEdge(p,src, dest, g);
+	}
+
+	private static boolean isOnEdge(geo_location p, int s, int d, directed_weighted_graph g) {
+		geo_location src = g.getNode(s).getLocation();
+		geo_location dest = g.getNode(d).getLocation();
+		return isOnEdge(p,src,dest);
 	}
 
 	private static boolean isOnEdge(geo_location p, geo_location src, geo_location dest ) {
@@ -133,18 +149,6 @@ public class Arena {
 		double d1 = src.distance(p) + p.distance(dest);
 		if(dist>d1-EPS2) {ans = true;}
 		return ans;
-	}
-	private static boolean isOnEdge(geo_location p, int s, int d, directed_weighted_graph g) {
-		geo_location src = g.getNode(s).getLocation();
-		geo_location dest = g.getNode(d).getLocation();
-		return isOnEdge(p,src,dest);
-	}
-	private static boolean isOnEdge(geo_location p, edge_data e, int type, directed_weighted_graph g) {
-		int src = g.getNode(e.getSrc()).getKey();
-		int dest = g.getNode(e.getDest()).getKey();
-		if(type<0 && dest>src) {return false;}
-		if(type>0 && src>dest) {return false;}
-		return isOnEdge(p,src, dest, g);
 	}
 
 	private static Range2D GraphRange(directed_weighted_graph g) {

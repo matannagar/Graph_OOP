@@ -25,7 +25,7 @@ public class MyFrame extends JFrame{
 	private int _ind;
 	private Arena _ar;
 	private Range2Range _w2f;
-	MyFrame(String a) {
+	public MyFrame(String a) {
 		super(a);
 		int _ind = 0;
 	}
@@ -65,7 +65,7 @@ public class MyFrame extends JFrame{
 		Iterator<node_data> iter = gg.getV().iterator();
 		while(iter.hasNext()) {
 			node_data n = iter.next();
-			g.setColor(Color.blue);
+			g.setColor(Color.DARK_GRAY);
 			drawNode(n,5,g);
 			Iterator<edge_data> itr = gg.getE(n.getKey()).iterator();
 			while(itr.hasNext()) {

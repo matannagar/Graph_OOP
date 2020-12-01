@@ -19,18 +19,18 @@ public class NodeData implements node_data {
         this.weight = 0;
         this.src= new HashMap<>();
         this.dest= new HashMap<>();
-        this.geo = new Geo_Location();
+        this.geo = new GeoLocation();
         this.info = "";
         this.tag = 0;
     }
 
-    public NodeData(int key, double w) {
+    public NodeData(int key, geo_location ge) {
 
         this.id = key;
-        this.weight = w;
+        this.weight = -1;
         this.src= new HashMap<>();
         this.dest= new HashMap<>();
-        this.geo = new Geo_Location();
+        this.geo = ge;
         this.info = "";
         this.tag = 0;
     }
@@ -42,7 +42,7 @@ public class NodeData implements node_data {
         this.info = n.getInfo() + "";
         this.tag = n.getTag();
         this.weight = n.getWeight();
-        this.geo = new Geo_Location(n.getLocation());
+        this.geo = new GeoLocation(n.getLocation());
     }
 
     @Override
@@ -137,52 +137,6 @@ public class NodeData implements node_data {
             return true;
         }*/
         return true;
-    }
-
-    private class Geo_Location implements geo_location {
-        private double x;
-        private double y;
-        private double z;
-
-        public Geo_Location() {
-            this.x = 0;
-            this.y = 0;
-            this.z = 0;
-        }
-
-        public Geo_Location(double x, double y, double z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public Geo_Location(geo_location g) {
-            this.x = g.x();
-            this.y = g.y();
-            this.z = g.z();
-        }
-
-        @Override
-        public double x() {
-            return x;
-        }
-
-        @Override
-        public double y() {
-            return y;
-        }
-
-        @Override
-        public double z() {
-            return z;
-        }
-
-        //////////////////////////////
-        /////fix/////////
-        @Override
-        public double distance(geo_location g) {
-            return 0;
-        }
     }
 }
 

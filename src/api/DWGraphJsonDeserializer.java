@@ -3,6 +3,7 @@ package api;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
 public class DWGraphJsonDeserializer implements JsonDeserializer<directed_weighted_graph> {
 
@@ -17,7 +18,15 @@ public class DWGraphJsonDeserializer implements JsonDeserializer<directed_weight
 
             JsonElement jsonValueElement = vertexObj.get(i);
             int id = jsonValueElement.getAsJsonObject().get("id").getAsInt();
-            node_data n = new NodeData(id);
+            String s = jsonValueElement.getAsJsonObject().get("pos").getAsString();
+            String [] arr= s.split(",");
+
+            double x=Double.valueOf(arr[0]);
+            double y=Double.valueOf(arr[1]);
+            double z=Double.valueOf(arr[2]);
+
+            geo_location ge= new GeoLocation(x,y,z);
+            node_data n = new NodeData(id,ge);
             graph.addNode(n);
         }
 

@@ -91,10 +91,14 @@ public class DWGraph_DS implements directed_weighted_graph {
 		return ((NodeData)(getNode(node_id))).getSrc();
 	}
 
+	public Collection<edge_data> getEDest(int node_id) {
+		if(!(Nodes.containsKey(node_id))) return null;
+		return ((NodeData)(getNode(node_id))).getDest();
+	}
+
 	public Collection<edge_data> getEdgesCollection() {
 		return Edges.values();
 	}
-
 
 	@Override
 	public node_data removeNode(int key) {
