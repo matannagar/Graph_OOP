@@ -5,12 +5,13 @@ import java.awt.*;
 import java.awt.event.*;
 
 //public class Login implements ActionListener {
-    public class Login   {
+    public class Login implements Runnable {
     static JTextField userText;
     static JTextField userNum;
     static int numId = -1;
     static int numGame = -1;
     private JMenuItem defaultId;
+    private JMenuItem defaultNum;
     private JPanel panel;
     private boolean flag;
 
@@ -24,7 +25,7 @@ import java.awt.event.*;
 
     public boolean user() {
         flag=false;
-        JFrame frame = new JFrame("Login Game");
+        JFrame frame = new JFrame("             Login Game");
         frame.setSize(350, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel = new JPanel();
@@ -32,10 +33,10 @@ import java.awt.event.*;
 
         panel.setLayout(null);
 
-        JLabel id = new JLabel("Id");
+        JLabel id = new JLabel("          Id");
         id.setBounds(10, 20, 80, 25);
         id.setForeground(Color.RED.darker());
-        id.setBackground(Color.orange);
+        id.setBackground(Color.gray.brighter());
         id.setOpaque(true);
 
         panel.add(id);
@@ -64,8 +65,11 @@ import java.awt.event.*;
 
 
 
-        JLabel gameKey = new JLabel("Key Game");
+        JLabel gameKey = new JLabel("   Key Game");
         gameKey.setBounds(10, 50, 80, 25);
+        gameKey.setForeground(Color.RED.darker());
+        gameKey.setBackground(Color.gray.brighter());
+        gameKey.setOpaque(true);
 
         panel.add(gameKey);
 
@@ -76,11 +80,14 @@ import java.awt.event.*;
         JMenuBar mb = new JMenuBar();
         JMenu menu = new JMenu("Menu");
         JMenu submenu = new JMenu("Default");
-        JMenuItem i1 = new JMenuItem("Item 1");
+        //JMenuItem i1 = new JMenuItem("Item 1");
         defaultId = new JMenuItem("Default User Id");
-        menu.add(i1);
+        defaultNum= new JMenuItem("Default Key Game");
+
+        //menu.add(i1);
 
         submenu.add(defaultId);
+        submenu.add(defaultNum);
         menu.add(submenu);
         mb.add(menu);
         frame.setJMenuBar(mb);
@@ -90,10 +97,18 @@ import java.awt.event.*;
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource()==defaultId){
                    // userText.setEditable(false);
-                    userText.setText("123456789");}
+                    userText.setText("208196709");}
             }
         });
 
+        defaultNum.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource()==defaultNum){
+                    // userText.setEditable(false);
+                    userNum.setText("1");}
+            }
+        });
 
         JButton button = new JButton("Start Game");
         button.setBounds(120, 100, 120, 25);
@@ -111,7 +126,7 @@ import java.awt.event.*;
             public void actionPerformed(ActionEvent e) {
                if( userText.getText().length()==9){
                    numId=Integer.valueOf(userText.getText());
-                   if( userNum.getText().length()>0&& userNum.getText().length()<3) {
+                   if( userNum.getText().length()>0&& userNum.getText().length()<=3) {
                        numGame = Integer.valueOf(userNum.getText());
                        flag = true;
                        System.exit(0);
@@ -121,6 +136,15 @@ import java.awt.event.*;
         });
         return flag;
     }
+
+    @Override
+    public void run() {
+        user();
+            System.out.println(getId());
+            System.out.println(getNum());
+
+    }
+
 
     /*@Override
     public void actionPerformed(ActionEvent e) {

@@ -155,11 +155,6 @@ public class Arena {
                 double v = pk.getDouble("value");
                 //double s = 0;//pk.getDouble("speed");
 
-                /*if(==0){
-                    this.set(x);
-                    _count++;
-                }*/
-
                 String p = pk.getString("pos");
                 CL_Pokemon f = new CL_Pokemon(new Point3D(p), t, v, 0, null);
                 ans.add(f);
