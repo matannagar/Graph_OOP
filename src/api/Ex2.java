@@ -34,10 +34,10 @@ public class Ex2 implements Runnable{
         _win.setTitle("Ex2 - OOP: (NONE trivial Solution) "+game.toString());
         int ind=0;
         long dt=100;
-
-        SimplePlayer player= new SimplePlayer("data/music.mp3");
-        Thread playerThread= new Thread(player);
-        playerThread.start();
+//
+//        SimplePlayer player = new SimplePlayer("data/music.mp3");
+//        Thread playerThread = new Thread(player);
+//        playerThread.start();
         while(game.isRunning()) {
             moveAgents(game, gg);
             try {
