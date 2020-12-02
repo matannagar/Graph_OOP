@@ -18,14 +18,16 @@ public class Ex2 implements Runnable {
     private static List<CL_Pokemon> freePok;
 
     public static void main(String[] args) {
-     /*   Login l= new Login();
-        l.user();
-        numGame=l.getNum();
-        id=l.getId();*/
+       Login l= new Login();
+       boolean flag=l.user();
 
-        Thread client = new Thread(new Ex2());
-        client.start();
+        if(flag==true) {
+            numGame = l.getNum();
+            id = l.getId();
 
+            Thread client = new Thread(new Ex2());
+            client.start();
+        }
     }
 
     @Override
