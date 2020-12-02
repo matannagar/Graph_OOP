@@ -19,15 +19,15 @@ public class Ex2 implements Runnable {
     private static ArrayList<Integer> pair = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
-        Login l = new Login();
+        /*Login l = new Login();
         Thread login = new Thread(l);
 
         login.start();
         while (!l.exit()) {
             System.out.print("");
         }
-        id= l.getId();
-        numGame=l.getNum();
+        id = l.getId();
+        numGame = l.getNum();*/
 
         Thread client = new Thread(new Ex2());
         client.start();
@@ -38,7 +38,7 @@ public class Ex2 implements Runnable {
         /*while(numGame==-1 || id==-1) {
             System.out.println(numGame+" "+id);
         }*/
-
+        numGame=17;
         game_service game = Game_Server_Ex2.getServer(numGame);
 
         //game.login(id);
@@ -151,12 +151,20 @@ public class Ex2 implements Runnable {
             double v = ag.getValue();
             if (dest == -1) {
                 pair.set(id, -1);
-                List<node_data> l = path(gg, src, id);
-                Iterator<node_data> it = l.iterator();
-                while (it.hasNext()) {
-                    node_data temp = it.next();
-                    game.chooseNextEdge(ag.getID(), temp.getKey());
-                    System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + temp.getKey());
+                for (int j = 0; j < ageA.size(); j++) {
+                    ag = ageA.get(i);
+                    id = ag.getID();
+                    dest = ag.getNextNode();
+                    src = ag.getSrcNode();
+                    v = ag.getValue();
+                    pair.set(id, -1);
+                    List<node_data> l = path(gg, src, id);
+                    Iterator<node_data> it = l.iterator();
+                    while (it.hasNext()) {
+                        node_data temp = it.next();
+                        game.chooseNextEdge(ag.getID(), temp.getKey());
+                        System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + temp.getKey());
+                    }
                 }
             }
         }
@@ -176,17 +184,22 @@ public class Ex2 implements Runnable {
         int po = 0;
         for (int i = 0; i < _ar.getPokemons().size(); i++) {
             Arena.updateEdge(_ar.getPokemons().get(i), g);
-            for (int j = 0; j < pair.size(); j++) {
                 dest = _ar.getPokemons().get(i).get_edge().getSrc();
+
+            for (int j = 0; j < pair.size(); j++) {
+/*
+                dest = _ar.getPokemons().get(i).get_edge().getSrc();
+*/
                 if (pair.get(j) == dest) flag = false;
             }
             // dest = _ar.getPokemons().get(i).get_edge().getSrc();
+            if(flag){
             double tempD = algo.shortestPathDist(src, dest);
-            if (tempD < minD && flag) {
+            if (tempD <= minD) {
                 minD = tempD;
                 index = dest;
                 po = i;
-            }
+            }}
             flag = true;
         }
 

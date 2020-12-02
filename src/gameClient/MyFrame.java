@@ -53,6 +53,8 @@ public class MyFrame extends JFrame {
 		drawGraph(g);
 		drawAgants(g);
 		drawInfo(g);
+		drawGradeAg(g);
+
 
 	}
 
@@ -138,5 +140,19 @@ public class MyFrame extends JFrame {
 		geo_location d0 = this._w2f.world2frame(d);
 		g.drawLine((int) s0.x(), (int) s0.y(), (int) d0.x(), (int) d0.y());
 		//	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
+	}
+
+	public void drawGradeAg( Graphics g){
+		List<CL_Agent> rs = _ar.getAgents();
+		g.setColor(Color.red);
+
+		g.drawLine(815,50,950,50);
+		g.drawLine(815,80+20*rs.size(),950,80+20*rs.size());
+
+		g.setColor(Color.blue);
+		int i = 0, j=20;
+		while (rs != null && i < rs.size()) {
+			g.drawString("Agent- "+rs.get(i).getID()+": value- "+ rs.get(i).getValue(),830,80+i*j);
+			i++;}
 	}
 }
