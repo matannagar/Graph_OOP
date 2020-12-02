@@ -7,7 +7,7 @@ import gameClient.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
+
 import java.util.*;
 
 
@@ -19,19 +19,19 @@ public class Ex2 implements Runnable {
     private static ArrayList<Integer> pair = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
-        Thread login = new Thread(new Login());
-        boolean flag = false;
+        Login l = new Login();
+        Thread login = new Thread(l);
+
         login.start();
-
-        while (login.isAlive()) {}
-        flag = true;
-        if (flag) {
-            Thread client = new Thread(new Ex2());
-            client.start();
+        while (!l.exit()) {
+            System.out.print("");
         }
+        id= l.getId();
+        numGame=l.getNum();
 
+        Thread client = new Thread(new Ex2());
+        client.start();
     }
-
 
     @Override
     public void run() {
@@ -39,8 +39,8 @@ public class Ex2 implements Runnable {
             System.out.println(numGame+" "+id);
         }*/
 
-        numGame = 23;
         game_service game = Game_Server_Ex2.getServer(numGame);
+
         //game.login(id);
         directed_weighted_graph gg = loadGraph(game.getGraph());
         init(game);

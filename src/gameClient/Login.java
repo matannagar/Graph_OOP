@@ -3,9 +3,10 @@ package gameClient;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 
-//public class Login implements ActionListener {
-    public class Login implements Runnable {
+public class Login implements Runnable {
     static JTextField userText;
     static JTextField userNum;
     static int numId = -1;
@@ -13,7 +14,9 @@ import java.awt.event.*;
     private JMenuItem defaultId;
     private JMenuItem defaultNum;
     private JPanel panel;
+    private JButton button;
     private boolean flag;
+    private JFrame frame;
 
     public int getNum() {
         return numGame;
@@ -23,15 +26,21 @@ import java.awt.event.*;
         return numId;
     }
 
-    public boolean user() {
+    public synchronized void user() {
+
         flag=false;
-        JFrame frame = new JFrame("             Login Game");
+        frame = new JFrame("             Pokemon Login");
         frame.setSize(350, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel = new JPanel();
 
-
         panel.setLayout(null);
+
+        JLabel temp= new JLabel();
+        temp.setIcon(new ImageIcon("data/pok.png"));
+        temp.setBounds(275, 70, 70, 70);
+        panel.add(temp);
+        frame.add(panel);
 
         JLabel id = new JLabel("          Id");
         id.setBounds(10, 20, 80, 25);
@@ -56,13 +65,13 @@ import java.awt.event.*;
                                         } else {
                                             userText.setEditable(false);
                                             //userText.setText("");
+
                                             userText.setText("* Enter only numeric digits(0-9)");
 
                                         }
                                     }
                                 }
         );
-
 
 
         JLabel gameKey = new JLabel("   Key Game");
@@ -110,7 +119,7 @@ import java.awt.event.*;
             }
         });
 
-        JButton button = new JButton("Start Game");
+        button = new JButton("Start Game");
         button.setBounds(120, 100, 120, 25);
         button.setForeground(Color.red.darker());
         button.setBackground(Color.PINK);
@@ -120,36 +129,43 @@ import java.awt.event.*;
 
        // button.addActionListener(new Login());
 
-
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                if( userText.getText().length()==9){
                    numId=Integer.valueOf(userText.getText());
-                   if( userNum.getText().length()>0&& userNum.getText().length()<=3) {
+                   if( userNum.getText().length()>0 && userNum.getText().length()<=3) {
                        numGame = Integer.valueOf(userNum.getText());
-                       flag = true;
-                       System.exit(0);
+                       flag=true;
+                       frame.dispose();
                    }
                }
             }
         });
-        return flag;
     }
 
     @Override
     public void run() {
-        user();
-            System.out.println(getId());
-            System.out.println(getNum());
 
+        user();
+       /* while (true) {
+         //   if (userNum.getText().length() > 0 && userNum.getText().length() <= 3)
+            if(flag){
+            return;}
+         *//*   System.out.println(getId());
+            System.out.println(getNum());}*//*
+        }*/
+    }
+
+    public boolean exit(){
+        return flag;
     }
 
 
-    /*@Override
+   /* @Override
     public void actionPerformed(ActionEvent e) {
-     *//*   id=Integer.parseInt(userText.getText());
-        num=Integer.parseInt(userNum.getText());*//*
+        id=Integer.parseInt(userText.getText());
+        num=Integer.parseInt(userNum.getText());
 
         id = Integer.valueOf(userText.getText());
         num = Integer.valueOf(userNum.getText());
@@ -160,4 +176,4 @@ import java.awt.event.*;
     }
 */
 
-}
+   }
