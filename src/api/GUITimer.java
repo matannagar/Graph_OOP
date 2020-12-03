@@ -112,4 +112,5 @@ public class GUITimer extends JFrame implements ItemListener {
         long converted = (ttime2 * 60000) + 1000;
         return converted;
     }
+
 }
