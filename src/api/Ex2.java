@@ -19,18 +19,19 @@ public class Ex2 implements Runnable {
     private static ArrayList<Integer> pair = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
-        /*Login l = new Login();
-        Thread login = new Thread(l);
-
-        login.start();
-        while (!l.exit()) {
-            System.out.print("");
-        }
-        id = l.getId();
-        numGame = l.getNum();*/
+//        Login l = new Login();
+//        Thread login = new Thread(l);
+//
+//        login.start();
+//        while (!l.exit()) {
+//            System.out.print("");
+//        }
+//        id = l.getId();
+//        numGame = l.getNum();
 
         Thread client = new Thread(new Ex2());
         client.start();
+        GUITimer timer = new GUITimer();
     }
 
     @Override
@@ -38,7 +39,7 @@ public class Ex2 implements Runnable {
         /*while(numGame==-1 || id==-1) {
             System.out.println(numGame+" "+id);
         }*/
-        numGame=17;
+        numGame=1;
         game_service game = Game_Server_Ex2.getServer(numGame);
 
         //game.login(id);
@@ -48,7 +49,7 @@ public class Ex2 implements Runnable {
         game.startGame();
 
         _win.setTitle("Ex2 " + game.toString());
-        int ind = 0;
+        int ind = 1;
         long dt = 100;
 //fix music location
         /*SimplePlayer player= new SimplePlayer("data/music.mp3");

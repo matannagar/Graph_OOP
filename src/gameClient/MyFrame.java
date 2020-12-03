@@ -1,16 +1,18 @@
 package gameClient;
 
-import api.directed_weighted_graph;
-import api.edge_data;
-import api.geo_location;
-import api.node_data;
+import api.*;
 import gameClient.util.Point3D;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
 import gameClient.util.Range2Range;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.text.StyledEditorKit;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class MyFrame extends JFrame {
 	private int _ind;
 	private Arena _ar;
 	private Range2Range _w2f;
+	private static int counter = 0;
 
 	public MyFrame(String a) {
 		super(a);
@@ -48,14 +51,16 @@ public class MyFrame extends JFrame {
 		int w = this.getWidth();
 		int h = this.getHeight();
 		g.clearRect(0, 0, w, h);
-		//	updateFrame();
+			updateFrame();
 		drawPokemons(g);
+
 		drawGraph(g);
-		drawAgants(g);
+
+		drawAgents(g);
 		drawInfo(g);
 		drawGradeAg(g);
-
-
+//		drawTimer(g);
+		counter++;
 	}
 
 	private void drawInfo(Graphics g) {
@@ -101,6 +106,17 @@ public class MyFrame extends JFrame {
 
 					geo_location fp = this._w2f.world2frame(c);
 					g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
+					/////////////////Matan's code
+					BufferedImage img = null;
+					try{
+						img = ImageIO.read(new File("data/pok.png"));
+					} catch (IOException e){
+
+					};
+//					g.drawImage(img,((getWidth()-img.getWidth()) /3) ,((getHeight()-img.getHeight())/3),this);
+					int k = 25;
+					g.drawImage(img,(int) fp.x() - k ,(int) fp.y() - k,this);
+					/////////////////Matan's code
 					//	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
 
 				}
@@ -108,7 +124,7 @@ public class MyFrame extends JFrame {
 		}
 	}
 
-	private void drawAgants(Graphics g) {
+	private void drawAgents(Graphics g) {
 		List<CL_Agent> rs = _ar.getAgents();
 		//	Iterator<OOP_Point3D> itr = rs.iterator();
 		g.setColor(Color.red);
@@ -120,7 +136,18 @@ public class MyFrame extends JFrame {
 			if (c != null) {
 
 				geo_location fp = this._w2f.world2frame(c);
-				g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
+//				g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
+				/////////////////Matan's code
+				BufferedImage img = null;
+				try{
+					img = ImageIO.read(new File("data/mypac.png"));
+				} catch (IOException e){
+
+				};
+//					g.drawImage(img,((getWidth()-img.getWidth()) /3) ,((getHeight()-img.getHeight())/3),this);
+				int k = 25;
+				g.drawImage(img,(int) fp.x() - k ,(int) fp.y() - k,this);
+				/////////////////Matan's code
 			}
 		}
 	}
@@ -129,7 +156,12 @@ public class MyFrame extends JFrame {
 		geo_location pos = n.getLocation();
 		geo_location fp = this._w2f.world2frame(pos);
 		g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
+		g.setColor(Color.red);
+		//matans code
+		g.setFont(new Font("David",Font.PLAIN,20));
+		//matans code
 		g.drawString("" + n.getKey(), (int) fp.x(), (int) fp.y() - 4 * r);
+
 	}
 
 	private void drawEdge(edge_data e, Graphics g) {
@@ -138,6 +170,12 @@ public class MyFrame extends JFrame {
 		geo_location d = gg.getNode(e.getDest()).getLocation();
 		geo_location s0 = this._w2f.world2frame(s);
 		geo_location d0 = this._w2f.world2frame(d);
+		//////Matan's
+//		this.paintComponents(g);
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setStroke(new BasicStroke(3));
+		g2.drawLine((int) s0.x(), (int) s0.y(), (int) d0.x(), (int) d0.y());
+		///Matan's
 		g.drawLine((int) s0.x(), (int) s0.y(), (int) d0.x(), (int) d0.y());
 		//	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
 	}
@@ -155,4 +193,12 @@ public class MyFrame extends JFrame {
 			g.drawString("Agent- "+rs.get(i).getID()+": value- "+ rs.get(i).getValue(),830,80+i*j);
 			i++;}
 	}
+//////////Matan's timer
+	public void drawTimer(Graphics g){
+
+		GUITimer timer = new GUITimer();
+	}
+	/////////Matan's timer
+
+
 }

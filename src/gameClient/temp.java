@@ -1,8 +1,10 @@
 package gameClient;
 
+import api.GUITimer;
+
 public class temp {
     public static void main(String[] args) {
-        Login l= new Login();
-        l.user();
+        GUITimer timer = new GUITimer();
+        System.out.println(timer);
     }
 }
