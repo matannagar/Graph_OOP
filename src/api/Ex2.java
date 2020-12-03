@@ -7,7 +7,6 @@ import gameClient.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import java.util.*;
 
 
@@ -19,8 +18,9 @@ public class Ex2 implements Runnable {
     private static ArrayList<Integer> pair = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
-//        Login l = new Login();
-//        Thread login = new Thread(l);
+        //Login l = new Login();
+       // Thread login = new Thread(l);
+       //l.user();
 //
 //        login.start();
 //        while (!l.exit()) {
@@ -31,7 +31,9 @@ public class Ex2 implements Runnable {
 
         Thread client = new Thread(new Ex2());
         client.start();
-        GUITimer timer = new GUITimer();
+
+
+       // GUITimer timer = new GUITimer();
     }
 
     @Override
@@ -39,7 +41,19 @@ public class Ex2 implements Runnable {
         /*while(numGame==-1 || id==-1) {
             System.out.println(numGame+" "+id);
         }*/
-        numGame=1;
+       /* Login l = new Login();
+        l.user();
+        boolean f=true;
+        while (!f) {f=l.exit();}*/
+        /*synchronized (this){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }*/
+
+        numGame=17;
         game_service game = Game_Server_Ex2.getServer(numGame);
 
         //game.login(id);
@@ -55,6 +69,8 @@ public class Ex2 implements Runnable {
         /*SimplePlayer player= new SimplePlayer("data/music.mp3");
         Thread playerThread= new Thread(player);
         playerThread.start();*/
+
+        GUITimer timer = new GUITimer();
 
         while (game.isRunning()) {
             moveAgents(game, gg);

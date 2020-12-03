@@ -7,6 +7,7 @@ import gameClient.util.Range2D;
 import gameClient.util.Range2Range;
 
 import javax.imageio.ImageIO;
+import javax.management.timer.TimerMBean;
 import javax.swing.*;
 import javax.swing.text.StyledEditorKit;
 import java.awt.*;
@@ -25,6 +26,7 @@ import java.util.TimerTask;
  * code and not to take it "as is".
  */
 public class MyFrame extends JFrame {
+
     private int _ind;
     private Arena _ar;
     private Range2Range _w2f;
@@ -52,12 +54,15 @@ public class MyFrame extends JFrame {
         int h = this.getHeight();
         g.clearRect(0, 0, w, h);
         updateFrame();
-        drawPokemons(g);
+
         drawGraph(g);
+        drawPokemons(g);
         drawAgents(g);
         drawInfo(g);
         drawGradeAg(g);
         drawTimer(g);
+       // T(g);
+
     }
 
     private void drawInfo(Graphics g) {
@@ -102,7 +107,7 @@ public class MyFrame extends JFrame {
                 if (c != null) {
 
                     geo_location fp = this._w2f.world2frame(c);
-                    g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
+                    //g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
                     /////////////////Matan's code
                     BufferedImage img = null;
                     try {
@@ -181,15 +186,17 @@ public class MyFrame extends JFrame {
 
     public void drawGradeAg(Graphics g) {
         List<CL_Agent> rs = _ar.getAgents();
-        g.setColor(Color.red);
+        g.setColor(Color.pink);
 
-        g.drawLine(815, 50, 950, 50);
-        g.drawLine(815, 80 + 20 * rs.size(), 950, 80 + 20 * rs.size());
+        g.drawLine(815, 50, 970, 50);
+        g.drawLine(815, 80 + 20 * rs.size(), 970, 80 + 20 * rs.size());
 
-        g.setColor(Color.blue);
+        g.setColor(Color.blue.darker().darker());
+        Font  f1  = new Font(Font.DIALOG,  Font.BOLD, 15);
+        g.setFont(f1);
         int i = 0, j = 20;
         while (rs != null && i < rs.size()) {
-            g.drawString("Agent- " + rs.get(i).getID() + ": value- " + rs.get(i).getValue(), 830, 80 + i * j);
+            g.drawString("Agent- " + rs.get(i).getID() + ": value- " + rs.get(i).getValue(), 820, 80 + i * j);
             i++;
         }
         //Matan's commet:

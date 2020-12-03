@@ -3,10 +3,10 @@ package gameClient;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
+
 
 public class Login implements Runnable {
+
     static JTextField userText;
     static JTextField userNum;
     static int numId = -1;
@@ -33,6 +33,7 @@ public class Login implements Runnable {
         frame.setSize(350, 200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel = new JPanel();
+        panel.setBackground(Color.orange);
 
         panel.setLayout(null);
 

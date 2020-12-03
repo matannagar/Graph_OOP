@@ -31,7 +31,7 @@ public class GUITimer extends JFrame implements ItemListener {
         JPanel timePanel = new JPanel(){
             @Override
             public Dimension getPreferredSize(){
-                return new Dimension(200,100);
+                return new Dimension(200,70);
             }
         };
 
