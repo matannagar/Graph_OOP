@@ -11,7 +11,8 @@ import java.util.*;
 
 
 public class Ex2 implements Runnable {
-    private static MyFrame _win;
+    //private static MyFrame _win;
+    private static ReutFrame _win;
     private static Arena _ar;
     private static int id;
     private static int numGame;
@@ -105,17 +106,23 @@ public class Ex2 implements Runnable {
     }
 
     private void init(game_service game) {
+        _win= new ReutFrame("try", 350,200);
+        _win.initLogin();
+        _win = new ReutFrame("Catch Them All",1000, 700);
+
         String pks = game.getPokemons();
         directed_weighted_graph gg = loadGraph(game.getGraph());
+
         _ar = new Arena();
         _ar.setGraph(gg);
         _ar.setPokemons(Arena.json2Pokemons(pks));
 
-        _win = new MyFrame("Catch Them All");
-        _win.setSize(1000, 700);
+        //_win = new MyFrame("Catch Them All");
+        //_win.setSize(1000, 700);
         _win.update(_ar);
+        _win.timer();
 
-        _win.show();
+      //  _win.show();
         String info = game.toString();
         JSONObject line;
         try {
