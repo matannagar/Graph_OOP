@@ -20,8 +20,8 @@ public class Ex2 implements Runnable {
 
     public static void main(String[] args) throws Exception {
         //Login l = new Login();
-       // Thread login = new Thread(l);
-       //l.user();
+        // Thread login = new Thread(l);
+        //l.user();
 //
 //        login.start();
 //        while (!l.exit()) {
@@ -34,11 +34,12 @@ public class Ex2 implements Runnable {
         client.start();
 
 
-       // GUITimer timer = new GUITimer();
+        // GUITimer timer = new GUITimer();
     }
 
     @Override
     public void run() {
+
         /*while(numGame==-1 || id==-1) {
             System.out.println(numGame+" "+id);
         }*/
@@ -53,8 +54,21 @@ public class Ex2 implements Runnable {
                 e.printStackTrace();
             }
         }*/
-
-        numGame=17;
+        _win = new ReutFrame("login game", 350, 200);
+        _win.initLogin();
+        /*String s = _win.initLogin();
+        int id = 0, numkey=0;
+        for (int i = 0; i < 9; i++) {
+            int j = Integer.valueOf(s.charAt(i));
+            j *= 10;
+            id += j;
+        }
+        for(int i=9; i<s.length(); i++){
+            int j = Integer.valueOf(s.charAt(i));
+            j *= 10;
+            numkey += j;
+        }*/
+        numGame = 17;
         game_service game = Game_Server_Ex2.getServer(numGame);
 
         //game.login(id);
@@ -71,14 +85,13 @@ public class Ex2 implements Runnable {
         Thread playerThread= new Thread(player);
         playerThread.start();*/
 
-        GUITimer timer = new GUITimer();
-
         while (game.isRunning()) {
             moveAgents(game, gg);
             _win.setTitle("Ex2 " + game.toString());
             try {
-                if (ind % 2 == 0) {
+                if (ind % 1 == 0) {
                     _win.repaint();
+
                 }
                 Thread.sleep(dt);
                 ind++;
@@ -106,9 +119,7 @@ public class Ex2 implements Runnable {
     }
 
     private void init(game_service game) {
-        _win= new ReutFrame("try", 350,200);
-        _win.initLogin();
-        _win = new ReutFrame("Catch Them All",1000, 700);
+        _win = new ReutFrame("Catch Them All", 1000, 700);
 
         String pks = game.getPokemons();
         directed_weighted_graph gg = loadGraph(game.getGraph());
@@ -122,7 +133,7 @@ public class Ex2 implements Runnable {
         _win.update(_ar);
         _win.timer();
 
-      //  _win.show();
+        //  _win.show();
         String info = game.toString();
         JSONObject line;
         try {
@@ -208,7 +219,7 @@ public class Ex2 implements Runnable {
         int po = 0;
         for (int i = 0; i < _ar.getPokemons().size(); i++) {
             Arena.updateEdge(_ar.getPokemons().get(i), g);
-                dest = _ar.getPokemons().get(i).get_edge().getSrc();
+            dest = _ar.getPokemons().get(i).get_edge().getSrc();
 
             for (int j = 0; j < pair.size(); j++) {
 /*
@@ -217,13 +228,14 @@ public class Ex2 implements Runnable {
                 if (pair.get(j) == dest) flag = false;
             }
             // dest = _ar.getPokemons().get(i).get_edge().getSrc();
-            if(flag){
-            double tempD = algo.shortestPathDist(src, dest);
-            if (tempD <= minD) {
-                minD = tempD;
-                index = dest;
-                po = i;
-            }}
+            if (flag) {
+                double tempD = algo.shortestPathDist(src, dest);
+                if (tempD <= minD) {
+                    minD = tempD;
+                    index = dest;
+                    po = i;
+                }
+            }
             flag = true;
         }
 

@@ -14,20 +14,25 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
 
 public class ReutFrame extends JFrame {
 
     private Arena _ar;
     private Range2Range _w2f;
+    private LinkedList<geo_location> pk= new LinkedList<>();
+    private LinkedList<geo_location> ag= new LinkedList<>();
+    private boolean flag;
+
 
     public ReutFrame(String s, int w, int h) {
         super(s);
-        newF(w,h);
+        newF(w, h);
+        flag=false;
     }
 
-    private void newF(int w, int h){
+    private void newF(int w, int h) {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(w, h);
         this.setVisible(true);
@@ -50,17 +55,12 @@ public class ReutFrame extends JFrame {
     }
 
     public void paint(Graphics g) {
-        int w = this.getWidth();
-        int h = this.getHeight();
-       g.clearRect(0, 0, w, h);
-        updateFrame();
-        
-
         drawGraph(g);
         drawPokemons(g);
         drawAgents(g);
         drawInfo(g);
         drawGradeAg(g);
+        drawGrade(g);
         drawTimer(g);
     }
 
@@ -69,6 +69,10 @@ public class ReutFrame extends JFrame {
         this.add(panel);
         this.setVisible(true);
         panel.setVisible(true);
+        /*Scanner s= new Scanner(System.in);
+        int userId = s.nextInt();  // Read userId input
+        int keyGame = s.nextInt();  // Read keyGame input
+        return (userId+""+keyGame);*/
     }
 
     private void initMenu() {
@@ -85,8 +89,14 @@ public class ReutFrame extends JFrame {
         this.setJMenuBar(mb);
     }
 
-    public void timer(){
-        GUITimer t= new GUITimer();
+    private void initGraph(Graphics g) {
+        updateFrame();
+        drawGraph(g);
+        this.setVisible(true);
+    }
+
+    public void timer() {
+        GUITimer t = new GUITimer();
     }
 
     private void initGame() {
@@ -104,6 +114,7 @@ public class ReutFrame extends JFrame {
     }
 
     private void drawGraph(Graphics g) {
+        if(flag==false){
         directed_weighted_graph gg = _ar.getGraph();
         Iterator<node_data> iter = gg.getV().iterator();
         while (iter.hasNext()) {
@@ -117,17 +128,29 @@ public class ReutFrame extends JFrame {
                 drawEdge(e, g);
             }
         }
+        flag=true;}
     }
 
     private void drawPokemons(Graphics g) {
-        java.util.List<CL_Pokemon> fs = _ar.getPokemons();
+        int k = 25;
+        for(geo_location p: pk) {
+            g.clearRect((int) p.x() - k, (int) p.y() - k, 70, 70);
+        }
+        pk.clear();
+
+        List<CL_Pokemon> fs = _ar.getPokemons();
         if (fs != null) {
+
             Iterator<CL_Pokemon> itr = fs.iterator();
-
             while (itr.hasNext()) {
-
                 CL_Pokemon f = itr.next();
                 Point3D c = f.getLocation();
+
+                /*for(geo_location p: pk){
+                    if(!(p.x()==c.x()&&p.y()==c.y()))
+                        g.clearRect((int) p.x() - k, (int) p.y() - k, 70, 70);
+                }*/
+
                 int r = 10;
                 g.setColor(Color.green);
                 if (f.getType() < 0) {
@@ -136,18 +159,22 @@ public class ReutFrame extends JFrame {
                 if (c != null) {
 
                     geo_location fp = this._w2f.world2frame(c);
+                    pk.add(fp);
                     //g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
                     /////////////////Matan's code
+                }
+                for(geo_location p: pk){
                     BufferedImage img = null;
                     try {
                         img = ImageIO.read(new File("data/pok.png"));
+
                     } catch (IOException e) {
 
                     }
                     ;
 //					g.drawImage(img,((getWidth()-img.getWidth()) /3) ,((getHeight()-img.getHeight())/3),this);
-                    int k = 25;
-                    g.drawImage(img, (int) fp.x() - k, (int) fp.y() - k, this);
+
+                    g.drawImage(img, (int) p.x() - k, (int) p.y() - k, this);
                     /////////////////Matan's code
                     //	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
 
@@ -157,7 +184,12 @@ public class ReutFrame extends JFrame {
     }
 
     private void drawAgents(Graphics g) {
-        java.util.List<CL_Agent> rs = _ar.getAgents();
+        int k = 25;
+        for(geo_location p: ag) {
+            g.clearRect((int) p.x() - k, (int) p.y() - k, 24, 27);
+        }
+        ag.clear();
+        List<CL_Agent> rs = _ar.getAgents();
         //	Iterator<OOP_Point3D> itr = rs.iterator();
         g.setColor(Color.red);
         int i = 0;
@@ -168,8 +200,11 @@ public class ReutFrame extends JFrame {
             if (c != null) {
 
                 geo_location fp = this._w2f.world2frame(c);
+                ag.add(fp);
 //				g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
                 /////////////////Matan's code
+            }
+            for(geo_location p: ag){
                 BufferedImage img = null;
                 try {
                     img = ImageIO.read(new File("data/mypac.png"));
@@ -178,8 +213,8 @@ public class ReutFrame extends JFrame {
                 }
                 ;
 //					g.drawImage(img,((getWidth()-img.getWidth()) /3) ,((getHeight()-img.getHeight())/3),this);
-                int k = 25;
-                g.drawImage(img, (int) fp.x() - k, (int) fp.y() - k, this);
+
+                g.drawImage(img, (int) p.x() - k, (int) p.y() - k, this);
                 /////////////////Matan's code
             }
         }
@@ -217,26 +252,42 @@ public class ReutFrame extends JFrame {
         List<CL_Agent> rs = _ar.getAgents();
         g.setColor(Color.pink);
 
+       // g.clearRect(815,50,100,50);
+
         g.drawLine(815, 50, 970, 50);
         g.drawLine(815, 80 + 20 * rs.size(), 970, 80 + 20 * rs.size());
 
         g.setColor(Color.blue.darker().darker());
-        Font  f1  = new Font(Font.DIALOG,  Font.BOLD, 15);
+        Font f1 = new Font(Font.DIALOG, Font.BOLD, 15);
         g.setFont(f1);
         int i = 0, j = 20;
         while (rs != null && i < rs.size()) {
-            g.drawString("Agent- " + rs.get(i).getID() + ": value- " + rs.get(i).getValue(), 820, 80 + i * j);
+          //  g.drawString("Agent- " + rs.get(i).getID() + ": value- " + rs.get(i).getValue(), 820, 80 + i * j);
+            g.drawString("Agent- " + rs.get(i).getID() + ": value- ",820, 80 + i * j);
             i++;
         }
         //Matan's commet:
         //lets add the num_of_scenario + total_points so far + num_of_steps + num_of_agnts ...
         //Matan's commet
     }
+    public void drawGrade(Graphics g) {
+        g.clearRect(940, 60, 50,70);
+        List<CL_Agent> rs = _ar.getAgents();
+
+        g.setColor(Color.orange.darker().darker());
+        Font f1 = new Font(Font.DIALOG, Font.BOLD, 15);
+        g.setFont(f1);
+        int i = 0, j = 20;
+        while (rs != null && i < rs.size()) {
+            g.drawString(""+rs.get(i).getValue(), 940, 80 + i * j);
+            i++;
+        }
+    }
 
     //////////Matan's timer
     public void drawTimer(Graphics g) {
-        g.setColor(Color.red);
-        g.drawString("Remaining time: 00:00"+" ,Insert timer here", 400, 120);
+        g.setColor(Color.orange.darker().darker());
+        g.drawString("Remaining time: 00:00" + " ,Insert timer here", 300, 100);
         /////////Matan's timer
     }
 
