@@ -9,8 +9,6 @@ import gameClient.util.Range2Range;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +22,7 @@ public class ReutFrame extends JFrame {
     private LinkedList<geo_location> pk = new LinkedList<>();
     private LinkedList<geo_location> ag = new LinkedList<>();
     private boolean flag;
-    private MyPanel p = new MyPanel("temp");
+ //   private MyPanel p = new MyPanel("temp");
 
     public ReutFrame(String s, int w, int h) {
         super(s);
@@ -65,7 +63,6 @@ public class ReutFrame extends JFrame {
         drawTimer(g);
 
 
-//        p.setVisible(true);
     }
 
     public void initLogin() {
@@ -94,20 +91,20 @@ public class ReutFrame extends JFrame {
         this.setJMenuBar(mb);
     }
 
-    private void initGraph(Graphics g) {
-        updateFrame();
-        drawGraph(g);
-        this.setVisible(true);
-    }
+   /* public MyPanel initGraph() {
+        MyPanel gr= new MyPanel("game");
+        this.add(gr);
+        return gr;
+    }*/
 
     public void timer() {
         GUITimer t = new GUITimer();
     }
 
-    private void initGame() {
+    /*public void initGame() {
         MyPanel panel = new MyPanel("game");
         this.add(panel);
-    }
+    }*/
 
 //    private void drawInfo(Graphics g) {
 //        java.util.List<String> str = _ar.get_info();
@@ -119,13 +116,8 @@ public class ReutFrame extends JFrame {
 //    }
 
     private void drawGraph(Graphics g) {
-        if (flag == false) {
+      //  if (flag == false) {
             if (_ar != null) {
-                ///
-                this.add(p);
-                p.setVisible(false);
-                p.temp(g);
-                ////
                 directed_weighted_graph gg = _ar.getGraph();
                 Iterator<node_data> iter = gg.getV().iterator();
                 while (iter.hasNext()) {
@@ -142,13 +134,13 @@ public class ReutFrame extends JFrame {
                 flag = true;
             }
         }
-    }
+   // }
 
     private void drawPokemons(Graphics g) {
         int k = 25;
-//        for(geo_location p: pk) {
-//        g.clearRect((int) p.x() - k, (int) p.y() - k, 70, 70);
-//        }
+        for(geo_location p: pk) {
+        g.clearRect((int) p.x() - k, (int) p.y() - k, 70, 70);
+        }
         pk.clear();
 
         //***** check why _ar could be NULL
@@ -175,10 +167,11 @@ public class ReutFrame extends JFrame {
 
                         geo_location fp = this._w2f.world2frame(c);
                         pk.add(fp);
-                        //g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
+
                         /////////////////Matan's code
                     }
                     for (geo_location p : pk) {
+                      //  g.fillOval((int) p.x() - r, (int) p.y() - r, 2 * r, 2 * r);
                         BufferedImage img = null;
                         try {
                             img = ImageIO.read(new File("data/pok.png"));
@@ -187,7 +180,7 @@ public class ReutFrame extends JFrame {
 
                         }
                         ;
-//					g.drawImage(img,((getWidth()-img.getWidth()) /3) ,((getHeight()-img.getHeight())/3),this);
+					g.drawImage(img,((getWidth()-img.getWidth()) /3) ,((getHeight()-img.getHeight())/3),this);
 
                         g.drawImage(img, (int) p.x() - k, (int) p.y() - k, this);
 
@@ -202,9 +195,9 @@ public class ReutFrame extends JFrame {
 
     private void drawAgents(Graphics g) {
         int k = 25;
-//        for(geo_location p: ag) {
-//            g.clearRect((int) p.x() - k, (int) p.y() - k, 30, 30);
-//        }
+        for(geo_location p: ag) {
+            g.clearRect((int) p.x() - k, (int) p.y() - k, 30, 30);
+        }
         ag.clear();
         //**** find out why _ar could be null
         if (_ar != null) {

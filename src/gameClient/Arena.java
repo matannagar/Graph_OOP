@@ -119,7 +119,7 @@ public class Arena {
             for (int i = 0; i < ags.length(); i++) {
                 ////////// נאתר את הצלעות של הפוקימונים, את המקור של הצלע ולשם נשלח את הסוכן על ההתחלה
                 CL_Agent c = new CL_Agent(gg, 0);
-                c.update(ags.get(i).toString(),StartPosAg(gg));
+                c.update(ags.get(i).toString(),StartPosAg(gg),ags.length());
                 ans.add(c);
             }
             //= getJSONArray("Agents");
@@ -136,7 +136,7 @@ public class Arena {
             updateEdge(pokemonsInit.get(i), g);
             //if (pokemonsInit.get(i).get_edge() != null) {
             int ans = pokemonsInit.get(i).get_edge().getSrc();
-           // pokemonsInit.remove(i);
+            pokemonsInit.remove(i);
             return ans;
         }
         // }

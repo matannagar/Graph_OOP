@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 
 public class MyPanel extends JPanel {
     public MyPanel(String type) {
+        super();
         if (type.equals("login")) {
             init();
             login();
@@ -20,6 +21,8 @@ public class MyPanel extends JPanel {
     /*public void paint(Graphics g){
         g.clearRect(0,0,this.getWidth(),this.getHeight());
     }*/
+
+
 
     private void init() {
         this.setBackground(Color.pink);
@@ -82,6 +85,7 @@ public class MyPanel extends JPanel {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 if (e.getSource() == button) {
                     // userText.setEditable(false);
                     userText.setText("208196709");
@@ -106,24 +110,21 @@ public class MyPanel extends JPanel {
         button.setBackground(Color.orange);
         this.add(button);
 
-        /*button.addActionListener(new ActionListener() {
+        button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == button) game();
             }
-        });*/
+        });
     }
-    /*private void game(){
-        this.repaint();
+   /* public void paint(Graphics g){
+       g.drawRect(100,200,56,80);
     }*/
 
-    public void temp(Graphics g){
-      this.setVisible(false);
-        g.fillOval(100,70,70,100);
-   //     this.setVisible(false);
-
-        // setVisible(true);
+    private void game(){
+        setBounds(0,0,1000, 700);
     }
+
 }
 
 
