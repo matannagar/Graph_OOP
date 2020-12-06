@@ -21,15 +21,15 @@ public class ReutFrame extends JFrame {
 
     private Arena _ar;
     private Range2Range _w2f;
-    private LinkedList<geo_location> pk= new LinkedList<>();
-    private LinkedList<geo_location> ag= new LinkedList<>();
+    private LinkedList<geo_location> pk = new LinkedList<>();
+    private LinkedList<geo_location> ag = new LinkedList<>();
     private boolean flag;
-
+    private MyPanel p = new MyPanel("temp");
 
     public ReutFrame(String s, int w, int h) {
         super(s);
         newF(w, h);
-        flag=false;
+        flag = false;
     }
 
     private void newF(int w, int h) {
@@ -55,13 +55,17 @@ public class ReutFrame extends JFrame {
     }
 
     public void paint(Graphics g) {
+
         drawGraph(g);
         drawPokemons(g);
         drawAgents(g);
-        drawInfo(g);
+//        drawInfo(g);
         drawGradeAg(g);
         drawGrade(g);
         drawTimer(g);
+
+
+//        p.setVisible(true);
     }
 
     public void initLogin() {
@@ -73,6 +77,7 @@ public class ReutFrame extends JFrame {
         int userId = s.nextInt();  // Read userId input
         int keyGame = s.nextInt();  // Read keyGame input
         return (userId+""+keyGame);*/
+
     }
 
     private void initMenu() {
@@ -104,69 +109,124 @@ public class ReutFrame extends JFrame {
         this.add(panel);
     }
 
-    private void drawInfo(Graphics g) {
-        java.util.List<String> str = _ar.get_info();
-        String dt = "none";
-        for (int i = 0; i < str.size(); i++) {
-            g.drawString(str.get(i) + " dt: " + dt, 100, 60 + i * 20);
-        }
-
-    }
+//    private void drawInfo(Graphics g) {
+//        java.util.List<String> str = _ar.get_info();
+//        String dt = "none";
+//        for (int i = 0; i < str.size(); i++) {
+//            g.drawString(str.get(i) + " dt: " + dt, 100, 60 + i * 20);
+//        }
+//
+//    }
 
     private void drawGraph(Graphics g) {
-        if(flag==false){
-        directed_weighted_graph gg = _ar.getGraph();
-        Iterator<node_data> iter = gg.getV().iterator();
-        while (iter.hasNext()) {
-            node_data n = iter.next();
-            g.setColor(Color.DARK_GRAY);
-            drawNode(n, 5, g);
-            Iterator<edge_data> itr = gg.getE(n.getKey()).iterator();
-            while (itr.hasNext()) {
-                edge_data e = itr.next();
-                g.setColor(Color.gray);
-                drawEdge(e, g);
+        if (flag == false) {
+            if (_ar != null) {
+                ///
+                this.add(p);
+                p.setVisible(false);
+                p.temp(g);
+                ////
+                directed_weighted_graph gg = _ar.getGraph();
+                Iterator<node_data> iter = gg.getV().iterator();
+                while (iter.hasNext()) {
+                    node_data n = iter.next();
+                    g.setColor(Color.DARK_GRAY);
+                    drawNode(n, 5, g);
+                    Iterator<edge_data> itr = gg.getE(n.getKey()).iterator();
+                    while (itr.hasNext()) {
+                        edge_data e = itr.next();
+                        g.setColor(Color.gray);
+                        drawEdge(e, g);
+                    }
+                }
+                flag = true;
             }
         }
-        flag=true;}
     }
 
     private void drawPokemons(Graphics g) {
         int k = 25;
-        for(geo_location p: pk) {
-            g.clearRect((int) p.x() - k, (int) p.y() - k, 70, 70);
-        }
+//        for(geo_location p: pk) {
+//        g.clearRect((int) p.x() - k, (int) p.y() - k, 70, 70);
+//        }
         pk.clear();
 
-        List<CL_Pokemon> fs = _ar.getPokemons();
-        if (fs != null) {
+        //***** check why _ar could be NULL
+        if (_ar != null) {
+            List<CL_Pokemon> fs = _ar.getPokemons();
+            if (fs != null) {
 
-            Iterator<CL_Pokemon> itr = fs.iterator();
-            while (itr.hasNext()) {
-                CL_Pokemon f = itr.next();
-                Point3D c = f.getLocation();
+                Iterator<CL_Pokemon> itr = fs.iterator();
+                while (itr.hasNext()) {
+                    CL_Pokemon f = itr.next();
+                    Point3D c = f.getLocation();
 
                 /*for(geo_location p: pk){
                     if(!(p.x()==c.x()&&p.y()==c.y()))
                         g.clearRect((int) p.x() - k, (int) p.y() - k, 70, 70);
                 }*/
 
-                int r = 10;
-                g.setColor(Color.green);
-                if (f.getType() < 0) {
-                    g.setColor(Color.orange);
+                    int r = 10;
+                    g.setColor(Color.green);
+                    if (f.getType() < 0) {
+                        g.setColor(Color.orange);
+                    }
+                    if (c != null) {
+
+                        geo_location fp = this._w2f.world2frame(c);
+                        pk.add(fp);
+                        //g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
+                        /////////////////Matan's code
+                    }
+                    for (geo_location p : pk) {
+                        BufferedImage img = null;
+                        try {
+                            img = ImageIO.read(new File("data/pok.png"));
+
+                        } catch (IOException e) {
+
+                        }
+                        ;
+//					g.drawImage(img,((getWidth()-img.getWidth()) /3) ,((getHeight()-img.getHeight())/3),this);
+
+                        g.drawImage(img, (int) p.x() - k, (int) p.y() - k, this);
+
+                        /////////////////Matan's code
+                        //	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
+
+                    }
                 }
+            }
+        }
+    }
+
+    private void drawAgents(Graphics g) {
+        int k = 25;
+//        for(geo_location p: ag) {
+//            g.clearRect((int) p.x() - k, (int) p.y() - k, 30, 30);
+//        }
+        ag.clear();
+        //**** find out why _ar could be null
+        if (_ar != null) {
+            List<CL_Agent> rs = _ar.getAgents();
+            //	Iterator<OOP_Point3D> itr = rs.iterator();
+            g.setColor(Color.red);
+            int i = 0;
+            while (rs != null && i < rs.size()) {
+                geo_location c = rs.get(i).getLocation();
+                int r = 8;
+                i++;
                 if (c != null) {
 
                     geo_location fp = this._w2f.world2frame(c);
-                    pk.add(fp);
-                    //g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
+                    ag.add(fp);
+//				g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
                     /////////////////Matan's code
                 }
-                for(geo_location p: pk){
+                for (geo_location p : ag) {
                     BufferedImage img = null;
                     try {
-                        img = ImageIO.read(new File("data/pok.png"));
+                        img = ImageIO.read(new File("data/mypac.png"));
 
                     } catch (IOException e) {
 
@@ -176,46 +236,7 @@ public class ReutFrame extends JFrame {
 
                     g.drawImage(img, (int) p.x() - k, (int) p.y() - k, this);
                     /////////////////Matan's code
-                    //	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
-
                 }
-            }
-        }
-    }
-
-    private void drawAgents(Graphics g) {
-        int k = 25;
-        for(geo_location p: ag) {
-            g.clearRect((int) p.x() - k, (int) p.y() - k, 24, 27);
-        }
-        ag.clear();
-        List<CL_Agent> rs = _ar.getAgents();
-        //	Iterator<OOP_Point3D> itr = rs.iterator();
-        g.setColor(Color.red);
-        int i = 0;
-        while (rs != null && i < rs.size()) {
-            geo_location c = rs.get(i).getLocation();
-            int r = 8;
-            i++;
-            if (c != null) {
-
-                geo_location fp = this._w2f.world2frame(c);
-                ag.add(fp);
-//				g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
-                /////////////////Matan's code
-            }
-            for(geo_location p: ag){
-                BufferedImage img = null;
-                try {
-                    img = ImageIO.read(new File("data/mypac.png"));
-                } catch (IOException e) {
-
-                }
-                ;
-//					g.drawImage(img,((getWidth()-img.getWidth()) /3) ,((getHeight()-img.getHeight())/3),this);
-
-                g.drawImage(img, (int) p.x() - k, (int) p.y() - k, this);
-                /////////////////Matan's code
             }
         }
     }
@@ -249,46 +270,50 @@ public class ReutFrame extends JFrame {
     }
 
     public void drawGradeAg(Graphics g) {
-        List<CL_Agent> rs = _ar.getAgents();
-        g.setColor(Color.pink);
+        //*****find out why _ar could be NULL
+        if (_ar != null) {
+            List<CL_Agent> rs = _ar.getAgents();
+            g.setColor(Color.pink);
 
-       // g.clearRect(815,50,100,50);
+            // g.clearRect(815,50,100,50);
 
-        g.drawLine(815, 50, 970, 50);
-        g.drawLine(815, 80 + 20 * rs.size(), 970, 80 + 20 * rs.size());
+            g.drawLine(815, 50, 970, 50);
+            g.drawLine(815, 80 + 20 * rs.size(), 970, 80 + 20 * rs.size());
 
-        g.setColor(Color.blue.darker().darker());
-        Font f1 = new Font(Font.DIALOG, Font.BOLD, 15);
-        g.setFont(f1);
-        int i = 0, j = 20;
-        while (rs != null && i < rs.size()) {
-          //  g.drawString("Agent- " + rs.get(i).getID() + ": value- " + rs.get(i).getValue(), 820, 80 + i * j);
-            g.drawString("Agent- " + rs.get(i).getID() + ": value- ",820, 80 + i * j);
-            i++;
+            g.setColor(Color.blue.darker().darker());
+            Font f1 = new Font(Font.DIALOG, Font.BOLD, 15);
+            g.setFont(f1);
+            int i = 0, j = 20;
+            while (rs != null && i < rs.size()) {
+                //  g.drawString("Agent- " + rs.get(i).getID() + ": value- " + rs.get(i).getValue(), 820, 80 + i * j);
+                g.drawString("Agent- " + rs.get(i).getID() + ": value- ", 820, 80 + i * j);
+                i++;
+            }
+            //Matan's commet:
+            //lets add the num_of_scenario + total_points so far + num_of_steps + num_of_agnts ...
+            //Matan's commet
         }
-        //Matan's commet:
-        //lets add the num_of_scenario + total_points so far + num_of_steps + num_of_agnts ...
-        //Matan's commet
     }
+
     public void drawGrade(Graphics g) {
-        g.clearRect(940, 60, 50,70);
-        List<CL_Agent> rs = _ar.getAgents();
+        g.clearRect(940, 60, 50, 70);
+        ///*** find out why _ar could be NULL
+        if (_ar != null) {
+            List<CL_Agent> rs = _ar.getAgents();
 
-        g.setColor(Color.orange.darker().darker());
-        Font f1 = new Font(Font.DIALOG, Font.BOLD, 15);
-        g.setFont(f1);
-        int i = 0, j = 20;
-        while (rs != null && i < rs.size()) {
-            g.drawString(""+rs.get(i).getValue(), 940, 80 + i * j);
-            i++;
+            g.setColor(Color.orange.darker().darker());
+            Font f1 = new Font(Font.DIALOG, Font.BOLD, 15);
+            g.setFont(f1);
+            int i = 0, j = 20;
+            while (rs != null && i < rs.size()) {
+                g.drawString("" + rs.get(i).getValue(), 940, 80 + i * j);
+                i++;
+            }
         }
     }
 
-    //////////Matan's timer
     public void drawTimer(Graphics g) {
         g.setColor(Color.orange.darker().darker());
         g.drawString("Remaining time: 00:00" + " ,Insert timer here", 300, 100);
-        /////////Matan's timer
     }
-
 }

@@ -116,6 +116,14 @@ public class MyPanel extends JPanel {
     /*private void game(){
         this.repaint();
     }*/
+
+    public void temp(Graphics g){
+      this.setVisible(false);
+        g.fillOval(100,70,70,100);
+   //     this.setVisible(false);
+
+        // setVisible(true);
+    }
 }
 
 

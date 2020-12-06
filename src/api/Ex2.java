@@ -219,12 +219,12 @@ public class Ex2 implements Runnable {
         int po = 0;
         for (int i = 0; i < _ar.getPokemons().size(); i++) {
             Arena.updateEdge(_ar.getPokemons().get(i), g);
-            dest = _ar.getPokemons().get(i).get_edge().getSrc();
+     //       dest = _ar.getPokemons().get(i).get_edge().getSrc();
 
             for (int j = 0; j < pair.size(); j++) {
-/*
+
                 dest = _ar.getPokemons().get(i).get_edge().getSrc();
-*/
+
                 if (pair.get(j) == dest) flag = false;
             }
             // dest = _ar.getPokemons().get(i).get_edge().getSrc();
