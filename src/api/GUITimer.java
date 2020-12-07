@@ -27,7 +27,7 @@ public class GUITimer extends JFrame implements ItemListener {
     public String init_time;
     public long remaining;
 
-    public GUITimer() {
+    public GUITimer(game_service game) {
         JPanel timePanel = new JPanel(){
             @Override
             public Dimension getPreferredSize(){
@@ -42,7 +42,8 @@ public class GUITimer extends JFrame implements ItemListener {
         _win.setOpaque(true);
         _win.setFont(new Font("Arial", Font.CENTER_BASELINE, 50));
         timePanel.add(_win);
-        init_time = "1";
+       // init_time = "1";
+        init_time = (game.timeToEnd())*-1+"";
         getContentPane().add(timePanel, BorderLayout.CENTER);
         updateDisplay();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,14 +52,14 @@ public class GUITimer extends JFrame implements ItemListener {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
+  /*  public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 new GUITimer();
             }
         });
-    }
+    }*/
 
     //run the timer on screen
     void updateDisplay() {

@@ -54,7 +54,7 @@ public class Ex2 implements Runnable {
                 e.printStackTrace();
             }
         }*/
-        _win = new ReutFrame("login game", 350, 200);
+        _win = new ReutFrame("login game", 350, 220);
         _win.initLogin();
         /*String s = _win.initLogin();
         int id = 0, numkey=0;
@@ -68,7 +68,7 @@ public class Ex2 implements Runnable {
             j *= 10;
             numkey += j;
         }*/
-        numGame = 23;
+        numGame = 17;
         game_service game = Game_Server_Ex2.getServer(numGame);
 
         //game.login(id);
@@ -133,7 +133,8 @@ public class Ex2 implements Runnable {
         //_win = new MyFrame("Catch Them All");
         //_win.setSize(1000, 700);
         _win.update(_ar);
-        _win.timer();
+        GUITimer t = new GUITimer(game);
+        //_win.timer();
 
         //  _win.show();
         String info = game.toString();

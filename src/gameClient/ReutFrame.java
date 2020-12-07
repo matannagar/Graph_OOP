@@ -60,7 +60,7 @@ public class ReutFrame extends JFrame {
 //        drawInfo(g);
         drawGradeAg(g);
         drawGrade(g);
-        drawTimer(g);
+       // drawTimer(g);
 
 
     }
@@ -97,9 +97,9 @@ public class ReutFrame extends JFrame {
         return gr;
     }*/
 
-    public void timer() {
-        GUITimer t = new GUITimer();
-    }
+/*    public void timer() {
+        GUITimer t = new GUITimer(game);
+    }*/
 
     /*public void initGame() {
         MyPanel panel = new MyPanel("game");
@@ -138,11 +138,11 @@ public class ReutFrame extends JFrame {
 
     private void drawPokemons(Graphics g) {
         int k = 25;
-        for(geo_location p: pk) {
+       /* for(geo_location p: pk) {
         g.clearRect((int) p.x() - k, (int) p.y() - k, 70, 70);
-        }
+        }*/
         pk.clear();
-
+        BufferedImage img = null;
         //***** check why _ar could be NULL
         if (_ar != null) {
             List<CL_Pokemon> fs = _ar.getPokemons();
@@ -161,6 +161,19 @@ public class ReutFrame extends JFrame {
                     int r = 10;
                     g.setColor(Color.green);
                     if (f.getType() < 0) {
+                        try {
+                            img = ImageIO.read(new File("data/pok.png"));
+
+                        } catch (IOException e) {
+
+                        }
+                        try {
+                            img = ImageIO.read(new File("data/balb.png"));
+                        } catch (IOException e) {
+
+                        }
+
+
                         g.setColor(Color.orange);
                     }
                     if (c != null) {
@@ -169,25 +182,22 @@ public class ReutFrame extends JFrame {
                         pk.add(fp);
 
                         /////////////////Matan's code
-                    }
+                    }}
                     for (geo_location p : pk) {
                       //  g.fillOval((int) p.x() - r, (int) p.y() - r, 2 * r, 2 * r);
-                        BufferedImage img = null;
-                        try {
-                            img = ImageIO.read(new File("data/pok.png"));
 
-                        } catch (IOException e) {
 
-                        }
                         ;
-					g.drawImage(img,((getWidth()-img.getWidth()) /3) ,((getHeight()-img.getHeight())/3),this);
-
-                        g.drawImage(img, (int) p.x() - k, (int) p.y() - k, this);
+                        /*if (f.getType() < 0) {
+                            g.drawImage(imgPok, (int) p.x() - k, (int) p.y() - k, this);
+                        }*/
+                    //    else
+                            g.drawImage(img, (int) p.x() - k, (int) p.y() - k, this);
 
                         /////////////////Matan's code
                         //	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
 
-                    }
+
                 }
             }
         }
@@ -195,9 +205,9 @@ public class ReutFrame extends JFrame {
 
     private void drawAgents(Graphics g) {
         int k = 25;
-        for(geo_location p: ag) {
+        /*for(geo_location p: ag) {
             g.clearRect((int) p.x() - k, (int) p.y() - k, 30, 30);
-        }
+        }*/
         ag.clear();
         //**** find out why _ar could be null
         if (_ar != null) {
@@ -307,6 +317,6 @@ public class ReutFrame extends JFrame {
 
     public void drawTimer(Graphics g) {
         g.setColor(Color.orange.darker().darker());
-        g.drawString("Remaining time: 00:00" + " ,Insert timer here", 300, 100);
+        g.drawString("Remaining time:" + " ,Insert timer here", 300, 100);
     }
 }

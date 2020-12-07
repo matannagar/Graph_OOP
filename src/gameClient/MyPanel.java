@@ -31,13 +31,14 @@ public class MyPanel extends JPanel {
 
     private void login() {
         idANDnum();
-        imagePok();
+       // imagePok();
+        imageLogo();
         buttonStart();
     }
 
     private void idANDnum() {
         JLabel id = new JLabel("          Id");
-        id.setBounds(10, 20, 80, 25);
+        id.setBounds(10, 70, 80, 25);
         id.setForeground(Color.RED.darker());
         id.setBackground(Color.gray.brighter());
         id.setOpaque(true);
@@ -45,7 +46,7 @@ public class MyPanel extends JPanel {
         add(id);
 
         JTextField userText = new JTextField();
-        userText.setBounds(100, 20, 165, 25);
+        userText.setBounds(100, 70, 165, 25);
         this.add(userText);
 
         userText.addKeyListener(new KeyAdapter() {
@@ -66,7 +67,7 @@ public class MyPanel extends JPanel {
         );
 
         JLabel gameKey = new JLabel("   Key Game");
-        gameKey.setBounds(10, 50, 80, 25);
+        gameKey.setBounds(10, 100, 80, 25);
         gameKey.setForeground(Color.RED.darker());
         gameKey.setBackground(Color.gray.brighter());
         gameKey.setOpaque(true);
@@ -74,11 +75,11 @@ public class MyPanel extends JPanel {
         this.add(gameKey);
 
         JTextField userNum = new JTextField();
-        userNum.setBounds(100, 50, 165, 25);
+        userNum.setBounds(100, 100, 165, 25);
         this.add(userNum);
 
         JButton button = new JButton("Default");
-        button.setBounds(150, 100, 100, 25);
+        button.setBounds(150, 140, 100, 25);
         button.setForeground(Color.red.darker());
         button.setBackground(Color.orange);
         this.add(button);
@@ -103,9 +104,18 @@ public class MyPanel extends JPanel {
         this.add(temp);
     }
 
+    private void imageLogo() {
+        JLabel temp = new JLabel();
+        //temp.setIcon(new ImageIcon("data/logo2.png"));
+        temp.setIcon(new ImageIcon("data/backround.jpg"));
+        temp.setBounds(0, 0, 350, 197);
+        this.add(temp);
+    }
+
+
     private void buttonStart() {
         JButton button = new JButton("Start Game");
-        button.setBounds(40, 100, 100, 25);
+        button.setBounds(40, 140, 100, 25);
         button.setForeground(Color.red.darker());
         button.setBackground(Color.orange);
         this.add(button);
