@@ -1,5 +1,6 @@
 package api;
 
+import GUI.ReutFrame;
 import Server.Game_Server_Ex2;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,9 +12,6 @@ import java.util.*;
 
 
 public class Ex2 implements Runnable {
-    //private static MyFrame _win;
-    private static MatanFrame frame;
-    private  static ReutPanel panel;
     private static ReutFrame _win;
     private static Arena _ar;
     private static int id;
@@ -121,7 +119,7 @@ public class Ex2 implements Runnable {
     }
 
     private void init(game_service game) {
-        _win = new ReutFrame("Catch Them All", 1000, 700);
+        _win = new ReutFrame("Catch Them All", 900, 800);
 
      /*   _win.setBounds(0,0,1000, 700);
         _win.initGame();*/

@@ -1,4 +1,4 @@
-package api;
+package GUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,7 +10,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 public class GUITimer extends JFrame implements ItemListener {

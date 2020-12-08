@@ -1,4 +1,4 @@
-package gameClient;
+package GUI;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class MyPanel extends JPanel {
-    public MyPanel(String type) {
+public class Login extends JPanel {
+    public Login(String type) {
         super();
         this.setLayout(null);
         if (type.equals("login")) {

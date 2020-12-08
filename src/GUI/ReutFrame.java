@@ -1,6 +1,9 @@
-package gameClient;
+package GUI;
 
 import api.*;
+import gameClient.Arena;
+import gameClient.CL_Agent;
+import gameClient.CL_Pokemon;
 import gameClient.util.Point3D;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
@@ -22,7 +25,7 @@ public class ReutFrame extends JFrame {
 
     public ReutFrame(String s, int w, int h) {
         super(s);
-        this.setSize(w,h);
+        this.setSize(w, h);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -50,7 +53,7 @@ public class ReutFrame extends JFrame {
 
     public void paint(Graphics g) {
 
-        this.add(new ReutPanel(this._w2f));
+        this.add(new myPanel(this._w2f));
         if (flag != true) {
             GUITimer t = new GUITimer();
         }
@@ -58,7 +61,7 @@ public class ReutFrame extends JFrame {
     }
 
     public void initLogin() {
-        MyPanel panel = new MyPanel("login");
+        Login panel = new Login("login");
         this.add(panel);
         this.setVisible(true);
         panel.setVisible(true);
@@ -82,10 +85,12 @@ public class ReutFrame extends JFrame {
         g.drawString("Remaining time:" + " ,Insert timer here", 300, 100);
     }
 
-    public class ReutPanel extends JPanel {
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public class myPanel extends JPanel {
         private Range2Range _w2f;
 
-        public ReutPanel(Range2Range _w2f) {
+        public myPanel(Range2Range _w2f) {
             if (_w2f != null)
                 this._w2f = _w2f;
             this.revalidate();
@@ -97,53 +102,12 @@ public class ReutFrame extends JFrame {
             drawGraph(gg);
             drawPokemons(gg);
             drawAgents(gg);
-            drawGradeAg(gg);
+//            drawGradeAg(gg);
             drawGrade(gg);
             drawTimer(gg);
 
             this.revalidate();
             this.setVisible(true);
-        }
-
-        public void drawGrade(Graphics g) {
-
-            ///CHECKTHIS find out why _ar could be NULL
-            if (_ar != null) {
-                List<CL_Agent> rs = _ar.getAgents();
-                g.setColor(Color.orange.darker().darker());
-                Font f1 = new Font(Font.DIALOG, Font.BOLD, 15);
-                g.setFont(f1);
-                int i = 0, j = 20;
-                while (rs != null && i < rs.size()) {
-                    g.drawString("" + rs.get(i).getValue(), 940, 80 + i * j);
-                    i++;
-                }
-            }
-        }
-
-
-        public void drawGradeAg(Graphics g) {
-            //CHECKTHIS find out why _ar could be NULL
-            if (_ar != null) {
-                List<CL_Agent> rs = _ar.getAgents();
-                g.setColor(Color.pink);
-
-                if (rs != null) {
-                    g.drawLine(815, 50, 970, 50);
-                    g.drawLine(815, 80 + 20 * rs.size(), 970, 80 + 20 * rs.size());
-                }
-                g.setColor(Color.blue.darker().darker());
-                Font f1 = new Font(Font.DIALOG, Font.BOLD, 15);
-                g.setFont(f1);
-                int i = 0, j = 20;
-                while (rs != null && i < rs.size()) {
-                    g.drawString("Agent- " + rs.get(i).getID() + ": value- ", 820, 80 + i * j);
-                    i++;
-                }
-                //CHECKTHIS's commet:
-                //lets add the num_of_scenario + total_points so far + num_of_steps + num_of_agnts ...
-            }
-            this.revalidate();
         }
 
         private void drawEdge(edge_data e, Graphics g) {
@@ -171,7 +135,7 @@ public class ReutFrame extends JFrame {
 
                 g.setColor(Color.red);
                 g.setFont(new Font("David", Font.PLAIN, 15));
-                g.drawString("" + n.getKey(), (int) fp.x(), (int) fp.y() - 4 * r);
+                g.drawString("" + n.getKey(), (int) fp.x(), (int) fp.y() - 2 * r);
             }
         }
 
@@ -202,9 +166,30 @@ public class ReutFrame extends JFrame {
             }
             this.revalidate();
         }
+        public void drawGrade(Graphics g) {
+            //CHECKTHIS find out why _ar could be NULL
+            if (_ar != null) {
+                List<CL_Agent> rs = _ar.getAgents();
+                g.setColor(Color.pink);
+                //CHECKTHIS
+                if (rs != null) {
+                    g.drawLine(815, 50, 970, 50);
+                    g.drawLine(815, 80 + 20 * rs.size(), 970, 80 + 20 * rs.size());
+                }
+                g.setColor(Color.blue.darker().darker());
+                g.setFont(new Font("MV Boli", Font.BOLD, 15));
+                int i = 0, j = 20;
+                while (rs != null && i < rs.size()) {
+                    g.drawString("Agent " + rs.get(i).getID(), 820, 80 + i * j);
+                    g.drawString("value  " , 887, 80 + i * j);
+                    g.drawString("" + rs.get(i).getValue(), 940, 80 + i * j);
+                    i++;
+                }
+            }
+        }
 
         private void drawGraph(Graphics g) {
-            ReutPanel reut = new ReutPanel(_w2f);
+            myPanel reut = new myPanel(_w2f);
             if (_ar != null) {
                 directed_weighted_graph gg = _ar.getGraph();
                 Iterator<node_data> iter = gg.getV().iterator();
