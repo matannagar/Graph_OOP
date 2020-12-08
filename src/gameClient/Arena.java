@@ -133,8 +133,13 @@ public class Arena {
     //set agents at best pos to catch poks
     //only useful for beginning of game
     public static int StartPosAg(directed_weighted_graph g) {
-        for (int i = 0; i < pokemonsInit.size(); i++) {
+        for(int i=0; i<pokemonsInit.size(); i++){
             updateEdge(pokemonsInit.get(i), g);
+        }
+        bubbleSort(pokemonsInit);
+
+        for (int i = 0; i < pokemonsInit.size(); i++) {
+
             //if (pokemonsInit.get(i).get_edge() != null) {
             int ans = pokemonsInit.get(i).get_edge().getSrc();
             pokemonsInit.remove(i);
@@ -142,6 +147,19 @@ public class Arena {
         }
         // }
         return 0;
+    }
+
+    private static void bubbleSort(List <CL_Pokemon> cl){
+        int n=cl.size();
+        for (int i=0; i<n-1; i++){
+            for(int j=0; j<n-i-1; j++){
+                if(cl.get(j).getValue()<cl.get(j+1).getValue()) {
+                    CL_Pokemon temp = cl.get(j);
+                    cl.set(j, cl.get(j + 1));
+                    cl.set(j + 1, temp);
+                }
+            }
+        }
     }
 
     public static ArrayList<CL_Pokemon> json2Pokemons(String fs) {

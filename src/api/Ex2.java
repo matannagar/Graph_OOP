@@ -35,7 +35,7 @@ public class Ex2 implements Runnable {
 
         _win = new myFrame("login game", 350, 220);
         _win.initLogin();
-        numGame = 17;
+        numGame = 23;
         game_service game = Game_Server_Ex2.getServer(numGame);
 //        game.login(206240301);
         directed_weighted_graph gg = loadGraph(game.getGraph());
@@ -60,7 +60,8 @@ public class Ex2 implements Runnable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if (game.timeToEnd() < 30000) dt = 91;
+           if (game.timeToEnd() < 30000) dt = 91;
+         //   if (game.timeToEnd() < 20000) dt = 80;
         }
         String res = game.toString();
 
@@ -138,7 +139,7 @@ public class Ex2 implements Runnable {
             int dest = ag.getNextNode();
             int src = ag.getSrcNode();
             int curr;
-            if (ag.get_curr_edge()==null) curr = -1;
+            if (ag.get_curr_edge() == null) curr = -1;
             double v = ag.getValue();
             double sp = ag.getSpeed();
             if (dest == -1) {
@@ -161,14 +162,9 @@ public class Ex2 implements Runnable {
         System.out.println(id + ": " + pair);
 
         //updates pokemon edges
-        double minD = Double.MAX_VALUE;
+        double minD = Double.MAX_VALUE, val;
         boolean flag = true;
-        int index = -1;
-        int srcP = 0;
-        int po = 0;
-        double val = 0;
-        int PmaxV = 0;
-        int pk = 0;
+        int index = 0, srcP, po = 0, PmaxV = 0, pk = 0;
 
         for (int i = 0; i < _ar.getPokemons().size(); i++) {
             Arena.updateEdge(_ar.getPokemons().get(i), g);
@@ -177,6 +173,8 @@ public class Ex2 implements Runnable {
             if (flag) {
                 //check if someone else go to this pok
                 for (int j = 0; j < pair.size(); j++) {
+                    //if (pair.get(j) != -1)
+                       // if ((pair.get(j) == srcP) || (algo.shortestPathDist(pair.get(j), srcP) < 3)) flag = false;
                     if (pair.get(j) == srcP) flag = false;
                 }
             }
@@ -196,17 +194,36 @@ public class Ex2 implements Runnable {
                     po = i;
                 }
             }
+
             flag = true;
         }
         if (Math.abs(algo.shortestPathDist(src, PmaxV) - minD) < 4) {
             index = PmaxV;
             po = pk;
         }
+       /* if (index == -1)
+            index = random(g, src);*/
+
         List<node_data> path = algo.shortestPath(src, index);
         int d = _ar.getPokemons().get(po).get_edge().getDest();
         pair.set(id, index);
         path.add(g.getNode(d));
         return path;
     }
+
+   /* private static int random(directed_weighted_graph g, int src) {
+        int ans = -1;
+        Collection<edge_data> ee = g.getE(src);
+        Iterator<edge_data> itr = ee.iterator();
+        int s = ee.size();
+        int r = (int) (Math.random() * s);
+        int i = 0;
+        while (i < r) {
+            itr.next();
+            i++;
+        }
+        ans = itr.next().getDest();
+        return ans;
+    }*/
 }
 

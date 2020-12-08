@@ -25,7 +25,8 @@ public class myFrame extends JFrame {
 
     public myFrame(String s, int w, int h) {
         super(s);
-        this.setSize(w, h);
+        this.setSize(new Dimension(w,h));
+       // this.setSize(w, h);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -53,7 +54,10 @@ public class myFrame extends JFrame {
 
     public void paint(Graphics g) {
 
-        this.add(new myPanel(this._w2f));
+       this.add(new myPanel(this._w2f));
+
+//        this.getContentPane().add(new myPanel(this._w2f),BorderLayout.CENTER);
+//        setLocationByPlatform(true);
         if (flag != true) {
             GUITimer t = new GUITimer();
         }
