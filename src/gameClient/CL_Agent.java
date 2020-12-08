@@ -41,7 +41,8 @@ public class CL_Agent {
         _count = i;
     }*/
 
-    public void update(String json, int x, int agNum) {
+//    public void update(String json, int x, int agNum) {
+        public void update(String json) {
         JSONObject line;
         try {
             // "GameServer":{"graph":"A0","pokemons":3,"agents":1}}
@@ -58,15 +59,15 @@ public class CL_Agent {
                 Point3D posA = new Point3D(p);
                 this._pos = posA;
 
-                if(_count<agNum){
-					this.setCurrNode(x);
-                    System.out.println(x);
-					_count++;
-				}
-                else {
+//                if(_count<agNum){
+//					this.setCurrNode(x);
+//                    System.out.println("start position:" + x);
+//					_count++;
+//				}
+//                else {
 					int src = readA.getInt("src");
 					this.setCurrNode(src);
-				}
+//				}
                 int dest = readA.getInt("dest");
                 this.setNextNode(dest);
                 double value = readA.getDouble("value");

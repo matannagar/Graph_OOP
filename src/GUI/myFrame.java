@@ -18,12 +18,12 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class ReutFrame extends JFrame {
+public class myFrame extends JFrame {
     private Arena _ar;
     private Range2Range _w2f;
     private boolean flag;
 
-    public ReutFrame(String s, int w, int h) {
+    public myFrame(String s, int w, int h) {
         super(s);
         this.setSize(w, h);
         this.setLocationRelativeTo(null);
@@ -87,7 +87,7 @@ public class ReutFrame extends JFrame {
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public class myPanel extends JPanel {
+    private class myPanel extends JPanel {
         private Range2Range _w2f;
 
         public myPanel(Range2Range _w2f) {

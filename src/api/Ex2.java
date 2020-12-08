@@ -1,6 +1,6 @@
 package api;
 
-import GUI.ReutFrame;
+import GUI.myFrame;
 import Server.Game_Server_Ex2;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,72 +12,36 @@ import java.util.*;
 
 
 public class Ex2 implements Runnable {
-    private static ReutFrame _win;
+    private static myFrame _win;
     private static Arena _ar;
     private static int id;
     private static int numGame;
     private static ArrayList<Integer> pair = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
-        //Login l = new Login();
-        // Thread login = new Thread(l);
-        //l.user();
-//
-//        login.start();
-//        while (!l.exit()) {
-//            System.out.print("");
-//        }
-//        id = l.getId();
-//        numGame = l.getNum();
 
         Thread client = new Thread(new Ex2());
         client.start();
 
-
-        // GUITimer timer = new GUITimer();
+        //Value of terminal
+        if (args.length == 2) {
+            id = Integer.valueOf(args[0]);
+            numGame = Integer.valueOf(args[1]);
+        }
     }
 
     @Override
     public void run() {
 
-        /*while(numGame==-1 || id==-1) {
-            System.out.println(numGame+" "+id);
-        }*/
-       /* Login l = new Login();
-        l.user();
-        boolean f=true;
-        while (!f) {f=l.exit();}*/
-        /*synchronized (this){
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }*/
-        _win = new ReutFrame("login game", 350, 220);
+        _win = new myFrame("login game", 350, 220);
         _win.initLogin();
-        /*String s = _win.initLogin();
-        int id = 0, numkey=0;
-        for (int i = 0; i < 9; i++) {
-            int j = Integer.valueOf(s.charAt(i));
-            j *= 10;
-            id += j;
-        }
-        for(int i=9; i<s.length(); i++){
-            int j = Integer.valueOf(s.charAt(i));
-            j *= 10;
-            numkey += j;
-        }*/
         numGame = 17;
         game_service game = Game_Server_Ex2.getServer(numGame);
-
-        //game.login(id);
+//        game.login(206240301);
         directed_weighted_graph gg = loadGraph(game.getGraph());
         init(game);
-
         game.startGame();
-
-        _win.setTitle("Ex2 " + game.toString());
+        _win.setTitle("Ex2 ");
         int ind = 1;
         long dt = 100;
 //fix music location
@@ -87,7 +51,6 @@ public class Ex2 implements Runnable {
 
         while (game.isRunning()) {
             moveAgents(game, gg);
-            _win.setTitle("Ex2 " + game.toString());
             try {
                 if (ind % 1 == 0) {
                     _win.repaint();
@@ -97,7 +60,7 @@ public class Ex2 implements Runnable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if(game.timeToEnd()<30000) dt=91;
+            if (game.timeToEnd() < 30000) dt = 91;
         }
         String res = game.toString();
 
@@ -119,24 +82,15 @@ public class Ex2 implements Runnable {
     }
 
     private void init(game_service game) {
-        _win = new ReutFrame("Catch Them All", 900, 800);
-
-     /*   _win.setBounds(0,0,1000, 700);
-        _win.initGame();*/
+        _win = new myFrame("Catch Them All", 1000, 900);
         String pks = game.getPokemons();
         directed_weighted_graph gg = loadGraph(game.getGraph());
 
         _ar = new Arena();
         _ar.setGraph(gg);
         _ar.setPokemons(Arena.json2Pokemons(pks));
-
-        //_win = new MyFrame("Catch Them All");
-        //_win.setSize(1000, 700);
         _win.update(_ar);
-//        GUITimer t = new GUITimer();
-        //_win.timer();
 
-        //  _win.show();
         String info = game.toString();
         JSONObject line;
         try {
@@ -165,10 +119,8 @@ public class Ex2 implements Runnable {
         }
     }
 
-
     /**
      * Moves each of the agents along the edge,
-     *
      *
      * @param game
      * @param gg
@@ -185,27 +137,20 @@ public class Ex2 implements Runnable {
             int id = ag.getID();
             int dest = ag.getNextNode();
             int src = ag.getSrcNode();
+            int curr;
+            if (ag.get_curr_edge()==null) curr = -1;
             double v = ag.getValue();
-            double sp= ag.getSpeed();
+            double sp = ag.getSpeed();
             if (dest == -1) {
-                //if(sp>=5) game.move();
                 pair.set(id, -1);
-                //for (int j = 0; j < ageA.size(); j++) {
-                   /* ag = ageA.get(j);
-                    id = ag.getID();
-                    dest = ag.getNextNode();
-                    src = ag.getSrcNode();
-                    v = ag.getValue();
-                    pair.set(id, -1);*/
-                    List<node_data> l = path(gg, src, id);
-                    Iterator<node_data> it = l.iterator();
-                    while (it.hasNext()) {
-                        node_data temp = it.next();
-                        game.chooseNextEdge(ag.getID(), temp.getKey());
-                        System.out.println("Agent: " + id + ", speed: " + sp +", val: " + v + "   turned to node: " + temp.getKey());
-                   // }
+                List<node_data> l = path(gg, src, id);
+                Iterator<node_data> it = l.iterator();
+                while (it.hasNext()) {
+                    node_data temp = it.next();
+                    game.chooseNextEdge(ag.getID(), temp.getKey());
+                    System.out.println("Agent: " + id + ", speed: " + sp + ", val: " + v + "  turned to node: " + temp.getKey());
                 }
-        }
+            }
         }
     }
 
@@ -221,29 +166,28 @@ public class Ex2 implements Runnable {
         int index = -1;
         int srcP = 0;
         int po = 0;
-        double val=0;
-        int PmaxV=0;
+        double val = 0;
+        int PmaxV = 0;
         int pk = 0;
 
         for (int i = 0; i < _ar.getPokemons().size(); i++) {
             Arena.updateEdge(_ar.getPokemons().get(i), g);
             srcP = _ar.getPokemons().get(i).get_edge().getSrc();
 
-            if(flag) {
+            if (flag) {
                 //check if someone else go to this pok
                 for (int j = 0; j < pair.size(); j++) {
                     if (pair.get(j) == srcP) flag = false;
                 }
             }
 
-            if (flag){
-                val= _ar.getPokemons().get(i).getValue();
-                if(val>PmaxV) {
-                    PmaxV=srcP;
-                    pk=i;
+            if (flag) {
+                val = _ar.getPokemons().get(i).getValue();
+                if (val > PmaxV) {
+                    PmaxV = srcP;
+                    pk = i;
                 }
             }
-
             if (flag) {
                 double tempD = algo.shortestPathDist(src, srcP);
                 if (tempD <= minD) {
@@ -253,20 +197,16 @@ public class Ex2 implements Runnable {
                 }
             }
             flag = true;
-
         }
-
-        if(Math.abs(algo.shortestPathDist(src, PmaxV)-minD)<4){
-            index=PmaxV;
-            po=pk;
+        if (Math.abs(algo.shortestPathDist(src, PmaxV) - minD) < 4) {
+            index = PmaxV;
+            po = pk;
         }
-
         List<node_data> path = algo.shortestPath(src, index);
         int d = _ar.getPokemons().get(po).get_edge().getDest();
         pair.set(id, index);
         path.add(g.getNode(d));
         return path;
     }
-
 }
 
