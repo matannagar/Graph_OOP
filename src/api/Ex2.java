@@ -12,6 +12,8 @@ import java.util.*;
 
 public class Ex2 implements Runnable {
     //private static MyFrame _win;
+    private static MatanFrame frame;
+    private  static ReutPanel panel;
     private static ReutFrame _win;
     private static Arena _ar;
     private static int id;
@@ -133,7 +135,7 @@ public class Ex2 implements Runnable {
         //_win = new MyFrame("Catch Them All");
         //_win.setSize(1000, 700);
         _win.update(_ar);
-        GUITimer t = new GUITimer(game);
+//        GUITimer t = new GUITimer();
         //_win.timer();
 
         //  _win.show();

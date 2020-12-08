@@ -1,0 +1,217 @@
+[33mcommit bac4199051b1eead13b76da4c441efb5384dfdc4[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Sun Dec 6 21:26:58 2020 +0200
+
+    game 23- 605 moves, 984 score
+
+[33mcommit 37e9a50713258e9c19c76b3c0899575eb84a92fa[m
+Author: matannagar <73398186+matannagar@users.noreply.github.com>
+Date:   Sun Dec 6 15:02:04 2020 +0200
+
+    gui changes from matan's pc
+
+[33mcommit f725e99eec6b683cd75bc52b86202c47ee449ff8[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Fri Dec 4 15:25:15 2020 +0200
+
+    refresh frame
+
+[33mcommit 3b3d041b5d3bfabef77e5ee77b3d2131d31bbf71[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Fri Dec 4 00:06:52 2020 +0200
+
+    try do new frame class
+
+[33mcommit db258ea176bdead4181fe143a5f5b0d4d3e8ae4e[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Thu Dec 3 16:25:28 2020 +0200
+
+    minor fix
+
+[33mcommit 03447799121a34dda2e8af28271652c22de13542[m
+Author: matannagar <73398186+matannagar@users.noreply.github.com>
+Date:   Thu Dec 3 04:18:37 2020 +0200
+
+    new pictures, timer
+
+[33mcommit f2b6ee69c449704d1756009c3b24f18ac87cdedf[m
+Author: matannagar <73398186+matannagar@users.noreply.github.com>
+Date:   Thu Dec 3 03:27:06 2020 +0200
+
+    mostly graphics
+
+[33mcommit 273046624a6235be43a1fa11a477469b65a90549[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Thu Dec 3 00:32:52 2020 +0200
+
+    fix algo pok & gui
+
+[33mcommit 5990c76309b14e86e6ac4fc42bd10459e558d2ca[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Wed Dec 2 22:43:58 2020 +0200
+
+    login screen
+
+[33mcommit 6538bb013d762fd06ebaabfbaa895a71321e10cb[m
+Author: matannagar <73398186+matannagar@users.noreply.github.com>
+Date:   Wed Dec 2 19:43:20 2020 +0200
+
+    login change
+
+[33mcommit 772a8cfb683f14d935a1f5ced5e5baa6b0eed209[m
+Author: matannagar <73398186+matannagar@users.noreply.github.com>
+Date:   Wed Dec 2 18:28:17 2020 +0200
+
+    adjustments for game
+
+[33mcommit 36a72d346cd05cb38986d6606d7e63164ad70961[m
+Merge: 97b87e5 c9a17c6
+Author: matannagar <73398186+matannagar@users.noreply.github.com>
+Date:   Wed Dec 2 14:39:56 2020 +0200
+
+    successful algorithm, fixed running
+
+[33mcommit 97b87e5c93558730472b78e96a3caa7ff3cf3c4c[m
+Author: matannagar <73398186+matannagar@users.noreply.github.com>
+Date:   Wed Dec 2 11:48:13 2020 +0200
+
+    oop
+
+[33mcommit c9a17c612c2d031097ab4c3aaeca056a2e877a40[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Wed Dec 2 11:43:34 2020 +0200
+
+    gui
+
+[33mcommit 445c75d7881f10db51c29856b93f06bc008758e4[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Tue Dec 1 21:57:55 2020 +0200
+
+    fix edges of pokemons
+
+[33mcommit 5d1d1c1892bf3ce51081c77effcac2fa7037905b[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Tue Dec 1 17:32:40 2020 +0200
+
+    start game algorithm
+
+[33mcommit fe71e2a020ebcf80f7657599ee546ff8443e67cf[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Tue Dec 1 15:47:19 2020 +0200
+
+    start client Ex2+ SimplePlayer
+
+[33mcommit 76a5d76e0c320de74e6e625c627615de92be5b12[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Mon Nov 30 13:02:39 2020 +0200
+
+    data source
+
+[33mcommit 045792e3ac8c8f3b29cebe2f2b758b147b5718c0[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Mon Nov 30 12:32:38 2020 +0200
+
+    change directory
+
+[33mcommit efb6c78de4c3071f50ab085d4cb6ee449f947c68[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Sun Nov 29 22:00:12 2020 +0200
+
+    add files
+
+[33mcommit 4c52a338efb97bb3ace2bbdcd5e5660e8decec4b[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Sun Nov 29 21:24:34 2020 +0200
+
+    fix load and save
+
+[33mcommit afb2fda82fdab9108f59e40c1d83f0967080ff7b[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Sun Nov 29 19:20:48 2020 +0200
+
+    import lib
+
+[33mcommit 023f36ff8aa45e0a3729268d5f64f678ddbcc64d[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Thu Nov 26 23:31:00 2020 +0200
+
+    + tests
+
+[33mcommit b7145bb6f842b586735b056eac877d04d45dfb15[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Thu Nov 26 17:07:20 2020 +0200
+
+    load
+
+[33mcommit 00977d6e4af2b4ed4db12755a64ca8cb4c6170d8[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Tue Nov 24 21:41:09 2020 +0200
+
+    shortestPath
+
+[33mcommit dd00dcf26d24710c901e4e0d4b58605d637ec497[m
+Author: matannagar <73398186+matannagar@users.noreply.github.com>
+Date:   Tue Nov 24 18:10:46 2020 +0200
+
+    json
+
+[33mcommit ecd896be0c349d0b1197df938708f689c8ae1f19[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Tue Nov 24 17:23:56 2020 +0200
+
+    Algorithms
+
+[33mcommit dba3805fa76440244c5635404aac768e8cfd62e7[m
+Merge: aca3881 c77b3a7
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Tue Nov 24 15:47:35 2020 +0200
+
+    tests and rebuild
+
+[33mcommit aca38815001944c6fee5ce4c91a9421bfbc9c0c6[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Sun Nov 22 21:15:54 2020 +0200
+
+    oop
+
+[33mcommit c77b3a7b89471979aca44eda542ae4514bb2a5b2[m
+Author: Matan Ben Nagar <Matannagar@gmail.com>
+Date:   Sun Nov 22 21:13:35 2020 +0200
+
+     Finalized the DWGraph_DS class
+
+[33mcommit 160c9bab8f642316d63dc9025e7df702bd5d1592[m
+Author: Matan Ben Nagar <Matannagar@gmail.com>
+Date:   Sun Nov 22 19:56:26 2020 +0200
+
+    merge edge
+
+[33mcommit 301f23c0d952655f4e24a9dd2a065290cea2c585[m
+Author: Matan Ben Nagar <Matannagar@gmail.com>
+Date:   Sun Nov 22 19:41:04 2020 +0200
+
+    edge_ds
+
+[33mcommit c68458f39adefc0a7678c56d3f926b3b57dbe185[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Sun Nov 22 19:35:51 2020 +0200
+
+    Node Data
+
+[33mcommit 2d2100884d92421702cd26545fbb49010114b5e2[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Sun Nov 22 19:08:17 2020 +0200
+
+    added calss
+
+[33mcommit 821ef14826065caf3c07d0d249e9f339821cefb4[m
+Author: Matan Ben Nagar <Matannagar@gmail.com>
+Date:   Sun Nov 22 19:05:48 2020 +0200
+
+    folders
+
+[33mcommit 3108a3ca9511bdbf87eec7f79b910862adb1c7d1[m
+Author: Reut-Maslansky <maslanskyr@gmail.com>
+Date:   Sun Nov 22 18:50:59 2020 +0200
+
+    init project
