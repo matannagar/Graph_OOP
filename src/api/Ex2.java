@@ -41,7 +41,7 @@ public class Ex2 implements Runnable {
         directed_weighted_graph gg = loadGraph(game.getGraph());
         init(game);
         game.startGame();
-        _win.setTitle("Ex2 ");
+        _win.setTitle("Ex2 "+game.toString());
         int ind = 1;
         long dt = 100;
 //fix music location

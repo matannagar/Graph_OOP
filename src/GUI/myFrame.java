@@ -28,6 +28,7 @@ public class myFrame extends JFrame {
         this.setSize(new Dimension(w,h));
        // this.setSize(w, h);
         this.setLocationRelativeTo(null);
+        this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         flag = false;
@@ -41,8 +42,8 @@ public class myFrame extends JFrame {
 
     private void updateFrame() {
 
-        Range rx = new Range(20, this.getWidth() - 20);
-        Range ry = new Range(this.getHeight() - 10, 150);
+        Range rx = new Range(20, this.getWidth() - 50);
+        Range ry = new Range(this.getHeight() - 150, 150);
         Range2D frame = new Range2D(rx, ry);
         directed_weighted_graph g = _ar.getGraph();
         _w2f = Arena.w2f(g, frame);
@@ -50,8 +51,12 @@ public class myFrame extends JFrame {
         this.revalidate();
 //        this.repaint();
         this.setVisible(true);
+//        makeFrameFullSize();
     }
-
+    private void makeFrameFullSize(myFrame this) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setSize(screenSize.width, screenSize.height);
+    }
     public void paint(Graphics g) {
 
        this.add(new myPanel(this._w2f));
@@ -144,28 +149,49 @@ public class myFrame extends JFrame {
         }
 
         private void drawAgents(Graphics g) {
-            int k = 25;
+            int k = 15;
             //CHECKTHIS find out why _ar could be null
             if (_ar != null) {
                 List<CL_Agent> rs = _ar.getAgents();
                 int i = 0;
                 while (rs != null && i < rs.size()) {
+                    System.out.println(rs.get(i).getID()+"-------------------------------------");
                     geo_location c = rs.get(i).getLocation();
-                    i++;
+
                     if (c != null) {
                         //CHECKTHIS _w2f PLASTER
                         if (this._w2f != null) {
                             geo_location fp = this._w2f.world2frame(c);
+
                             BufferedImage img = null;
-                            try {
-                                img = ImageIO.read(new File("data/mypac.png"));
+                            if(rs.get(i).getID()%3==0) {
+                                try {
+                                    img = ImageIO.read(new File("data/re.png"));
 
-                            } catch (IOException e) {
+                                } catch (IOException e) {
 
+                                }
+                            }
+                            else if(rs.get(i).getID()%3==1){
+                                try {
+                                    img = ImageIO.read(new File("data/pu.png"));
+
+                                } catch (IOException e) {
+
+                                }
+                            }
+                            else {
+                                try {
+                                    img = ImageIO.read(new File("data/yel.png"));
+
+                                } catch (IOException e) {
+
+                                }
                             }
                             g.drawImage(img, (int) fp.x() - k, (int) fp.y() - k, this);
                         }
                     }
+                    i++;
                 }
             }
             this.revalidate();
