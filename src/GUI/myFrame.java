@@ -21,17 +21,17 @@ import java.util.List;
 public class myFrame extends JFrame {
     private Arena _ar;
     private Range2Range _w2f;
-    private boolean flag;
+    private int numGame;
+    private float time;
 
-    public myFrame(String s, int w, int h) {
+    public myFrame(String s, int w, int h, int num) {
         super(s);
-        this.setSize(new Dimension(w,h));
-       // this.setSize(w, h);
+        this.setSize(new Dimension(w, h));
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        numGame = num;
         this.setVisible(true);
-        flag = false;
     }
 
     public void update(Arena ar) {
@@ -47,51 +47,31 @@ public class myFrame extends JFrame {
         Range2D frame = new Range2D(rx, ry);
         directed_weighted_graph g = _ar.getGraph();
         _w2f = Arena.w2f(g, frame);
-        initMenu();
         this.revalidate();
-//        this.repaint();
         this.setVisible(true);
 //        makeFrameFullSize();
     }
+
     private void makeFrameFullSize(myFrame this) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setSize(screenSize.width, screenSize.height);
     }
+
     public void paint(Graphics g) {
 
-       this.add(new myPanel(this._w2f));
-
-//        this.getContentPane().add(new myPanel(this._w2f),BorderLayout.CENTER);
-//        setLocationByPlatform(true);
-        if (flag != true) {
-            GUITimer t = new GUITimer();
-        }
+        this.add(new myPanel(this._w2f));
         this.revalidate();
     }
 
     public void initLogin() {
-        Login panel = new Login("login");
+        Ex2.Login panel = new Ex2.Login();
         this.add(panel);
         this.setVisible(true);
         panel.setVisible(true);
     }
 
-    private void initMenu() {
-        JMenuBar mb = new JMenuBar();
-        JMenu menu = new JMenu("Menu");
-        JMenu submenu = new JMenu("item");
-        JMenuItem defaultId = new JMenuItem("item1");
-        JMenuItem defaultNum = new JMenuItem("item2");
-
-        submenu.add(defaultId);
-        submenu.add(defaultNum);
-        menu.add(submenu);
-        mb.add(menu);
-        this.setJMenuBar(mb);
-    }
-
-    public void drawTimer(Graphics g) {
-        g.drawString("Remaining time:" + " ,Insert timer here", 300, 100);
+    public void setTimeToEnd(long timeTo) {
+        time = (float) timeTo / 100;
     }
 
 
@@ -102,21 +82,56 @@ public class myFrame extends JFrame {
         public myPanel(Range2Range _w2f) {
             if (_w2f != null)
                 this._w2f = _w2f;
+            ImageIcon img = new ImageIcon("data/icon.png");
+            setIconImage(img.getImage());
+            this.setBackground(new Color(255, 252, 221));
             this.revalidate();
         }
 
         public void paintComponent(Graphics g) {
             Graphics2D gg = (Graphics2D) g;
             super.paintComponent(g);
+            drawAsh(gg);
             drawGraph(gg);
             drawPokemons(gg);
             drawAgents(gg);
-//            drawGradeAg(gg);
             drawGrade(gg);
+            numGame(gg);
             drawTimer(gg);
 
             this.revalidate();
             this.setVisible(true);
+        }
+
+        private void drawTimer(Graphics g) {
+            g.setFont(new Font("MV Boli", Font.PLAIN, 30));
+            g.setColor(Color.magenta.darker().darker().darker());
+            g.drawString("Remaining time:  ", 10, 110);
+            g.setColor(Color.blue.darker().darker().darker());
+            g.setFont(new Font("MV Boli", Font.PLAIN, 23));
+            g.drawString("" + time, 250, 110);
+        }
+
+        private void drawAsh(Graphics g) {
+            Image img = null;
+            try {
+                img = ImageIO.read(new File("data/ash.png"));
+            } catch (IOException e) {
+
+            }
+            g.drawImage(img, 780, 120, this);
+            try {
+                img = ImageIO.read(new File("data/misty.png"));
+            } catch (IOException e) {
+
+            }
+            g.drawImage(img, 0, 120, this);
+            try {
+                img = ImageIO.read(new File("data/bigLogo.png"));
+            } catch (IOException e) {
+
+            }
+            g.drawImage(img, 350, 5, this);
         }
 
         private void drawEdge(edge_data e, Graphics g) {
@@ -155,7 +170,6 @@ public class myFrame extends JFrame {
                 List<CL_Agent> rs = _ar.getAgents();
                 int i = 0;
                 while (rs != null && i < rs.size()) {
-                    System.out.println(rs.get(i).getID()+"-------------------------------------");
                     geo_location c = rs.get(i).getLocation();
 
                     if (c != null) {
@@ -164,23 +178,21 @@ public class myFrame extends JFrame {
                             geo_location fp = this._w2f.world2frame(c);
 
                             BufferedImage img = null;
-                            if(rs.get(i).getID()%3==0) {
+                            if (rs.get(i).getID() % 3 == 0) {
                                 try {
                                     img = ImageIO.read(new File("data/re.png"));
 
                                 } catch (IOException e) {
 
                                 }
-                            }
-                            else if(rs.get(i).getID()%3==1){
+                            } else if (rs.get(i).getID() % 3 == 1) {
                                 try {
                                     img = ImageIO.read(new File("data/pu.png"));
 
                                 } catch (IOException e) {
 
                                 }
-                            }
-                            else {
+                            } else {
                                 try {
                                     img = ImageIO.read(new File("data/yel.png"));
 
@@ -196,52 +208,89 @@ public class myFrame extends JFrame {
             }
             this.revalidate();
         }
+
+        public void numGame(Graphics g) {
+            g.setColor(Color.magenta.darker().darker().darker());
+            g.setFont(new Font("MV Boli", Font.PLAIN, 40));
+            g.drawString("Game: ", 70, 30);
+            g.drawString("Score: ", 70, 70);
+            g.setColor(Color.blue.darker().darker().darker());
+            g.setFont(new Font("MV Boli", Font.PLAIN, 30));
+            g.drawString("" + numGame, 200, 30);
+        }
+
         public void drawGrade(Graphics g) {
             //CHECKTHIS find out why _ar could be NULL
+            int grade = 0;
             if (_ar != null) {
                 List<CL_Agent> rs = _ar.getAgents();
                 g.setColor(Color.pink);
-                //CHECKTHIS
-                if (rs != null) {
-                    g.drawLine(815, 50, 970, 50);
-                    g.drawLine(815, 80 + 20 * rs.size(), 970, 80 + 20 * rs.size());
-                }
-                g.setColor(Color.blue.darker().darker());
-                g.setFont(new Font("MV Boli", Font.BOLD, 15));
+
                 int i = 0, j = 20;
                 while (rs != null && i < rs.size()) {
-                    g.drawString("Agent " + rs.get(i).getID(), 820, 80 + i * j);
-                    g.drawString("value  " , 887, 80 + i * j);
-                    g.drawString("" + rs.get(i).getValue(), 940, 80 + i * j);
+                    BufferedImage img = null;
+                    if (rs.get(i).getID() % 3 == 0) {
+                        g.setColor(new Color(251, 61, 50));
+                        try {
+                            img = ImageIO.read(new File("data/re.png"));
+
+                        } catch (IOException e) {
+
+                        }
+                    } else if (rs.get(i).getID() % 3 == 1) {
+                        g.setColor(new Color(124, 54, 126));
+                        try {
+                            img = ImageIO.read(new File("data/pu.png"));
+
+                        } catch (IOException e) {
+
+                        }
+                    } else {
+                        g.setColor(new Color(227, 212, 23));
+                        try {
+                            img = ImageIO.read(new File("data/yel.png"));
+
+                        } catch (IOException e) {
+
+                        }
+                    }
+                    g.drawImage(img, 730, 22 + i * j, this);
+                    g.setFont(new Font("MV Boli", Font.BOLD, 15));
+                    g.drawString("Agent " + rs.get(i).getID(), 760, 40 + i * j);
+                    g.drawString("value  " + rs.get(i).getValue(), 840, 40 + i * j);
+
+                    grade += rs.get(i).getValue();
                     i++;
                 }
+                Graphics2D gg = (Graphics2D) g;
+                gg.setColor(Color.blue.darker().darker().darker());
+                gg.setFont(new Font("MV Boli", Font.PLAIN, 30));
+                gg.drawString("" + grade, 200, 70);
             }
         }
 
         private void drawGraph(Graphics g) {
-            myPanel reut = new myPanel(_w2f);
+            // myPanel reut = new myPanel(_w2f);
             if (_ar != null) {
                 directed_weighted_graph gg = _ar.getGraph();
                 Iterator<node_data> iter = gg.getV().iterator();
                 while (iter.hasNext()) {
                     node_data n = iter.next();
-                    g.setColor(Color.DARK_GRAY);
+                    g.setColor(Color.gray.darker());
                     drawNode(n, 5, g);
                     Iterator<edge_data> itr = gg.getE(n.getKey()).iterator();
                     while (itr.hasNext()) {
                         edge_data e = itr.next();
-                        g.setColor(Color.gray);
+                        g.setColor(Color.gray.darker());
                         drawEdge(e, g);
                     }
+
                 }
-                // CHECKTHIS
-                flag = true;
             }
         }
 
         private void drawPokemons(Graphics g) {
-
-            int k = 25;
+            int k = 20;
             BufferedImage img = null;
             //CHECKTHIS check why _ar could be NULL
             if (_ar != null) {

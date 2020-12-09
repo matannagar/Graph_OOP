@@ -1,5 +1,7 @@
 package api;
 
+//import GUI.Login;
+
 import GUI.myFrame;
 import Server.Game_Server_Ex2;
 import com.google.gson.Gson;
@@ -8,40 +10,62 @@ import gameClient.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.*;
+import java.util.List;
 
 
 public class Ex2 implements Runnable {
     private static myFrame _win;
     private static Arena _ar;
-    private static int id;
+    private static int ID;
     private static int numGame;
     private static ArrayList<Integer> pair = new ArrayList<>();
+    private static HashMap<Integer, Integer> edges = new HashMap<>();
+    private static Thread client = new Thread(new Ex2());
 
     public static void main(String[] args) throws Exception {
+        _win = new myFrame("Login game", 350, 220,numGame);
+        _win.initLogin();
 
-        Thread client = new Thread(new Ex2());
-        client.start();
+//        client.start();
+//        class frame extends JFrame {
+//            private Login log = new Login("Hello");
+//
+//            frame() {
+//                this.setSize(385, 260);
+//                this.add(log);
+//                this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//
+//                this.setVisible(true);
+//            }
+//        }
+//        frame frame = new frame();
+
+//        Thread client = new Thread(new Ex2());
+//        client.start();
 
         //Value of terminal
-        if (args.length == 2) {
-            id = Integer.valueOf(args[0]);
-            numGame = Integer.valueOf(args[1]);
-        }
+//        if (args.length == 2) {
+//            id = Integer.valueOf(args[0]);
+//            numGame = Integer.valueOf(args[1]);
+//        }
     }
 
     @Override
     public void run() {
-
-        _win = new myFrame("login game", 350, 220);
-        _win.initLogin();
-        numGame = 23;
         game_service game = Game_Server_Ex2.getServer(numGame);
-//        game.login(206240301);
+//        game.login(ID);
         directed_weighted_graph gg = loadGraph(game.getGraph());
         init(game);
         game.startGame();
-        _win.setTitle("Ex2 "+game.toString());
+        _win.setTitle("Ex2 " + game.toString());
         int ind = 1;
         long dt = 100;
 //fix music location
@@ -54,14 +78,18 @@ public class Ex2 implements Runnable {
             try {
                 if (ind % 1 == 0) {
                     _win.repaint();
+                    _win.setTimeToEnd(game.timeToEnd()/10);
                 }
                 Thread.sleep(dt);
                 ind++;
             } catch (Exception e) {
                 e.printStackTrace();
             }
-           if (game.timeToEnd() < 30000) dt = 91;
-         //   if (game.timeToEnd() < 20000) dt = 80;
+//            if (game.timeToEnd() < 30000) dt = 90;
+//            if (game.timeToEnd() < 20000) dt = 85;
+//            if (game.timeToEnd() < 10000) dt = 90;
+//            if (game.timeToEnd() < 5000) dt = 75;
+            //   if (game.timeToEnd() < 20000) dt = 80;
         }
         String res = game.toString();
 
@@ -75,6 +103,9 @@ public class Ex2 implements Runnable {
         Gson gson = builder.create();
         try {
             directed_weighted_graph g = gson.fromJson(s, DWGraph_DS.class);
+            for (int i = 0; i < g.getV().size(); i++) {
+                edges.put(i, -1);
+            }
             return g;
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,7 +114,7 @@ public class Ex2 implements Runnable {
     }
 
     private void init(game_service game) {
-        _win = new myFrame("Catch Them All", 1000, 900);
+        _win = new myFrame("Catch Them All", 1000, 900,numGame);
         String pks = game.getPokemons();
         directed_weighted_graph gg = loadGraph(game.getGraph());
 
@@ -173,31 +204,37 @@ public class Ex2 implements Runnable {
             if (flag) {
                 //check if someone else go to this pok
                 for (int j = 0; j < pair.size(); j++) {
-                    //if (pair.get(j) != -1)
-                       // if ((pair.get(j) == srcP) || (algo.shortestPathDist(pair.get(j), srcP) < 3)) flag = false;
+//                    if (pair.get(j) != -1)
+//                     if ((pair.get(j) == srcP) || (algo.shortestPathDist(pair.get(j), srcP) < 2)) flag = false;
                     if (pair.get(j) == srcP) flag = false;
+                    if (flag) {
+                        for (int k = 0; k < _ar.getPokemons().size(); k++) {
+//                            if _ar.getPokemons().get(i).get_edge()
+                        }
+                    }
                 }
-            }
 
-            if (flag) {
-                val = _ar.getPokemons().get(i).getValue();
-                if (val > PmaxV) {
-                    PmaxV = srcP;
-                    pk = i;
+
+                if (flag) {
+                    val = _ar.getPokemons().get(i).getValue();
+                    if (val > PmaxV) {
+                        PmaxV = srcP;
+                        pk = i;
+                    }
                 }
-            }
-            if (flag) {
-                double tempD = algo.shortestPathDist(src, srcP);
-                if (tempD <= minD) {
-                    minD = tempD;
-                    index = srcP;
-                    po = i;
+                if (flag) {
+                    double tempD = algo.shortestPathDist(src, srcP);
+                    if (tempD <= minD) {
+                        minD = tempD;
+                        index = srcP;
+                        po = i;
+                    }
                 }
             }
 
             flag = true;
         }
-        if (Math.abs(algo.shortestPathDist(src, PmaxV) - minD) < 4) {
+        if (Math.abs(algo.shortestPathDist(src, PmaxV) - minD) < 5) {
             index = PmaxV;
             po = pk;
         }
@@ -211,19 +248,154 @@ public class Ex2 implements Runnable {
         return path;
     }
 
-   /* private static int random(directed_weighted_graph g, int src) {
-        int ans = -1;
-        Collection<edge_data> ee = g.getE(src);
-        Iterator<edge_data> itr = ee.iterator();
-        int s = ee.size();
-        int r = (int) (Math.random() * s);
-        int i = 0;
-        while (i < r) {
-            itr.next();
-            i++;
+    /* private static int random(directed_weighted_graph g, int src) {
+         int ans = -1;
+         Collection<edge_data> ee = g.getE(src);
+         Iterator<edge_data> itr = ee.iterator();
+         int s = ee.size();
+         int r = (int) (Math.random() * s);
+         int i = 0;
+         while (i < r) {
+             itr.next();
+             i++;
+         }
+         ans = itr.next().getDest();
+         return ans;
+     }*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static class Login extends JPanel {
+        public void main(String[] args) {
+            Login log = new Login();
         }
-        ans = itr.next().getDest();
-        return ans;
-    }*/
+
+        public Login() {
+            super();
+            this.setLayout(null);
+            idANDnum();
+            title();
+            imageLogo();
+        }
+
+        private void title() {
+            JLabel t = new JLabel("Catch Them All");
+            t.setFont(new Font("MV Boli", Font.BOLD, 30));
+            t.setForeground(Color.white);
+            t.setBounds(40, 20, 350, 40);
+            add(t);
+            t = new JLabel("Catch Them All");
+            t.setFont(new Font("MV Boli", Font.BOLD, 30));
+            t.setForeground(Color.red.darker());
+            t.setBounds(42, 22, 350, 40);
+            add(t);
+        }
+
+        private void idANDnum() {
+            JLabel id = new JLabel("     Id");
+            id.setBounds(10, 70, 80, 25);
+            Border b = BorderFactory.createLineBorder(Color.RED.darker(), 2);
+            id.setForeground(Color.RED.darker());
+            id.setBackground(Color.gray.brighter());
+            id.setFont(new Font("MV Boli", Font.BOLD, 13));
+            id.setBorder(b);
+            id.setOpaque(true);
+
+            add(id);
+
+            JTextField userText = new JTextField();
+            userText.setBounds(100, 70, 165, 25);
+            userText.setFont(new Font("MV Boli", Font.BOLD, 13));
+            userText.setForeground(Color.RED.darker());
+
+            this.add(userText);
+
+//            userText.addKeyListener(new KeyAdapter() {
+//                                        public void keyPressed(KeyEvent ke) {
+//                                            String value = userText.getText();
+//                                            int l = value.length();
+//                                            if (ke.getKeyChar() >= '0' && ke.getKeyChar() <= '9') {
+//                                                userText.setEditable(true);
+//                                            } else {
+//                                                userText.setEditable(false);
+//                                                //userText.setText("");
+//
+//                                                userText.setText("* Enter only numeric digits(0-9)");
+//
+//                                            }
+//                                        }
+//                                    }
+//            );
+
+            JLabel gameKey = new JLabel(" Key Game");
+            gameKey.setBounds(10, 100, 80, 25);
+            gameKey.setForeground(Color.RED.darker());
+            gameKey.setBackground(Color.gray.brighter());
+            gameKey.setFont(new Font("MV Boli", Font.BOLD, 13));
+            gameKey.setBorder(b);
+            gameKey.setOpaque(true);
+
+            this.add(gameKey);
+
+            JTextField userNum = new JTextField();
+            userNum.setBounds(100, 100, 165, 25);
+            userNum.setFont(new Font("MV Boli", Font.BOLD, 13));
+            userNum.setForeground(Color.RED.darker());
+            this.add(userNum);
+
+            JButton button = new JButton("Reut");
+            button.setBounds(150, 140, 100, 25);
+            button.setForeground(Color.red.darker());
+            button.setBackground(Color.orange);
+            button.setBorder(b);
+            button.setFont(new Font("MV Boli", Font.BOLD, 15));
+
+            this.add(button);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    if (e.getSource() == button) {
+                        // userText.setEditable(false);
+                        userText.setText("208196709");
+                        userNum.setText("1");
+                    }
+                }
+
+            });
+
+            JButton button1 = new JButton("Start");
+            button1.setBounds(40, 140, 100, 25);
+            button1.setForeground(Color.red.darker());
+            button1.setBackground(Color.orange);
+            button1.setFont(new Font("MV Boli", Font.BOLD, 15));
+            button1.setBorder(b);
+            this.add(button1);
+            button1.addActionListener(e ->
+                    numGame = Integer.valueOf(userNum.getText()));
+            button1.addActionListener(e ->
+                    ID = Integer.valueOf(userText.getText()));
+            button1.addActionListener(e -> client.start());
+        }
+
+        private void imageLogo() {
+            JLabel temp = new JLabel();
+            temp.setIcon(new ImageIcon("data/backround.jpg"));
+            temp.setBounds(0, 0, 350, 197);
+            this.add(temp);
+        }
+    }
 }
 
