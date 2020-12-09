@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 public class CL_Agent {
     public static final double EPS = 0.0001;
-    private static int _count = 0;
+    private int _count = 0;
     private static int _seed = 3331;
     private int _id;
     //	private long _key;
@@ -41,11 +41,10 @@ public class CL_Agent {
         _count = i;
     }*/
 
-//    public void update(String json, int x, int agNum) {
+//    public void update(String json, int [] x, int agNum) {
         public void update(String json) {
         JSONObject line;
         try {
-            // "GameServer":{"graph":"A0","pokemons":3,"agents":1}}
             line = new JSONObject(json);
             JSONObject readA = line.getJSONObject("Agent");
             int id = readA.getInt("id");
@@ -59,14 +58,20 @@ public class CL_Agent {
                 Point3D posA = new Point3D(p);
                 this._pos = posA;
 
-//                if(_count<agNum){
-//					this.setCurrNode(x);
-//                    System.out.println("start position:" + x);
-//					_count++;
+//                if(_count==0){
+//              //  if(_count<agNum){
+//					this.setCurrNode(x[0]);
+//                    System.out.println("start position:" + x[0]);
+//                   // this.setNextNode(x[1]);
+////                    this.setNextNode(-1);
+////                    System.out.println("dest start position:" + x[1]);
+////                    System.out.println("ex value:" + x[2]);
+//                    _count++;
 //				}
 //                else {
 					int src = readA.getInt("src");
 					this.setCurrNode(src);
+
 //				}
                 int dest = readA.getInt("dest");
                 this.setNextNode(dest);

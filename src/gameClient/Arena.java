@@ -119,7 +119,7 @@ public class Arena {
             for (int i = 0; i < ags.length(); i++) {
                 ////////// נאתר את הצלעות של הפוקימונים, את המקור של הצלע ולשם נשלח את הסוכן על ההתחלה
                 CL_Agent c = new CL_Agent(gg, 0);
-//                c.update(ags.get(i).toString(),StartPosAg(gg),ags.length());
+//                c.update(ags.get(i).toString(), StartPosAg(gg), ags.length());
                 c.update(ags.get(i).toString());
                 ans.add(c);
             }
@@ -132,28 +132,27 @@ public class Arena {
 
     //set agents at best pos to catch poks
     //only useful for beginning of game
-    public static int StartPosAg(directed_weighted_graph g) {
-        for(int i=0; i<pokemonsInit.size(); i++){
+    public static int[] StartPosAg(directed_weighted_graph g) {
+        for (int i = 0; i < pokemonsInit.size(); i++) {
             updateEdge(pokemonsInit.get(i), g);
         }
         bubbleSort(pokemonsInit);
 
-        for (int i = 0; i < pokemonsInit.size(); i++) {
+        int[] arr = {0, 0, 0};
 
-            //if (pokemonsInit.get(i).get_edge() != null) {
-            int ans = pokemonsInit.get(i).get_edge().getSrc();
-            pokemonsInit.remove(i);
-            return ans;
-        }
-        // }
-        return 0;
+        arr[0] = pokemonsInit.get(0).get_edge().getSrc();
+        arr[1] = pokemonsInit.get(0).get_edge().getDest();
+        arr[2] = (int) pokemonsInit.get(0).getValue();
+        pokemonsInit.remove(0);
+
+        return arr;
     }
 
-    private static void bubbleSort(List <CL_Pokemon> cl){
-        int n=cl.size();
-        for (int i=0; i<n-1; i++){
-            for(int j=0; j<n-i-1; j++){
-                if(cl.get(j).getValue()<cl.get(j+1).getValue()) {
+    private static void bubbleSort(List<CL_Pokemon> cl) {
+        int n = cl.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (cl.get(j).getValue() < cl.get(j + 1).getValue()) {
                     CL_Pokemon temp = cl.get(j);
                     cl.set(j, cl.get(j + 1));
                     cl.set(j + 1, temp);

@@ -165,7 +165,7 @@ public class DWGraph_DS implements directed_weighted_graph {
 	public int getMC() {
 		return mc;
 	}
-	private String getPair(int src, int dest) {
+	public String getPair(int src, int dest) {
 		return String.valueOf(src) + "," + String.valueOf(dest);
 	}
 

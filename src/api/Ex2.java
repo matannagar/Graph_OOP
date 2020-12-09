@@ -1,7 +1,5 @@
 package api;
 
-//import GUI.Login;
-
 import GUI.myFrame;
 import Server.Game_Server_Ex2;
 import com.google.gson.Gson;
@@ -24,38 +22,23 @@ import java.util.List;
 public class Ex2 implements Runnable {
     private static myFrame _win;
     private static Arena _ar;
-    private static int ID;
-    private static int numGame;
+    private static int ID=-1;
+    private static int numGame=-1;
     private static ArrayList<Integer> pair = new ArrayList<>();
     private static HashMap<Integer, Integer> edges = new HashMap<>();
     private static Thread client = new Thread(new Ex2());
+    private static long dt;
+    private static HashMap<String, Double> dij = new HashMap<>();
 
-    public static void main(String[] args) throws Exception {
-        _win = new myFrame("Login game", 350, 220,numGame);
+    public static void main(String[] args) {
+        _win = new myFrame("Login game", 350, 220, numGame);
         _win.initLogin();
 
-//        client.start();
-//        class frame extends JFrame {
-//            private Login log = new Login("Hello");
-//
-//            frame() {
-//                this.setSize(385, 260);
-//                this.add(log);
-//                this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//
-//                this.setVisible(true);
-//            }
-//        }
-//        frame frame = new frame();
-
-//        Thread client = new Thread(new Ex2());
-//        client.start();
-
         //Value of terminal
-//        if (args.length == 2) {
-//            id = Integer.valueOf(args[0]);
-//            numGame = Integer.valueOf(args[1]);
-//        }
+        if (args.length == 2) {
+            ID = Integer.valueOf(args[0]);
+            numGame = Integer.valueOf(args[1]);
+        }
     }
 
     @Override
@@ -65,9 +48,10 @@ public class Ex2 implements Runnable {
         directed_weighted_graph gg = loadGraph(game.getGraph());
         init(game);
         game.startGame();
-        _win.setTitle("Ex2 " + game.toString());
+//        _win.setTitle("");
         int ind = 1;
-        long dt = 100;
+        dt = 110;
+
 //fix music location
         /*SimplePlayer player= new SimplePlayer("data/music.mp3");
         Thread playerThread= new Thread(player);
@@ -78,17 +62,14 @@ public class Ex2 implements Runnable {
             try {
                 if (ind % 1 == 0) {
                     _win.repaint();
-                    _win.setTimeToEnd(game.timeToEnd()/10);
+                    _win.setTimeToEnd(game.timeToEnd() / 10);
                 }
                 Thread.sleep(dt);
                 ind++;
             } catch (Exception e) {
                 e.printStackTrace();
             }
-//            if (game.timeToEnd() < 30000) dt = 90;
-//            if (game.timeToEnd() < 20000) dt = 85;
-//            if (game.timeToEnd() < 10000) dt = 90;
-//            if (game.timeToEnd() < 5000) dt = 75;
+
             //   if (game.timeToEnd() < 20000) dt = 80;
         }
         String res = game.toString();
@@ -114,7 +95,7 @@ public class Ex2 implements Runnable {
     }
 
     private void init(game_service game) {
-        _win = new myFrame("Catch Them All", 1000, 900,numGame);
+        _win = new myFrame("Catch Them All", 1000, 900, numGame);
         String pks = game.getPokemons();
         directed_weighted_graph gg = loadGraph(game.getGraph());
 
@@ -164,123 +145,147 @@ public class Ex2 implements Runnable {
         _ar.setAgents(ageA);
         String pk = game.getPokemons();
         _ar.setPokemons(Arena.json2Pokemons(pk));
+        dw_graph_algorithms algo = new DWGraph_Algo();
+        algo.init(gg);
         for (int i = 0; i < ageA.size(); i++) {
             CL_Agent ag = ageA.get(i);
             int id = ag.getID();
             int dest = ag.getNextNode();
             int src = ag.getSrcNode();
-            int curr;
-            if (ag.get_curr_edge() == null) curr = -1;
+
             double v = ag.getValue();
             double sp = ag.getSpeed();
             if (dest == -1) {
                 pair.set(id, -1);
-                List<node_data> l = path(gg, src, id);
+                List<node_data> l = path(gg, src, id, sp, game);
                 Iterator<node_data> it = l.iterator();
                 while (it.hasNext()) {
                     node_data temp = it.next();
                     game.chooseNextEdge(ag.getID(), temp.getKey());
                     System.out.println("Agent: " + id + ", speed: " + sp + ", val: " + v + "  turned to node: " + temp.getKey());
                 }
+
+//                for (int j = 0; j < ageA.size(); j++) {
+//                    ag = ageA.get(j);
+//                    id = ag.getID();
+//                    dest = ag.getNextNode();
+//                    src = ag.getSrcNode();
+//
+//                    v = ag.getValue();
+//                    sp = ag.getSpeed();
+//
+//                    if (i != j ) {
+//                        //if (algo.shortestPathDist(src, pair.get(id)) > 8) {
+//                            pair.set(id, -1);
+//                            l = path(gg, src, id, sp, game);
+//                            it = l.iterator();
+//                            while (it.hasNext()) {
+//                                node_data temp = it.next();
+//                                game.chooseNextEdge(ag.getID(), temp.getKey());
+//                                System.out.println("Agent: " + id + ", speed: " + sp + ", val: " + v + "  turned to node: " + temp.getKey());
+//
+//                            }
+////                        }
+//                    }
+//                }
             }
         }
     }
 
     //pairs each agent with closest pokemon
-    public static List<node_data> path(directed_weighted_graph g, int src, int id) {
+    public static List<node_data> path(directed_weighted_graph g, int src, int id, double sp, game_service game) {
+        if (sp == 1) dt = 120;
+        else dt = 90;
         dw_graph_algorithms algo = new DWGraph_Algo();
         algo.init(g);
-        System.out.println(id + ": " + pair);
+       // System.out.println(id + ": " + pair);
 
         //updates pokemon edges
         double minD = Double.MAX_VALUE, val;
         boolean flag = true;
-        int index = 0, srcP, po = 0, PmaxV = 0, pk = 0;
+        int index = 0, srcP, po = 0, PmaxV = 0, pk = 0, destP;
 
         for (int i = 0; i < _ar.getPokemons().size(); i++) {
             Arena.updateEdge(_ar.getPokemons().get(i), g);
-            srcP = _ar.getPokemons().get(i).get_edge().getSrc();
+//            srcP = _ar.getPokemons().get(i).get_edge().getSrc();
+            destP = _ar.getPokemons().get(i).get_edge().getDest();
+
 
             if (flag) {
                 //check if someone else go to this pok
                 for (int j = 0; j < pair.size(); j++) {
 //                    if (pair.get(j) != -1)
 //                     if ((pair.get(j) == srcP) || (algo.shortestPathDist(pair.get(j), srcP) < 2)) flag = false;
-                    if (pair.get(j) == srcP) flag = false;
-                    if (flag) {
-                        for (int k = 0; k < _ar.getPokemons().size(); k++) {
-//                            if _ar.getPokemons().get(i).get_edge()
-                        }
-                    }
+//                    if (pair.get(j) == srcP) flag = false;
+                    if (pair.get(j) == destP) flag = false;
                 }
-
-
+            }
                 if (flag) {
                     val = _ar.getPokemons().get(i).getValue();
                     if (val > PmaxV) {
-                        PmaxV = srcP;
+//                        PmaxV = srcP;
+                        PmaxV = destP;
                         pk = i;
                     }
                 }
                 if (flag) {
-                    double tempD = algo.shortestPathDist(src, srcP);
+                    double tempD;
+                    if (!(dij.containsKey(((DWGraph_DS) g).getPair(src, destP)))) {
+//                    double tempD = algo.shortestPathDist(src, srcP);
+                        tempD = algo.shortestPathDist(src, destP);
+                        dij.put(((DWGraph_DS) g).getPair(src, destP), tempD);
+                    } else {
+                        tempD = dij.get(((DWGraph_DS) g).getPair(src, destP));
+                    }
                     if (tempD <= minD) {
                         minD = tempD;
-                        index = srcP;
+//                        index = srcP;
+                        index = destP;
                         po = i;
+
                     }
                 }
-            }
 
             flag = true;
         }
-        if (Math.abs(algo.shortestPathDist(src, PmaxV) - minD) < 5) {
+
+        double shortes;
+        if (!(dij.containsKey(((DWGraph_DS) g).getPair(src, PmaxV)))) {
+            shortes = algo.shortestPathDist(src, PmaxV);
+            dij.put(((DWGraph_DS) g).getPair(src, PmaxV), shortes);
+        }
+        else {
+            shortes = dij.get(((DWGraph_DS) g).getPair(src, PmaxV));
+        }
+        if (Math.abs(shortes - minD) < 5) {
             index = PmaxV;
             po = pk;
         }
+
        /* if (index == -1)
             index = random(g, src);*/
 
-        List<node_data> path = algo.shortestPath(src, index);
-        int d = _ar.getPokemons().get(po).get_edge().getDest();
+        srcP = _ar.getPokemons().get(po).get_edge().getSrc();
+//        List<node_data> path = algo.shortestPath(src, index);
+        List<node_data> path = algo.shortestPath(src, srcP);
+
+        //     int d = _ar.getPokemons().get(po).get_edge().getDest();
+
         pair.set(id, index);
-        path.add(g.getNode(d));
+//        path.add(g.getNode(d));
+        path.add(g.getNode(index));
+        if (_ar.getPokemons().get(po).get_edge().getWeight() < 1.5 && sp >= 5 && game.timeToEnd() < 30000) dt = 70;
         return path;
     }
-
-    /* private static int random(directed_weighted_graph g, int src) {
-         int ans = -1;
-         Collection<edge_data> ee = g.getE(src);
-         Iterator<edge_data> itr = ee.iterator();
-         int s = ee.size();
-         int r = (int) (Math.random() * s);
-         int i = 0;
-         while (i < r) {
-             itr.next();
-             i++;
-         }
-         ans = itr.next().getDest();
-         return ans;
-     }*/
-
-
-
-
-
-
-
-
-
-
-
 
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public static class Login extends JPanel {
-        public void main(String[] args) {
+       /* public void main(String[] args) {
             Login log = new Login();
-        }
+        }*/
 
         public Login() {
             super();
@@ -319,6 +324,7 @@ public class Ex2 implements Runnable {
             userText.setBounds(100, 70, 165, 25);
             userText.setFont(new Font("MV Boli", Font.BOLD, 13));
             userText.setForeground(Color.RED.darker());
+            if(ID>=0) userText.setText(ID+"");
 
             this.add(userText);
 
@@ -353,10 +359,12 @@ public class Ex2 implements Runnable {
             userNum.setBounds(100, 100, 165, 25);
             userNum.setFont(new Font("MV Boli", Font.BOLD, 13));
             userNum.setForeground(Color.RED.darker());
+            if(numGame>=0) userNum.setText(numGame+"");
+
             this.add(userNum);
 
             JButton button = new JButton("Reut");
-            button.setBounds(150, 140, 100, 25);
+            button.setBounds(30, 140, 80, 25);
             button.setForeground(Color.red.darker());
             button.setBackground(Color.orange);
             button.setBorder(b);
@@ -376,8 +384,29 @@ public class Ex2 implements Runnable {
 
             });
 
+            JButton matan = new JButton("Matan");
+            matan.setBounds(210, 140, 80, 25);
+            matan.setForeground(Color.red.darker());
+            matan.setBackground(Color.orange);
+            matan.setBorder(b);
+            matan.setFont(new Font("MV Boli", Font.BOLD, 15));
+
+            this.add(matan);
+            matan.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    if (e.getSource() == matan) {
+                        // userText.setEditable(false);
+                        userText.setText("206240301");
+                        userNum.setText("1");
+                    }
+                }
+
+            });
+
             JButton button1 = new JButton("Start");
-            button1.setBounds(40, 140, 100, 25);
+            button1.setBounds(120, 140, 80, 25);
             button1.setForeground(Color.red.darker());
             button1.setBackground(Color.orange);
             button1.setFont(new Font("MV Boli", Font.BOLD, 15));
@@ -388,6 +417,7 @@ public class Ex2 implements Runnable {
             button1.addActionListener(e ->
                     ID = Integer.valueOf(userText.getText()));
             button1.addActionListener(e -> client.start());
+
         }
 
         private void imageLogo() {

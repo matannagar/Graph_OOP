@@ -45,11 +45,13 @@ public class myFrame extends JFrame {
         Range rx = new Range(20, this.getWidth() - 50);
         Range ry = new Range(this.getHeight() - 150, 150);
         Range2D frame = new Range2D(rx, ry);
-        directed_weighted_graph g = _ar.getGraph();
-        _w2f = Arena.w2f(g, frame);
-        this.revalidate();
-        this.setVisible(true);
+        if(this._ar!=null) {
+            directed_weighted_graph g = _ar.getGraph();
+            _w2f = Arena.w2f(g, frame);
+            this.revalidate();
+            this.setVisible(true);
 //        makeFrameFullSize();
+        }
     }
 
     private void makeFrameFullSize(myFrame this) {
@@ -60,6 +62,7 @@ public class myFrame extends JFrame {
     public void paint(Graphics g) {
 
         this.add(new myPanel(this._w2f));
+        updateFrame();
         this.revalidate();
     }
 
