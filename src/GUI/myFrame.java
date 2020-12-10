@@ -45,7 +45,7 @@ public class myFrame extends JFrame {
         Range rx = new Range(20, this.getWidth() - 50);
         Range ry = new Range(this.getHeight() - 150, 150);
         Range2D frame = new Range2D(rx, ry);
-        if(this._ar!=null) {
+        if (this._ar != null) {
             directed_weighted_graph g = _ar.getGraph();
             _w2f = Arena.w2f(g, frame);
             this.revalidate();
@@ -76,7 +76,6 @@ public class myFrame extends JFrame {
     public void setTimeToEnd(long timeTo) {
         time = (float) timeTo / 100;
     }
-
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private class myPanel extends JPanel {
@@ -172,6 +171,8 @@ public class myFrame extends JFrame {
             if (_ar != null) {
                 List<CL_Agent> rs = _ar.getAgents();
                 int i = 0;
+                double grade = 0;
+                int nextNode;
                 while (rs != null && i < rs.size()) {
                     geo_location c = rs.get(i).getLocation();
 
@@ -179,6 +180,8 @@ public class myFrame extends JFrame {
                         //CHECKTHIS _w2f PLASTER
                         if (this._w2f != null) {
                             geo_location fp = this._w2f.world2frame(c);
+                            grade = grade + rs.get(i).getValue();
+                            nextNode = rs.get(i).getNextNode();
 
                             BufferedImage img = null;
                             if (rs.get(i).getID() % 3 == 0) {
@@ -204,7 +207,15 @@ public class myFrame extends JFrame {
                                 }
                             }
                             g.drawImage(img, (int) fp.x() - k, (int) fp.y() - k, this);
+                            //HERE YOU CAN ADD INFO REGARDING AGENT
+                            g.setFont(new Font("MV Boli", Font.BOLD, 15));
+                            g.drawString("" + grade, (int) fp.x() - k, (int) fp.y() - k);
+                            double speed = rs.get(i).getSpeed();
+                            if (speed == 5)
+                                g.setColor(Color.red);
+                            g.drawString("" + speed, (int) fp.x() - 25, (int) fp.y() - 25);
                         }
+                        grade = 0;
                     }
                     i++;
                 }
