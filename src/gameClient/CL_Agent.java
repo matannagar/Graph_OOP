@@ -24,76 +24,44 @@ public class CL_Agent {
     private double _value;
 
 
-    public CL_Agent(directed_weighted_graph g, int start_node, int dest_node, int id) {
+    public CL_Agent(directed_weighted_graph g, int start_node) {
         _gg = g;
         set_value(0);
         this._curr_node = _gg.getNode(start_node);
-        this.setNextNode(dest_node);
-        geo_location loc = _curr_node.getLocation();
-        String pos= loc.x()+","+loc.y()+","+loc.z();
-        this._pos=new Point3D(pos);
-        _id=id;
-        //setSpeed(0);
-        setSpeed(1);
+        _pos = _curr_node.getLocation();
+        _id = -1;
+        setSpeed(0);
     }
 
-   /* public static int getCount() {
-        return _count;
-    }
-
-    public static void setCount(int i) {
-        _count = i;
-    }*/
-
-//    public void update(String json, int [] x, int agNum) {
-        public void update(String json) {
+    public void update(String json) {
         JSONObject line;
         try {
             line = new JSONObject(json);
             JSONObject readA = line.getJSONObject("Agent");
             int id = readA.getInt("id");
             if (id == this.getID() || this.getID() == -1) {
-//                if (this.getID() == -1) {
-//                    _id = id;
-//                    double speed = readA.getDouble("speed");
-//                    this.setSpeed(speed);
-//                    double value = readA.getDouble("value");
-//                    this.set_value(value);
-//                }
-//                else {
-                    double speed = readA.getDouble("speed");
-                    this.setSpeed(speed);
-                    String p = readA.getString("pos");
-                    Point3D posA = new Point3D(p);
-                    this._pos = posA;
+                if (this.getID() == -1) {
+                    _id = id;
+                }
+                double speed = readA.getDouble("speed");
+                this.setSpeed(speed);
+                String p = readA.getString("pos");
+                Point3D posA = new Point3D(p);
+                this._pos = posA;
 
-//                if(_count==0){
-//              //  if(_count<agNum){
-//					this.setCurrNode(x[0]);
-//                    System.out.println("start position:" + x[0]);
-//                   // this.setNextNode(x[1]);
-////                    this.setNextNode(-1);
-////                    System.out.println("dest start position:" + x[1]);
-////                    System.out.println("ex value:" + x[2]);
-//                    _count++;
-//				}
-//                else {
-                    int src = readA.getInt("src");
-                    this.setCurrNode(src);
+                int src = readA.getInt("src");
+                this.setCurrNode(src);
 
-//				}
-                    int dest = readA.getInt("dest");
-                    this.setNextNode(dest);
-                    double value = readA.getDouble("value");
-                    this.set_value(value);
-//                }
+                int dest = readA.getInt("dest");
+                this.setNextNode(dest);
+                double value = readA.getDouble("value");
+                this.set_value(value);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    //@Override
     public int getSrcNode() {
         return this._curr_node.getKey();
     }

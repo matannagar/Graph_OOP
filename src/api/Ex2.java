@@ -29,7 +29,6 @@ public class Ex2 implements Runnable {
     private static Thread client = new Thread(new Ex2());
     private static long dt;
     private static HashMap<String, Double> dij = new HashMap<>();
-    private static boolean start=true;
 
     public static void main(String[] args) {
 
@@ -47,7 +46,7 @@ public class Ex2 implements Runnable {
     @Override
     public void run() {
             game_service game = Game_Server_Ex2.getServer(numGame);
-       // game.login(ID);
+//        game.login(ID);
         directed_weighted_graph gg = loadGraph(game.getGraph());
         init(game);
         game.startGame();
@@ -118,14 +117,20 @@ public class Ex2 implements Runnable {
             for (int i = 0; i < pksArr.size(); i++) {
                 Arena.updateEdge(pksArr.get(i), gg);
             }
+
+            //if we want set agents at src edge with the max pok value- bubbleSort
+            //////////////here Reut Change
+             bubbleSort(pksArr);
+
             //decides where we should place the agent
             //on an edge that is accessible to the pokemon
             for (int i = 0; i < rs; i++) {
-                CL_Pokemon c = pksArr.get(i % pksArr.size());
-                int nn = c.get_edge().getDest();
-                if (c.getType() < 0) {
-                    nn = c.get_edge().getSrc();
-                }
+                CL_Pokemon c = pksArr.get(i);
+                System.out.println(c.get_edge()+" value: "+c.getValue());
+//                int nn = c.get_edge().getDest();
+//                if (c.getType() < 0) {
+                 int  nn = c.get_edge().getSrc();
+//                }
                 game.addAgent(nn);
                 pair.add(-1);
             }
@@ -133,6 +138,22 @@ public class Ex2 implements Runnable {
             e.printStackTrace();
         }
     }
+
+    //sort the poks order to their value
+    //after that we can set agents at best pos to catch poks
+    private static void bubbleSort(List<CL_Pokemon> cl) {
+        int n = cl.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (cl.get(j).getValue() < cl.get(j + 1).getValue()) {
+                    CL_Pokemon temp = cl.get(j);
+                    cl.set(j, cl.get(j + 1));
+                    cl.set(j + 1, temp);
+                }
+            }
+        }
+    }
+
 
     /**
      * Moves each of the agents along the edge,
@@ -285,20 +306,9 @@ public class Ex2 implements Runnable {
 
         String lg = game.move();
         List<CL_Agent> ageA = Arena.getAgents(lg, gg);
-        System.out.println("ageA "+ageA.toString());
         _ar.setAgents(ageA);
         String pk = game.getPokemons();
         _ar.setPokemons(Arena.json2Pokemons(pk));
-        if(start){
-            start=false;
-            for (int i = 0; i < _ar.getAgents().size(); i++) {
-                CL_Agent ag = _ar.getAgents().get(i);
-                int dest = ag.getNextNode();
-                game.chooseNextEdge(ag.getID(), dest);
-                System.out.println("Agent: " + ag.getID() + ", speed: 1.0" + ", val: 0.0" + "   turned to node: " + dest);
-            }
-        }
-        else {
         for (int i = 0; i < _ar.getAgents().size(); i++) {
             CL_Agent ag = _ar.getAgents().get(i);
             int id = ag.getID();
@@ -318,7 +328,7 @@ public class Ex2 implements Runnable {
             }
         }
         }
-    }
+
 
 //    //pairs each agent with closest pokemon
 //    public static List<node_data> path(directed_weighted_graph g, int src, int id, double sp, long timeToEnd) {

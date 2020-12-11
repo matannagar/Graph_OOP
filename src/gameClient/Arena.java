@@ -12,9 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,9 +29,6 @@ public class Arena {
     private List<String> _info;
     private static Point3D MIN = new Point3D(0, 100, 0);
     private static Point3D MAX = new Point3D(0, 100, 0);
-    private static List<CL_Pokemon> pokemonsInit;
-    private static int count=0;
-    private static List<CL_Agent> statAge;
 
     public Arena() {
         ;
@@ -49,7 +44,6 @@ public class Arena {
 
     public void setPokemons(List<CL_Pokemon> f) {
         this._pokemons = f;
-        pokemonsInit = f;
     }
 
     public void setAgents(List<CL_Agent> f) {
@@ -116,68 +110,24 @@ public class Arena {
     }
 
     public static List<CL_Agent> getAgents(String aa, directed_weighted_graph gg) {
-        if(statAge==null){
-        statAge = new ArrayList<CL_Agent>();}
+        ArrayList<CL_Agent> ans = new ArrayList<CL_Agent>();
         try {
             JSONObject ttt = new JSONObject(aa);
             JSONArray ags = ttt.getJSONArray("Agents");
             for (int i = 0; i < ags.length(); i++) {
                 ////////// נאתר את הצלעות של הפוקימונים, את המקור של הצלע ולשם נשלח את הסוכן על ההתחלה
-//                if(count<= ags.length())
-//                CL_Agent c = new CL_Agent(gg, 0);
-
-                if(statAge.size()<=i){
-                    int []arr= StartPosAg(gg);
-                 CL_Agent c = new CL_Agent(gg, arr[0], arr[1],i);
-                 statAge.add(c);
-                }
-                else{
-//                    CL_Pokemon c=nags.get(i).;
+                CL_Agent c = new CL_Agent(gg, 0);
 //                c.update(ags.get(i).toString(), StartPosAg(gg), ags.length());
-                CL_Agent c=statAge.get(i);
                 c.update(ags.get(i).toString());
-                statAge.set(i,c);
-                }
+                ans.add(c);
             }
             //= getJSONArray("Agents");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return statAge;
+        return ans;
     }
 
-
-
-    //set agents at best pos to catch poks
-    //only useful for beginning of game
-    public static int[] StartPosAg(directed_weighted_graph g) {
-        for (int i = 0; i < pokemonsInit.size(); i++) {
-            updateEdge(pokemonsInit.get(i), g);
-        }
-        bubbleSort(pokemonsInit);
-
-        int[] arr = {0, 0, 0};
-
-        arr[0] = pokemonsInit.get(0).get_edge().getSrc();
-        arr[1] = pokemonsInit.get(0).get_edge().getDest();
-        arr[2] = (int) pokemonsInit.get(0).getValue();
-        pokemonsInit.remove(0);
-        System.out.println(Arrays.toString(arr));
-        return arr;
-    }
-
-    private static void bubbleSort(List<CL_Pokemon> cl) {
-        int n = cl.size();
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                if (cl.get(j).getValue() < cl.get(j + 1).getValue()) {
-                    CL_Pokemon temp = cl.get(j);
-                    cl.set(j, cl.get(j + 1));
-                    cl.set(j + 1, temp);
-                }
-            }
-        }
-    }
 
     public static ArrayList<CL_Pokemon> json2Pokemons(String fs) {
         ArrayList<CL_Pokemon> ans = new ArrayList<CL_Pokemon>();
