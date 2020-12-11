@@ -29,10 +29,10 @@ public class Ex2 implements Runnable {
     private static Thread client = new Thread(new Ex2());
     private static long dt;
     private static HashMap<String, Double> dij = new HashMap<>();
+    private static boolean start=true;
 
     public static void main(String[] args) {
-        _win = new myFrame("Login game", 350, 220, numGame);
-        _win.initLogin();
+
 
         //Value of terminal
         if (args.length == 2) {
@@ -40,12 +40,14 @@ public class Ex2 implements Runnable {
             numGame = Integer.valueOf(args[1]);
         }
 
+        _win = new myFrame("Login game", 350, 220, numGame);
+        _win.initLogin();
     }
 
     @Override
     public void run() {
-        game_service game = Game_Server_Ex2.getServer(numGame);
-//        game.login(ID);
+            game_service game = Game_Server_Ex2.getServer(numGame);
+       // game.login(ID);
         directed_weighted_graph gg = loadGraph(game.getGraph());
         init(game);
         game.startGame();
@@ -70,7 +72,7 @@ public class Ex2 implements Runnable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if(game.timeToEnd()<20000) dt=90;
+            if (game.timeToEnd() < 20000) dt = 90;
             //   if (game.timeToEnd() < 20000) dt = 80;
         }
         String res = game.toString();
@@ -232,7 +234,7 @@ public class Ex2 implements Runnable {
 //            if (flag) {
 //                double tempD;
 //                if (!(dij.containsKey(((DWGraph_DS) g).getPair(src, destP)))) {
-////                    double tempD = algo.shortestPathDist(src, srcP);
+////                    double tempD = algo.shortestPathDist(src, destP);
 //                    tempD = algo.shortestPathDist(src, destP);
 //                    dij.put(((DWGraph_DS) g).getPair(src, destP), tempD);
 //                } else {
@@ -280,106 +282,190 @@ public class Ex2 implements Runnable {
 
 
     private static void moveAgents(game_service game, directed_weighted_graph gg) {
+
         String lg = game.move();
         List<CL_Agent> ageA = Arena.getAgents(lg, gg);
+        System.out.println("ageA "+ageA.toString());
         _ar.setAgents(ageA);
         String pk = game.getPokemons();
         _ar.setPokemons(Arena.json2Pokemons(pk));
-        for (int i = 0; i < ageA.size(); i++) {
-            CL_Agent ag = ageA.get(i);
+        if(start){
+            start=false;
+            for (int i = 0; i < _ar.getAgents().size(); i++) {
+                CL_Agent ag = _ar.getAgents().get(i);
+                int dest = ag.getNextNode();
+                game.chooseNextEdge(ag.getID(), dest);
+                System.out.println("Agent: " + ag.getID() + ", speed: 1.0" + ", val: 0.0" + "   turned to node: " + dest);
+            }
+        }
+        else {
+        for (int i = 0; i < _ar.getAgents().size(); i++) {
+            CL_Agent ag = _ar.getAgents().get(i);
             int id = ag.getID();
             int dest = ag.getNextNode();
             int src = ag.getSrcNode();
             double v = ag.getValue();
-            double sp= ag.getSpeed();
+            double sp = ag.getSpeed();
             if (dest == -1) {
-                //if(sp>=5) game.move();
                 pair.set(id, -1);
-                //for (int j = 0; j < ageA.size(); j++) {
-                   /* ag = ageA.get(j);
-                    id = ag.getID();
-                    dest = ag.getNextNode();
-                    src = ag.getSrcNode();
-                    v = ag.getValue();
-                    pair.set(id, -1);*/
-                List<node_data> l = path(gg, src, id);
+                List<node_data> l = path(gg, src, id, sp, game.timeToEnd());
                 Iterator<node_data> it = l.iterator();
                 while (it.hasNext()) {
                     node_data temp = it.next();
                     game.chooseNextEdge(ag.getID(), temp.getKey());
-                    System.out.println("Agent: " + id + ", speed: " + sp +", val: " + v + "   turned to node: " + temp.getKey());
-                    // }
+                    System.out.println("Agent: " + id + ", speed: " + sp + ", val: " + v + "   turned to node: " + temp.getKey());
                 }
             }
         }
+        }
     }
 
-    //pairs each agent with closest pokemon
-    public static List<node_data> path(directed_weighted_graph g, int src, int id) {
+//    //pairs each agent with closest pokemon
+//    public static List<node_data> path(directed_weighted_graph g, int src, int id, double sp, long timeToEnd) {
+//        dt=100;
+//        if (timeToEnd < 20000) dt = 90;
+//        dw_graph_algorithms algo = new DWGraph_Algo();
+//        algo.init(g);
+//        System.out.println(id + ": " + pair);
+//
+//        //updates pokemon edges
+//        double minD = Double.MAX_VALUE;
+//        boolean flag = true;
+////        int index = -1;
+//        int index = 0;
+//        int srcP;
+//        int po = 0;
+//        double val=0;
+//        int PmaxV=0;
+//        int destP;
+//        int pk = 0;
+//
+//        for (int i = 0; i < _ar.getPokemons().size(); i++) {
+//            Arena.updateEdge(_ar.getPokemons().get(i), g);
+//            srcP = _ar.getPokemons().get(i).get_edge().getSrc();
+////            destP = _ar.getPokemons().get(i).get_edge().getDest();
+//
+//            if(flag) {
+//                //check if someone else go to this pok
+//                for (int j = 0; j < pair.size(); j++) {
+//                    if (pair.get(j) == srcP) flag = false;
+////                    if (pair.get(j) == destP) flag = false;
+//                }
+//            }
+//
+//            if (flag){
+//                val= _ar.getPokemons().get(i).getValue();
+//                if(val>PmaxV) {
+//                    PmaxV=srcP;
+////                    PmaxV = destP;
+//                    pk=i;
+//                }
+//            }
+//
+//            if (flag) {
+////                double tempD = algo.shortestPathDist(src, destP);
+//                double tempD = algo.shortestPathDist(src, srcP);
+//                if (tempD <= minD) {
+//                    minD = tempD;
+//                    index = srcP;
+////                    index = destP;
+//                    po = i;
+//                }
+//            }
+//            flag = true;
+//
+//        }
+//
+//        if(Math.abs(algo.shortestPathDist(src, PmaxV)-minD)<4){
+//            index=PmaxV;
+//            po=pk;
+//        }
+//
+//        srcP = _ar.getPokemons().get(po).get_edge().getSrc();
+//        List<node_data> path = algo.shortestPath(src, index);
+////        List<node_data> path = algo.shortestPath(src, srcP);
+//        int d = _ar.getPokemons().get(po).get_edge().getDest();
+//        pair.set(id, index);
+//        path.add(g.getNode(d));
+////        path.add(g.getNode(index));
+//        if (_ar.getPokemons().get(po).get_edge().getWeight() < 0.5 && sp >= 5 && timeToEnd < 30000) dt = 50;
+//        return path;
+//    }
+
+    public static List<node_data> path(directed_weighted_graph g, int mySrc, int id, double sp, long timeToEnd) {
+        dt=100;
+        if (timeToEnd < 20000) dt = 90;
         dw_graph_algorithms algo = new DWGraph_Algo();
         algo.init(g);
-        System.out.println(id + ": " + pair);
+//        System.out.println(id + ": " + pair);
 
         //updates pokemon edges
-        double minD = Double.MAX_VALUE;
+        double minDistance = Double.MAX_VALUE;
         boolean flag = true;
-        int index = -1;
-        int srcP = 0;
-        int po = 0;
-        double val=0;
-        int PmaxV=0;
-        int pk = 0;
+        int nodeDest = -1;
+        int pokSrc;
+        int PMVSrc=0;
+        int minDindex = 0;
+        double val;
+        double PmaxV=0;
+        int PmaxVindex = 0;
 
         for (int i = 0; i < _ar.getPokemons().size(); i++) {
             Arena.updateEdge(_ar.getPokemons().get(i), g);
-            srcP = _ar.getPokemons().get(i).get_edge().getSrc();
-
+            pokSrc = _ar.getPokemons().get(i).get_edge().getSrc();
+            //if might not be critical
             if(flag) {
-                //check if someone else go to this pok
+                //check if someone else goes to this pok
                 for (int j = 0; j < pair.size(); j++) {
-                    if (pair.get(j) == srcP) flag = false;
+                    if (pair.get(j) == pokSrc) flag = false;
                 }
             }
 
-            if (flag){
+            /*if (flag){
+                //temporary value of each pokemon in this for
+                //PmaxVindex is the index of the pokemon with the heighest value
+                //sound redundant because a pokemon with heighest value can be very far from me
+                //and there might be one closer to me with the same value;
+                //we should switch the order of functions
                 val= _ar.getPokemons().get(i).getValue();
                 if(val>PmaxV) {
-                    PmaxV=srcP;
-                    pk=i;
+                    PmaxV=val;
+                    PmaxVindex=i;
+                    PMVSrc = pokSrc;
+
                 }
-            }
+            }*/
 
             if (flag) {
-                double tempD = algo.shortestPathDist(src, srcP);
-                if (tempD <= minD) {
-                    minD = tempD;
-                    index = srcP;
-                    po = i;
+                //save the index of the pokemon that is closest to the agent
+                double tempDistance = algo.shortestPathDist(mySrc, pokSrc);
+                if (tempDistance < minDistance) {
+                    minDistance = tempDistance;
+                    minDindex = i;
+                    nodeDest = pokSrc;
                 }
             }
             flag = true;
 
         }
+        //if the distance between the agent and PmaxValuePokemon equals to distance
+        //between agent and minDistantPokemon
+      /*  if(Math.abs(algo.shortestPathDist(mySrc, PMVSrc)-minDistance)<5){
+            nodeDest=PMVSrc;
+            minDindex=PmaxVindex;
+        }*/
 
-        if(Math.abs(algo.shortestPathDist(src, PmaxV)-minD)<4){
-            index=PmaxV;
-            po=pk;
-        }
-
-        List<node_data> path = algo.shortestPath(src, index);
-        int d = _ar.getPokemons().get(po).get_edge().getDest();
-        pair.set(id, index);
+        List<node_data> path = algo.shortestPath(mySrc, nodeDest);
+        int d = _ar.getPokemons().get(minDindex).get_edge().getDest();
+        pair.set(id, nodeDest);
         path.add(g.getNode(d));
+        if (_ar.getPokemons().get(minDindex).get_edge().getWeight() < 0.5 && sp >= 5 && timeToEnd < 30000) dt = 50;
         return path;
     }
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static class Login extends JPanel {
-       /* public void main(String[] args) {
-            Login log = new Login();
-        }*/
 
         public Login() {
             super();

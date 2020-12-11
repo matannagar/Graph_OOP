@@ -12,7 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,6 +32,8 @@ public class Arena {
     private static Point3D MIN = new Point3D(0, 100, 0);
     private static Point3D MAX = new Point3D(0, 100, 0);
     private static List<CL_Pokemon> pokemonsInit;
+    private static int count=0;
+    private static List<CL_Agent> statAge;
 
     public Arena() {
         ;
@@ -112,23 +116,37 @@ public class Arena {
     }
 
     public static List<CL_Agent> getAgents(String aa, directed_weighted_graph gg) {
-        ArrayList<CL_Agent> ans = new ArrayList<CL_Agent>();
+        if(statAge==null){
+        statAge = new ArrayList<CL_Agent>();}
         try {
             JSONObject ttt = new JSONObject(aa);
             JSONArray ags = ttt.getJSONArray("Agents");
             for (int i = 0; i < ags.length(); i++) {
                 ////////// נאתר את הצלעות של הפוקימונים, את המקור של הצלע ולשם נשלח את הסוכן על ההתחלה
-                CL_Agent c = new CL_Agent(gg, 0);
+//                if(count<= ags.length())
+//                CL_Agent c = new CL_Agent(gg, 0);
+
+                if(statAge.size()<=i){
+                    int []arr= StartPosAg(gg);
+                 CL_Agent c = new CL_Agent(gg, arr[0], arr[1],i);
+                 statAge.add(c);
+                }
+                else{
+//                    CL_Pokemon c=nags.get(i).;
 //                c.update(ags.get(i).toString(), StartPosAg(gg), ags.length());
+                CL_Agent c=statAge.get(i);
                 c.update(ags.get(i).toString());
-                ans.add(c);
+                statAge.set(i,c);
+                }
             }
             //= getJSONArray("Agents");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return ans;
+        return statAge;
     }
+
+
 
     //set agents at best pos to catch poks
     //only useful for beginning of game
@@ -144,7 +162,7 @@ public class Arena {
         arr[1] = pokemonsInit.get(0).get_edge().getDest();
         arr[2] = (int) pokemonsInit.get(0).getValue();
         pokemonsInit.remove(0);
-
+        System.out.println(Arrays.toString(arr));
         return arr;
     }
 

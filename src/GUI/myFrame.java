@@ -210,10 +210,10 @@ public class myFrame extends JFrame {
                             //HERE YOU CAN ADD INFO REGARDING AGENT
                             g.setFont(new Font("MV Boli", Font.BOLD, 15));
                             g.drawString("" + grade, (int) fp.x() - k, (int) fp.y() - k);
-                            double speed = rs.get(i).getSpeed();
-                            if (speed == 5)
-                                g.setColor(Color.red);
-                            g.drawString("" + speed, (int) fp.x() - 25, (int) fp.y() - 25);
+//                            double speed = rs.get(i).getSpeed();
+//                            if (speed == 5)
+//                                g.setColor(Color.red);
+//                            g.drawString("" + speed, (int) fp.x() - 25, (int) fp.y() - 25);
                         }
                         grade = 0;
                     }

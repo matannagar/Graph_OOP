@@ -24,13 +24,17 @@ public class CL_Agent {
     private double _value;
 
 
-    public CL_Agent(directed_weighted_graph g, int start_node) {
+    public CL_Agent(directed_weighted_graph g, int start_node, int dest_node, int id) {
         _gg = g;
         set_value(0);
         this._curr_node = _gg.getNode(start_node);
-        _pos = _curr_node.getLocation();
-        _id = -1;
-        setSpeed(0);
+        this.setNextNode(dest_node);
+        geo_location loc = _curr_node.getLocation();
+        String pos= loc.x()+","+loc.y()+","+loc.z();
+        this._pos=new Point3D(pos);
+        _id=id;
+        //setSpeed(0);
+        setSpeed(1);
     }
 
    /* public static int getCount() {
@@ -49,14 +53,19 @@ public class CL_Agent {
             JSONObject readA = line.getJSONObject("Agent");
             int id = readA.getInt("id");
             if (id == this.getID() || this.getID() == -1) {
-                if (this.getID() == -1) {
-                    _id = id;
-                }
-                double speed = readA.getDouble("speed");
-                this.setSpeed(speed);
-                String p = readA.getString("pos");
-                Point3D posA = new Point3D(p);
-                this._pos = posA;
+//                if (this.getID() == -1) {
+//                    _id = id;
+//                    double speed = readA.getDouble("speed");
+//                    this.setSpeed(speed);
+//                    double value = readA.getDouble("value");
+//                    this.set_value(value);
+//                }
+//                else {
+                    double speed = readA.getDouble("speed");
+                    this.setSpeed(speed);
+                    String p = readA.getString("pos");
+                    Point3D posA = new Point3D(p);
+                    this._pos = posA;
 
 //                if(_count==0){
 //              //  if(_count<agNum){
@@ -69,14 +78,15 @@ public class CL_Agent {
 //                    _count++;
 //				}
 //                else {
-					int src = readA.getInt("src");
-					this.setCurrNode(src);
+                    int src = readA.getInt("src");
+                    this.setCurrNode(src);
 
 //				}
-                int dest = readA.getInt("dest");
-                this.setNextNode(dest);
-                double value = readA.getDouble("value");
-                this.set_value(value);
+                    int dest = readA.getInt("dest");
+                    this.setNextNode(dest);
+                    double value = readA.getDouble("value");
+                    this.set_value(value);
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
