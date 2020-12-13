@@ -4,47 +4,82 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * This class represents an directional weighted graph.
+ *
+ * @param: Nodes- A HashMap contains all the vertexes in this graph.
+ * @param: Rdges- A HashMap contains all the edges in this graph.
+ * @param: mc- How many changes we does in this graph.
+ *
+ * @author Reut-Maslansky & Matan-Ben-Nagar
+ */
+
 public class DWGraph_DS implements directed_weighted_graph {
 	private HashMap<Integer,node_data> Nodes;
 	private HashMap<String,edge_data> Edges;
 	private int mc;
 
-	@Override
-	public node_data getNode(int key) {
-		return Nodes.get(key);
-	}
-
+	/**
+	 * Default constructor
+	 */
 	public DWGraph_DS() {
 		this.mc=0;
 		this.Nodes =new HashMap<>();
 		this.Edges =new HashMap<>();
 	}
-		public DWGraph_DS(directed_weighted_graph g) {
-			if(g==null) return;
 
-			this.Nodes = new HashMap<>();
-			this.Edges = new HashMap<>();
+	/**
+	 * Copy constructor
+	 *
+	 * @param g
+	 */
+	public DWGraph_DS(directed_weighted_graph g) {
+		if(g==null) return;
 
-			for (node_data n : g.getV()) {
-				node_data no = new NodeData(n);
-				addNode(no);
-			}
-			for (node_data n : g.getV()) {
-				for (edge_data e : g.getE(n.getKey())) {
-					connect(e.getSrc(),e.getDest(),e.getWeight());
-				}
-			}
+		this.Nodes = new HashMap<>();
+		this.Edges = new HashMap<>();
 
-			this.mc=g.nodeSize()+g.edgeSize();
+		for (node_data n : g.getV()) {
+			node_data no = new NodeData(n);
+			addNode(no);
 		}
+		for (node_data n : g.getV()) {
+			for (edge_data e : g.getE(n.getKey())) {
+				connect(e.getSrc(),e.getDest(),e.getWeight());
+			}
+		}
+
+		this.mc=g.nodeSize()+g.edgeSize();
+	}
+
+	/**
+	 * returns the node throw the key number.
+	 * @param key - the node_id
+	 * @return
+	 */
+	@Override
+	public node_data getNode(int key) {
+		return Nodes.get(key);
+	}
+
+	/**
+	 * Return the weight between this vertexes.
+	 * If there is no such edge- return -1.
+	 *
+	 * @param src
+	 * @param dest
+	 * @return
+	 * */
 	@Override
 	public edge_data getEdge(int src, int dest) {
 		String pair = getPair(src,dest);
 		return Edges.get(pair);
 	}
 
+	/**
+	 * Add a new node to the graph with the given key.
+	 */
 	@Override
-	////check
 	public void addNode(node_data n) {
 		if (!Nodes.containsKey(n.getKey())) {
 			Nodes.put(n.getKey(), n);
@@ -52,6 +87,10 @@ public class DWGraph_DS implements directed_weighted_graph {
 		}
 	}
 
+	/**
+	 * Connect an edge between src and dest, with an edge with weight >=0.
+	 * if the edge src-dest already exists - the method simply updates the weight of the edge.
+	 */
 	@Override
 	public void connect(int src, int dest, double w) {
 		if (!(this.Nodes.containsKey(src)) || !(this.Nodes.containsKey(dest))) return;
@@ -79,27 +118,54 @@ public class DWGraph_DS implements directed_weighted_graph {
 		Edges.put(pair, e);
 	}
 
-
+	/**
+	 * This method return a pointer for the collection representing all the nodes in the graph.
+	 *
+	 * @return Collection<node_data>
+	 */
 	@Override
 	public Collection<node_data> getV() {
 		return Nodes.values();
 	}
 
+	/**
+	 * This method return a pointer for the collection representing all the edges that leaves the src node
+	 * @param node_id
+	 * @return
+	 */
 	@Override
 	public Collection<edge_data> getE(int node_id) {
 		if(!(Nodes.containsKey(node_id))) return null;
 		return ((NodeData)(getNode(node_id))).getSrc();
 	}
 
+
+	/**
+	 * This method return a pointer for the collection representing all the edges that are coming from the dest node
+	 * @param node_id
+	 * @return
+	 */
 	public Collection<edge_data> getEDest(int node_id) {
 		if(!(Nodes.containsKey(node_id))) return null;
 		return ((NodeData)(getNode(node_id))).getDest();
 	}
 
+
+	/**
+	 * This method return a pointer for the collection representing all the edges in this graph
+	 * @return
+	 */
 	public Collection<edge_data> getEdgesCollection() {
 		return Edges.values();
 	}
 
+	/**
+	 * Delete the node (with the given ID) from the graph -
+	 * and removes all edges which starts or ends at this node.
+	 *
+	 * @param key
+	 * @return the data of the removed node (null if none).
+	 */
 	@Override
 	public node_data removeNode(int key) {
 		if (Nodes.containsKey(key)) {
@@ -128,7 +194,6 @@ public class DWGraph_DS implements directed_weighted_graph {
 				it = ((NodeData)node).getDest().iterator();
 			}
 
-
 			Nodes.remove(key);
 
 			return node;
@@ -136,6 +201,12 @@ public class DWGraph_DS implements directed_weighted_graph {
 		return null;
 	}
 
+	/**
+	 * Delete the edge from the graph between the vertexes.
+	 *
+	 * @param src
+	 * @param dest
+	 */
 	@Override
 	public edge_data removeEdge(int src, int dest) {
 		if(src==dest) return null;
@@ -151,20 +222,34 @@ public class DWGraph_DS implements directed_weighted_graph {
 		return e;
 	}
 
+	/** return the number of vertices in this graph.*/
 	@Override
 	public int nodeSize() {
 		return Nodes.size();
 	}
 
+	/** return the number of edges in this graph.*/
 	@Override
 	public int edgeSize() {
 		return Edges.size();
 	}
 
+	/**
+	 * Return how many changes we does in this graph.
+	 *
+	 * @return
+	 */
 	@Override
 	public int getMC() {
 		return mc;
 	}
+
+	/**
+	 * return String pair of src node and dest node of an edge.
+	 * @param src
+	 * @param dest
+	 * @return
+	 */
 	public String getPair(int src, int dest) {
 		return String.valueOf(src) + "," + String.valueOf(dest);
 	}
@@ -176,6 +261,14 @@ public class DWGraph_DS implements directed_weighted_graph {
 				"edges=" + Edges.values() +"\n"+"\t"+
 				"mc: " + mc;
 	}
+
+	/**
+	 * This method returns if this object and this graph equals of
+	 * their values of vertexes and edges.
+	 *
+	 * @param o
+	 * @return
+	 * */
 	@Override
 	public boolean equals(Object o){
 		if(!(o instanceof DWGraph_DS)) return false;

@@ -12,46 +12,76 @@ public class Edge_DS implements edge_data {
         this.dest = dest;
         this.weight = w;
         this.info = "";
-        //**********NOTICE ME************
         this.tag = -1;
     }
 
+    /**
+     * The id of the source node of this edge.
+     * @return
+     */
     @Override
     public int getSrc() {
         return this.src;
     }
 
+    /**
+     * The id of the destination node of this edge
+     * @return
+     */
     @Override
     public int getDest() {
         return this.dest;
     }
 
+    /**
+     * @return the weight of this edge (positive value).
+     */
     @Override
     public double getWeight() {
         return this.weight;
     }
 
+    /**
+     * Returns the remark (meta data) associated with this edge.
+     * @return
+     */
     @Override
     public String getInfo() {
         return this.info;
     }
 
+    /**
+     * Allows changing the remark (meta data) associated with this edge.
+     * @param s
+     */
     @Override
     public void setInfo(String s) {
         this.info = s;
-
     }
 
+    /**
+     * Temporal data (aka color: e,g, white, gray, black)
+     * which can be used be algorithms
+     * @return
+     */
     @Override
     public int getTag() {
         return this.tag;
     }
 
+    /**
+     * This method allows setting the "tag" value for temporal marking an edge
+     * @param t - the new value of the tag
+     */
     @Override
     public void setTag(int t) {
         this.tag = t;
     }
 
+    /**
+     * This method allows setting the weight value for this edge
+     * @param w - the new value of the weight
+     */
     public void setWeight(double w) {
         this.weight = w;
     }

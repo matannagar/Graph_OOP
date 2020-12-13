@@ -9,20 +9,54 @@ import java.io.PrintWriter;
 
 import java.util.*;
 
+/**
+        * This class represents a directed (positive) Weighted Graph Theory algorithms including:
+        *      0. clone();
+        *      1. init(graph);
+        *      2. isConnected();
+        *      3. double shortestPathDist(int src, int dest);
+        *      4. List<node_data> shortestPath(int src, int dest);
+        *      5. Save(file);
+        *      6. Load(file);
+        *
+        * @param: gr- a graph on which We'll operates the algorithms.
+        *
+        * @author Reut-Maslansky & Matan-Ben-Nagar
+        */
+
 public class DWGraph_Algo implements dw_graph_algorithms{
 
     private directed_weighted_graph gr;
 
+    /**
+     * Default constructor
+     */
+    public DWGraph_Algo(){
+        this.gr= new DWGraph_DS();
+    }
+
+    /**
+     * Init the graph on which this set of algorithms operates on.
+     * @param g
+     */
     @Override
     public void init(directed_weighted_graph g) {
         this.gr=g;
     }
 
+    /**
+     * Return the underlying graph of which this class works.
+     * @return
+     */
     @Override
     public directed_weighted_graph getGraph() {
         return this.gr;
     }
 
+    /**
+     * Compute a deep copy of this weighted graph.
+     * @return
+     */
     @Override
     public directed_weighted_graph copy() {
         if(gr==null) return null;
@@ -30,6 +64,22 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         return g;
     }
 
+    /**
+     * Returns true if and only if there is a valid path from EVREY node to each other node.
+     *
+     * this method based on BFS Algorithm.
+     * We use the private function- bfs-
+     * that will return the number of times we changed the vertex info,
+     * and thus we will know if during the iterations we went over the amount of vertices that exist in the graph.
+     *
+     * In this operation, of comparing the counter with the number of vertices in the graph -
+     * we saved another pass over all the vertices in the graph.
+     *
+     * After the first iteration on the graph, we turn the graph "upside- down"
+     * and reactivated the "bfs" algo on the same node.
+     *
+     * @return
+     */
     @Override
     public boolean isConnected() {
         if (gr == null) return false;
@@ -49,6 +99,20 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         return true;
     }
 
+    /**
+     * Returns the length of the shortest path between src to dest
+     * if no such path, returns -1
+     *
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     *
+     * This method based on Dijkstra Algorithm.
+     * The data of this algorithm will save in a temporal Node-
+     * 1. The shortest weight from the source vertex to this vertex.
+     * 2. The vertex neighbor that connect this vertex and update him this value of weight accepted.
+     *
+     */
     @Override
     public double shortestPathDist(int src, int dest) {
         if (gr == null) return -1;
@@ -64,6 +128,24 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         return temp.get(dest).tag;
     }
 
+    /**
+     * returns the the shortest path between src to dest - as an ordered List of nodes:
+     * src--> n1-->n2-->...dest
+     *
+     * Note if no such path --> returns null;
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     *
+     *
+     * This method based on Dijkstra Algorithm.
+     * We use the private function- dij- that will return a HashMap.
+     *
+     * In this HasMap, the data of this algorithm will save in a temporal Node- contains:
+     *      1. The shortest weight from the source vertex to this vertex.
+     *      2. The vertex neighbor that connect this vertex and update him this value of weight accepted.
+     *
+     */
     @Override
     public List<node_data> shortestPath(int src, int dest) {
         if (gr == null) return null;
@@ -94,6 +176,14 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         return list;
     }
 
+    /**
+     * Saves this weighted (undirected) graph to the given file name.
+     * we used he json method.
+     *
+     * @param file - the file name (may include a relative path).
+     * @return true - if the file was successfully saved
+     *
+     */
     @Override
     public boolean save(String file) {
 
@@ -139,6 +229,17 @@ public class DWGraph_Algo implements dw_graph_algorithms{
         return true;
     }
 
+    /**
+     * This method load a graph to this graph algorithm.
+     * if the file was successfully loaded - the underlying graph
+     * of this class will be changed (to the loaded one), in case the
+     * graph was not loaded the original graph should remain "as is".
+     *
+     * we used json method.
+     *
+     * @param file - file name
+     * @return true - if the graph was successfully loaded.
+     */
     @Override
     public boolean load(String file) {
         GsonBuilder builder = new GsonBuilder();
@@ -158,6 +259,19 @@ public class DWGraph_Algo implements dw_graph_algorithms{
                 }
     		return true;
     }
+
+    /**
+     * bfs will pass over the nodes.
+     *
+     * @Return how many nodes we marked- then we will know if we pass all the nodes in the graph.
+     *
+     * The function receives a vertex key from which we will perform the test on the graph connected test.
+     * During the test we will mark the vertices in the graph in the "info" that each vertex holds.
+     * At the end we will return the number of times we changed the vertex info,
+     * and thus we will know if during the iterations we went over the amount of vertices that exist in the graph.
+     * In this operation, of comparing the counter with the number of vertices in the graph -
+     * we saved another pass over all the vertices in the graph - in a loop of o(v) where v is the number of vertices in the graph.
+     */
     private int bfs(int key, int flag){
 
         //reset info&tag

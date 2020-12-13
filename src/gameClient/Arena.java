@@ -17,75 +17,34 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This class represents a multi Agents Arena which move on a graph - grabs Pokemons and avoid the Zombies.
- *
- * @author boaz.benmoshe
+ * This class represents a multi Agents Arena which move on a graph - grabs Pokemons.
  */
+
 public class Arena {
-    public static final double EPS1 = 0.001, EPS2 = EPS1 * EPS1, EPS = EPS2;
+    public static final double EPS1 = 0.001, EPS2 = EPS1 * EPS1;
     private directed_weighted_graph _gg;
     private List<CL_Agent> _agents;
     private List<CL_Pokemon> _pokemons;
-    private List<String> _info;
-    private static Point3D MIN = new Point3D(0, 100, 0);
-    private static Point3D MAX = new Point3D(0, 100, 0);
 
-    public Arena() {
-        ;
-        _info = new ArrayList<String>();
-    }
-
-    private Arena(directed_weighted_graph g, List<CL_Agent> r, List<CL_Pokemon> p) {
-        _gg = g;
-        this.setPokemons(p);
-        this.setAgents(r);
-    }
-
-
+    /**
+     * sets a list of pokemons that will appear during the game.
+     */
     public void setPokemons(List<CL_Pokemon> f) {
         this._pokemons = f;
     }
 
+    /**
+     * sets a list of agents that will participate in the game.
+     */
     public void setAgents(List<CL_Agent> f) {
         this._agents = f;
     }
 
+    /**
+     * set the arena of the game.
+     */
     public void setGraph(directed_weighted_graph g) {
         this._gg = g;
-    }
-    //init();}
-
-    private void init() {
-        MIN = null;
-        MAX = null;
-        double x0 = 0, x1 = 0, y0 = 0, y1 = 0;
-        Iterator<node_data> iter = _gg.getV().iterator();
-        while (iter.hasNext()) {
-            geo_location c = iter.next().getLocation();
-            if (MIN == null) {
-                x0 = c.x();
-                y0 = c.y();
-                x1 = x0;
-                y1 = y0;
-                MIN = new Point3D(x0, y0);
-            }
-            if (c.x() < x0) {
-                x0 = c.x();
-            }
-            if (c.y() < y0) {
-                y0 = c.y();
-            }
-            if (c.x() > x1) {
-                x1 = c.x();
-            }
-            if (c.y() > y1) {
-                y1 = c.y();
-            }
-        }
-        double dx = x1 - x0, dy = y1 - y0;
-        MIN = new Point3D(x0 - dx / 10, y0 - dy / 10);
-        MAX = new Point3D(x1 + dx / 10, y1 + dy / 10);
-
     }
 
     public List<CL_Agent> getAgents() {
@@ -96,39 +55,35 @@ public class Arena {
         return _pokemons;
     }
 
+    public directed_weighted_graph getGraph() { return _gg; }
 
-    public directed_weighted_graph getGraph() {
-        return _gg;
-    }
-
-    public List<String> get_info() {
-        return _info;
-    }
-
-    public void set_info(List<String> _info) {
-        this._info = _info;
-    }
-
+    /**
+    * constantly creating agents from a json file.
+     * @param aa
+     * @param gg
+     * @return
+     */
     public static List<CL_Agent> getAgents(String aa, directed_weighted_graph gg) {
         ArrayList<CL_Agent> ans = new ArrayList<CL_Agent>();
         try {
             JSONObject ttt = new JSONObject(aa);
             JSONArray ags = ttt.getJSONArray("Agents");
             for (int i = 0; i < ags.length(); i++) {
-                ////////// נאתר את הצלעות של הפוקימונים, את המקור של הצלע ולשם נשלח את הסוכן על ההתחלה
                 CL_Agent c = new CL_Agent(gg, 0);
-//                c.update(ags.get(i).toString(), StartPosAg(gg), ags.length());
                 c.update(ags.get(i).toString());
                 ans.add(c);
             }
-            //= getJSONArray("Agents");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return ans;
     }
 
-
+    /**
+     * constantly creating pokemons from a json file.
+     * @param fs
+     * @return
+     */
     public static ArrayList<CL_Pokemon> json2Pokemons(String fs) {
         ArrayList<CL_Pokemon> ans = new ArrayList<CL_Pokemon>();
         try {
@@ -139,21 +94,24 @@ public class Arena {
                 JSONObject pk = pp.getJSONObject("Pokemon");
                 int t = pk.getInt("type");
                 double v = pk.getDouble("value");
-                //double s = 0;//pk.getDouble("speed");
-
                 String p = pk.getString("pos");
-                CL_Pokemon f = new CL_Pokemon(new Point3D(p), t, v, 0, null);
+                CL_Pokemon f = new CL_Pokemon(new Point3D(p), t, v, null);
                 ans.add(f);
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         return ans;
     }
 
+    /**
+     * updates the pokemon edge field
+     * @param pk
+     * @param g
+     */
     public static void updateEdge(CL_Pokemon pk, directed_weighted_graph g) {
-        //	oop_edge_data ans = null;
         Iterator<node_data> itr = g.getV().iterator();
         while (itr.hasNext()) {
             node_data v = itr.next();
@@ -168,6 +126,14 @@ public class Arena {
         }
     }
 
+    /**
+     * make sure that the pokemon is placed on the edge.
+     * @param p
+     * @param e
+     * @param type
+     * @param g
+     * @return
+     */
     private static boolean isOnEdge(geo_location p, edge_data e, int type, directed_weighted_graph g) {
         int src = g.getNode(e.getSrc()).getKey();
         int dest = g.getNode(e.getDest()).getKey();

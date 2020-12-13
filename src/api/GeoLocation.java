@@ -1,5 +1,8 @@
 package api;
 
+/**
+ * This class represents a geo location <x,y,z>, aka Point3D
+ */
 public class GeoLocation implements geo_location {
         private double x;
         private double y;
