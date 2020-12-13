@@ -16,6 +16,9 @@ import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Ex2 class is responsible for initiating and starting the game.
+ */
 
 public class Ex2 implements Runnable {
     private static myFrame _win;
@@ -39,6 +42,9 @@ public class Ex2 implements Runnable {
         _win.initLogin();
     }
 
+    /**
+     * starts the game and counter, connect the game results to the server.
+     */
     @Override
     public void run() {
         game_service game = Game_Server_Ex2.getServer(numGame);
@@ -69,6 +75,9 @@ public class Ex2 implements Runnable {
         System.exit(0);
     }
 
+    /**
+     * loads the picked scenario to create the game arena
+     */
     private directed_weighted_graph loadGraph(String s) {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(DWGraph_DS.class, new DWGraphJsonDeserializer());
@@ -86,7 +95,10 @@ public class Ex2 implements Runnable {
     }
 
     /**
-     * init the game by creating an arena customized
+     * initialize the game by creating a customized arena;
+     * the arena includes a list of agents and pokemons that will appear in the game.
+     * this method also calls for the myFrame class that creates the graphic game.
+     *
      * @param game
      */
     private void init(game_service game) {
@@ -108,7 +120,7 @@ public class Ex2 implements Runnable {
             int rs = gameData.getInt("agents");
             System.out.println("Welcome to our pokemon game!\n");
             System.out.println("We wish you the best of luck catching them all :)\n");
-            System.out.println(info+ "\n");
+            System.out.println(info + "\n");
             ArrayList<CL_Pokemon> pksArr = Arena.json2Pokemons(game.getPokemons());
             for (int i = 0; i < pksArr.size(); i++) {
                 Arena.updateEdge(pksArr.get(i), gg);
@@ -132,8 +144,10 @@ public class Ex2 implements Runnable {
         }
     }
 
-    //sort the poks order to their value
-    //after that we can set agents at best pos to catch poks
+    /**
+     * sort the pokemons by the order of their value
+     * after that we can set agents at best positions to catch the pokemons
+     */
     private static void bubbleSort(List<CL_Pokemon> cl) {
         int n = cl.size();
         for (int i = 0; i < n - 1; i++) {
@@ -146,7 +160,6 @@ public class Ex2 implements Runnable {
             }
         }
     }
-
 
     /**
      * Moves each of the agents along the edge
@@ -183,6 +196,16 @@ public class Ex2 implements Runnable {
         }
     }
 
+    /**
+     * this functions picks the shortest path from an unoccupied agent to a pokemon.
+     *
+     * @param g
+     * @param mySrc
+     * @param id
+     * @param sp
+     * @param timeToEnd
+     * @return
+     */
     public static List<node_data> path(directed_weighted_graph g, int mySrc, int id, double sp, long timeToEnd) {
         timeToSleep = 100;
         if (timeToEnd < 20000) timeToSleep = 90;
@@ -202,12 +225,12 @@ public class Ex2 implements Runnable {
             pokSrc = _ar.getPokemons().get(i).get_edge().getSrc();
 
             if (flag) {
-                //check if someone else goes to this pok
+                //check if some other agent is heading to this pokemon
                 for (int j = 0; j < pair.size(); j++) {
                     if (pair.get(j) == pokSrc) flag = false;
                 }
             }
-
+            //chooses the closest pokemon as a destination
             if (flag) {
                 //save the index of the pokemon that is closest to the agent
                 double tempDistance = algo.shortestPathDist(mySrc, pokSrc);
@@ -225,12 +248,19 @@ public class Ex2 implements Runnable {
         int d = _ar.getPokemons().get(minDindex).get_edge().getDest();
         pair.set(id, nodeDest);
         path.add(g.getNode(d));
-        if (_ar.getPokemons().get(minDindex).get_edge().getWeight() < 0.5 && sp >= 5 && timeToEnd < 30000) timeToSleep = 50;
+        // if an agent has maximun speed, is on a short edge and there are only 30 seconds to the game
+        //get more moves.
+        if (_ar.getPokemons().get(minDindex).get_edge().getWeight() < 0.5 && sp >= 5 && timeToEnd < 30000)
+            timeToSleep = 50;
         return path;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * this class is responsible for the login screen of the game
+     * where one enters his ID number and a chosen scenario for the game.
+     */
     public static class Login extends JPanel {
 
         public Login() {
