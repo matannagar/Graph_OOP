@@ -10,19 +10,20 @@ In this game the goal is to collect as many pokemons as possible through one or 
 The game has few different scenarios, based on different graphs with different time limits, in various levels.<br />
 The pokemons remain static in their places and have different values. one pokemon can be more valuable than the other.
 
-<a href="https://imgbb.com/"><img src="https://i.ibb.co/HxbVLvs/pu.png" alt="pu" border="0"></a> <a href="https://imgbb.com/"><img src="https://i.ibb.co/Z1Y8RLb/re.png" alt="re" border="0"></a><a href="https://imgbb.com/"> <img src="https://i.ibb.co/CQ5qMv4/yel.png" alt="yel" border="0"></a><br />
+***The pokeballs-*** <a href="https://imgbb.com/"><img src="https://i.ibb.co/HxbVLvs/pu.png" alt="pu" border="0"></a> <a href="https://imgbb.com/"><img src="https://i.ibb.co/Z1Y8RLb/re.png" alt="re" border="0"></a><a href="https://imgbb.com/"> <img src="https://i.ibb.co/CQ5qMv4/yel.png" alt="yel" border="0"></a><br />
 
-***The pokeballs-*** are our players and the more they catch pokemons the more value they gain.<br />
+The pokeballs are our players and the more they catch pokemons the more value they gain.<br />
 They can also increase their speed if they catch enough pokemons.<br />
 
-<a href="https://imgbb.com/"><img src="https://i.ibb.co/HxbVLvs/pu.png" alt="pu" border="0"></a> <a href="https://imgbb.com/"><img src="https://i.ibb.co/Z1Y8RLb/re.png" alt="re" border="0"></a><a href="https://imgbb.com/"> <img src="https://i.ibb.co/CQ5qMv4/yel.png" alt="yel" border="0"></a>
 
 ***The pokemons-*** there are two types of them:
 - Picachua <a href="https://imgbb.com/"><img src="https://i.ibb.co/F6nJSmp/Webp-net-resizeimage-1.png" alt="Webp-net-resizeimage-1" border="0"></a> 
 - Balbazor <a href="https://imgbb.com/"><img src="https://i.ibb.co/zQS7Hd0/balb.png" alt="balb" border="0"></a>  
 
-
 Our game is connected to a server that provides the arenas as a JSON file converted into a string.
+
+![](game.gif)
+
 
 ## Our Packages & Classes:
 
@@ -40,12 +41,6 @@ Our game is connected to a server that provides the arenas as a JSON file conver
 
 **Data:**
 * In this folder you will find the graphs files and the elements images for the graphical presentation.
-
-![](game.gif)
-
-### *A screenshot of the game play:*
-<a href="https://imgbb.com/"><img src="https://i.ibb.co/fvFfNFq/Screenshot-2020-12-13-212540.jpg" alt="Screenshot-2020-12-13-212540" border="0"></a>
-<a href="https://ibb.co/M9HpDxn"><img src="https://i.ibb.co/Fn1JbL6/Screenshot-2020-12-13-114057.jpg" alt="Screenshot-2020-12-13-114057" border="0"></a>
 
 ## **Main algoritms to construct the game:**
 - ***shortestPathDist-*** return the length of the shortest path between source vertex to the target vertex.
