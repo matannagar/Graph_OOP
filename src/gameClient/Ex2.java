@@ -1,10 +1,10 @@
-package api;
+package gameClient;
 
+import api.*;
 import gameClient.util.myFrame;
 import Server.Game_Server_Ex2;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import gameClient.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,9 +34,10 @@ public class Ex2 implements Runnable {
             numGame = Integer.valueOf(args[1]);
             client.start();
         }
-
-        _win = new myFrame("Login game", 350, 220, numGame);
-        _win.initLogin();
+        else {
+            _win = new myFrame("Login game", 350, 220, numGame);
+            _win.initLogin();
+        }
     }
 
     /**
@@ -100,7 +101,7 @@ public class Ex2 implements Runnable {
      * @param game
      */
     private void init(game_service game) {
-        _win.setVisible(false);
+
         _win = new myFrame("Catch Them All", 1000, 900, numGame);
         String pks = game.getPokemons();
         directed_weighted_graph gg = loadGraph(game.getGraph());

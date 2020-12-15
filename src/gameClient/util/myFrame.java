@@ -4,10 +4,8 @@ import api.*;
 import gameClient.Arena;
 import gameClient.CL_Agent;
 import gameClient.CL_Pokemon;
-import gameClient.util.Point3D;
-import gameClient.util.Range;
-import gameClient.util.Range2D;
-import gameClient.util.Range2Range;
+import gameClient.Ex2;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -336,6 +334,9 @@ public class myFrame extends JFrame {
             idANDnum();
             title();
             imageLogo();
+/*
+            if(Ex2.numGame!=-1&&Ex2.ID!=-1) Ex2.client.start();
+*/
         }
 
         private void title() {
@@ -435,6 +436,8 @@ public class myFrame extends JFrame {
             button1.addActionListener(e ->
                     Ex2.ID = Integer.parseInt(userText.getText()));
             button1.addActionListener(e -> Ex2.client.start());
+            button1.addActionListener(e ->  Ex2._win.setVisible(false));
+
         }
 
         private void imageLogo() {
