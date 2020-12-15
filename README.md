@@ -1,6 +1,6 @@
+<a href="https://imgbb.com/"><img src="https://i.ibb.co/LZJR5tL/small-logo.png" alt="small-logo" border="0"></a><br />
 
 ***Authors:** Matan Ben Nagar & Reut Maslansky*
-
 
 ## **About this project**
 This project represents a game that is based on the implementation of an directional weighted graph with different methods and algorithms.
@@ -50,6 +50,8 @@ Our game is connected to a server that provides the arenas as a JSON file conver
 ## **Dijkstra's algorithm**
 In the development of the algorithm of shortestPath in the weighted graph, we based on Dijkstra's algorithm,<br />
 in order to find the quickest path from a pokeball to a pokemon.
+
+<a href="https://ibb.co/Brw6Psk"><img src="https://i.ibb.co/LJvgPpK/dijkstra1.png" alt="dijkstra1" border="0"></a><br />
 
 More about- https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 
