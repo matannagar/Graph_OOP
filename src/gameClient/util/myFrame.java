@@ -1,18 +1,20 @@
-package gameClient;
+package gameClient.util;
 
 import api.*;
+import gameClient.Arena;
+import gameClient.CL_Agent;
+import gameClient.CL_Pokemon;
 import gameClient.util.Point3D;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
 import gameClient.util.Range2Range;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 import java.util.List;
 
 /**
@@ -29,7 +31,7 @@ public class myFrame extends JFrame {
     private Range2Range _w2f;
     private int numGame;
     private float time;
-    private Ex2.Login panel;
+    private Login panel;
 
     public myFrame(String s, int w, int h, int num) {
         super(s);
@@ -73,14 +75,10 @@ public class myFrame extends JFrame {
      * this function is responsible for the initial game window
      */
     public void initLogin() {
-        panel = new Ex2.Login();
+        panel = new Login();
         this.add(panel);
         this.setVisible(true);
         panel.setVisible(true);
-    }
-
-    public void closeInitWindow(){
-        panel.setVisible(false);
     }
 
     public void setTimeToEnd(long timeTo) {
@@ -113,7 +111,6 @@ public class myFrame extends JFrame {
                 numGame(gg);
                 drawTimer(gg);
 
-                this.revalidate();
                 this.setVisible(true);
             }
         }
@@ -160,7 +157,7 @@ public class myFrame extends JFrame {
             g2.setStroke(new BasicStroke(3));
             g2.drawLine((int) s0.x(), (int) s0.y(), (int) d0.x(), (int) d0.y());
             g.drawLine((int) s0.x(), (int) s0.y(), (int) d0.x(), (int) d0.y());
-            this.revalidate();
+//            this.revalidate();
         }
 
         private void drawNode(node_data n, int r, Graphics g) {
@@ -283,14 +280,10 @@ public class myFrame extends JFrame {
         private void drawGraph(Graphics g) {
             if (_ar != null) {
                 directed_weighted_graph gg = _ar.getGraph();
-                Iterator<node_data> iter = gg.getV().iterator();
-                while (iter.hasNext()) {
-                    node_data n = iter.next();
+                for (node_data n : gg.getV()) {
                     g.setColor(Color.gray.darker());
                     drawNode(n, 5, g);
-                    Iterator<edge_data> itr = gg.getE(n.getKey()).iterator();
-                    while (itr.hasNext()) {
-                        edge_data e = itr.next();
+                    for (edge_data e : gg.getE(n.getKey())) {
                         g.setColor(Color.gray.darker());
                         drawEdge(e, g);
                     }
@@ -304,9 +297,7 @@ public class myFrame extends JFrame {
             List<CL_Pokemon> fs = _ar.getPokemons();
 
             if (fs != null) {
-                Iterator<CL_Pokemon> itr = fs.iterator();
-                while (itr.hasNext()) {
-                    CL_Pokemon f = itr.next();
+                for (CL_Pokemon f : fs) {
                     Point3D c = f.getLocation();
 
                     if (f.getType() < 0) {
@@ -330,6 +321,127 @@ public class myFrame extends JFrame {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * this class is responsible for the login screen of the game
+     * where one enters his ID number and a chosen scenario for the game.
+     */
+    public static class Login extends JPanel {
+
+        public Login() {
+            super();
+            this.setLayout(null);
+            idANDnum();
+            title();
+            imageLogo();
+        }
+
+        private void title() {
+            JLabel t = new JLabel("Catch Them All");
+            t.setFont(new Font("MV Boli", Font.BOLD, 30));
+            t.setForeground(Color.white);
+            t.setBounds(40, 20, 350, 40);
+            add(t);
+            t = new JLabel("Catch Them All");
+            t.setFont(new Font("MV Boli", Font.BOLD, 30));
+            t.setForeground(Color.red.darker());
+            t.setBounds(42, 22, 350, 40);
+            add(t);
+        }
+
+        private void idANDnum() {
+            JLabel id = new JLabel("     Id");
+            id.setBounds(10, 70, 80, 25);
+            Border b = BorderFactory.createLineBorder(Color.RED.darker(), 2);
+            id.setForeground(Color.RED.darker());
+            id.setBackground(Color.gray.brighter());
+            id.setFont(new Font("MV Boli", Font.BOLD, 13));
+            id.setBorder(b);
+            id.setOpaque(true);
+
+            add(id);
+
+            JTextField userText = new JTextField();
+            userText.setBounds(100, 70, 165, 25);
+            userText.setFont(new Font("MV Boli", Font.BOLD, 13));
+            userText.setForeground(Color.RED.darker());
+            if (Ex2.ID >= 0) userText.setText(Ex2.ID + "");
+
+            this.add(userText);
+
+            JLabel gameKey = new JLabel(" Key Game");
+            gameKey.setBounds(10, 100, 80, 25);
+            gameKey.setForeground(Color.RED.darker());
+            gameKey.setBackground(Color.gray.brighter());
+            gameKey.setFont(new Font("MV Boli", Font.BOLD, 13));
+            gameKey.setBorder(b);
+            gameKey.setOpaque(true);
+
+            this.add(gameKey);
+
+            JTextField userNum = new JTextField();
+            userNum.setBounds(100, 100, 165, 25);
+            userNum.setFont(new Font("MV Boli", Font.BOLD, 13));
+            userNum.setForeground(Color.RED.darker());
+            if (Ex2.numGame >= 0) userNum.setText(Ex2.numGame + "");
+
+            this.add(userNum);
+
+            JButton button = new JButton("Reut");
+            button.setBounds(30, 140, 80, 25);
+            button.setForeground(Color.red.darker());
+            button.setBackground(Color.orange);
+            button.setBorder(b);
+            button.setFont(new Font("MV Boli", Font.BOLD, 15));
+
+            this.add(button);
+            button.addActionListener(e -> {
+
+                if (e.getSource() == button) {
+                    // userText.setEditable(false);
+                    userText.setText("208196709");
+                    userNum.setText("1");
+                }
+            });
+
+            JButton matan = new JButton("Matan");
+            matan.setBounds(210, 140, 80, 25);
+            matan.setForeground(Color.red.darker());
+            matan.setBackground(Color.orange);
+            matan.setBorder(b);
+            matan.setFont(new Font("MV Boli", Font.BOLD, 15));
+
+            this.add(matan);
+            matan.addActionListener(e -> {
+
+                if (e.getSource() == matan) {
+                    // userText.setEditable(false);
+                    userText.setText("206240301");
+                    userNum.setText("1");
+                }
+            });
+
+            JButton button1 = new JButton("Start");
+            button1.setBounds(120, 140, 80, 25);
+            button1.setForeground(Color.red.darker());
+            button1.setBackground(Color.orange);
+            button1.setFont(new Font("MV Boli", Font.BOLD, 15));
+            button1.setBorder(b);
+            this.add(button1);
+            button1.addActionListener(e ->
+                    Ex2.numGame = Integer.parseInt(userNum.getText()));
+            button1.addActionListener(e ->
+                    Ex2.ID = Integer.parseInt(userText.getText()));
+            button1.addActionListener(e -> Ex2.client.start());
+        }
+
+        private void imageLogo() {
+            JLabel temp = new JLabel();
+            temp.setIcon(new ImageIcon("data/backround.jpg"));
+            temp.setBounds(0, 0, 350, 197);
+            this.add(temp);
         }
     }
 }
