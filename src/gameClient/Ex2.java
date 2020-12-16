@@ -177,6 +177,7 @@ public class Ex2 implements Runnable {
         _ar.setAgents(ageA);
         String pk = game.getPokemons();
         _ar.setPokemons(Arena.json2Pokemons(pk));
+
         for (int i = 0; i < _ar.getAgents().size(); i++) {
             CL_Agent ag = _ar.getAgents().get(i);
             int id = ag.getID();
