@@ -42,7 +42,7 @@ Our game is connected to a server that provides the arenas as a JSON file conver
 **Data:**
 * In this folder you will find the graphs files and the elements images for the graphical presentation.
 
-## **Main algoritms to construct the game:**
+## **Main algoritms to construct the game**
 - ***shortestPathDist-*** return the length of the shortest path between source vertex to the target vertex.
 - ***shortestPath-*** return the shortest path between source vertex to the target vertex- as an ordered list of nodes:
 *source--> n1--> n2--> ... -->target*
@@ -55,15 +55,18 @@ in order to find the quickest path from a pokeball to a pokemon.
 
 More about- https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 
-## **For clone down this repository**
+## **To clone this repository**
 Write in your Git Bash the follow:
 
 ```
 $ git clone https://github.com/Reut-Maslansky/ex2.git
 ```
-
-מסך כניסה
-בחירה של משתמש איזה משחק להריץ
-jar
-אלגוריתם של המשחק- סוכן אחד הולך לפוקימון ולא כמה
-
+## To run this game
+Download the jar file and data folder and put them in the same folder.
+1. Open this folder in the cmd and run this command line :
+```
+java -jar Ex2.jar <ID Number> <Scenario Number> 
+``` 
+2. Click twice on the jar file. This will open a login window where you will be required to fill ID number and a scenario of a chosen game.
+Make sure you enter a valid scenario game number and ID.
+Finally, press start!
