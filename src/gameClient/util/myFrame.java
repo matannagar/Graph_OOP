@@ -20,7 +20,7 @@ import java.util.List;
  * A JFrame that includes a JPanel.
  * The game window is resizeable, includes a timer, total score points and
  * agent personal grade.
- *
+ * <p>
  * The game includes initial game window that requires a user Id number and a game scenario.
  */
 
@@ -76,6 +76,7 @@ public class myFrame extends JFrame {
         panel = new Login();
         this.add(panel);
         this.setVisible(true);
+        this.setResizable(false);
         panel.setVisible(true);
     }
 
@@ -129,7 +130,7 @@ public class myFrame extends JFrame {
             } catch (IOException e) {
 
             }
-            g.drawImage(img, 780, 120, this);
+            g.drawImage(img, this.getWidth() - 400, this.getHeight() - 512, this);
             try {
                 img = ImageIO.read(new File("data/misty.png"));
             } catch (IOException e) {
@@ -141,7 +142,7 @@ public class myFrame extends JFrame {
             } catch (IOException e) {
 
             }
-            g.drawImage(img, 350, 5, this);
+            g.drawImage(img, this.getWidth() / 2 - 80, 5, this);
         }
 
         private void drawEdge(edge_data e, Graphics g) {
@@ -261,10 +262,10 @@ public class myFrame extends JFrame {
 
                     }
                 }
-                g.drawImage(img, 730, 22 + i * j, this);
+                g.drawImage(img, this.getWidth() - 240, 20 + i * j, this);
                 g.setFont(new Font("MV Boli", Font.BOLD, 15));
-                g.drawString("Agent " + rs.get(i).getID(), 760, 40 + i * j);
-                g.drawString("value  " + rs.get(i).getValue(), 840, 40 + i * j);
+                g.drawString("Agent " + rs.get(i).getID(), this.getWidth() - 200, 40 + i * j);
+                g.drawString("value  " + rs.get(i).getValue(), this.getWidth() - 120, 40 + i * j);
 
                 grade += rs.get(i).getValue();
                 i++;
@@ -341,23 +342,23 @@ public class myFrame extends JFrame {
 
         private void title() {
             JLabel t = new JLabel("Catch Them All");
-            t.setFont(new Font("MV Boli", Font.BOLD, 30));
-            t.setForeground(Color.white);
-            t.setBounds(40, 20, 350, 40);
+            t.setFont(new Font("MV Boli", Font.BOLD, 35));
+            t.setForeground(new Color(124, 54, 126));
+            t.setBounds(23, 20, 350, 40);
             add(t);
             t = new JLabel("Catch Them All");
-            t.setFont(new Font("MV Boli", Font.BOLD, 30));
-            t.setForeground(Color.red.darker());
-            t.setBounds(42, 22, 350, 40);
+            t.setFont(new Font("MV Boli", Font.BOLD, 35));
+            t.setForeground(new Color(253, 239, 204));
+            t.setBounds(24, 21, 350, 40);
             add(t);
         }
 
         private void idANDnum() {
             JLabel id = new JLabel("     Id");
-            id.setBounds(10, 70, 80, 25);
-            Border b = BorderFactory.createLineBorder(Color.RED.darker(), 2);
-            id.setForeground(Color.RED.darker());
-            id.setBackground(Color.gray.brighter());
+            id.setBounds(30, 70, 80, 25);
+            Border b = BorderFactory.createLineBorder(new Color(124, 54, 126), 2);
+            id.setForeground(new Color(124, 54, 126));
+            id.setBackground(new Color(253, 239, 204));
             id.setFont(new Font("MV Boli", Font.BOLD, 13));
             id.setBorder(b);
             id.setOpaque(true);
@@ -365,17 +366,17 @@ public class myFrame extends JFrame {
             add(id);
 
             JTextField userText = new JTextField();
-            userText.setBounds(100, 70, 165, 25);
+            userText.setBounds(120, 70, 170, 25);
             userText.setFont(new Font("MV Boli", Font.BOLD, 13));
-            userText.setForeground(Color.RED.darker());
+            userText.setForeground(new Color(124, 54, 126));
             if (Ex2.ID >= 0) userText.setText(Ex2.ID + "");
 
             this.add(userText);
 
             JLabel gameKey = new JLabel(" Key Game");
-            gameKey.setBounds(10, 100, 80, 25);
-            gameKey.setForeground(Color.RED.darker());
-            gameKey.setBackground(Color.gray.brighter());
+            gameKey.setBounds(30, 100, 80, 25);
+            gameKey.setForeground(new Color(124, 54, 126));
+            gameKey.setBackground(new Color(253, 239, 204));
             gameKey.setFont(new Font("MV Boli", Font.BOLD, 13));
             gameKey.setBorder(b);
             gameKey.setOpaque(true);
@@ -383,16 +384,16 @@ public class myFrame extends JFrame {
             this.add(gameKey);
 
             JTextField userNum = new JTextField();
-            userNum.setBounds(100, 100, 165, 25);
+            userNum.setBounds(120, 100, 170, 25);
             userNum.setFont(new Font("MV Boli", Font.BOLD, 13));
-            userNum.setForeground(Color.RED.darker());
+            userNum.setForeground(new Color(124, 54, 126));
             if (Ex2.numGame >= 0) userNum.setText(Ex2.numGame + "");
 
             this.add(userNum);
 
             JButton button = new JButton("Reut");
             button.setBounds(30, 140, 80, 25);
-            button.setForeground(Color.red.darker());
+            button.setForeground(new Color(124, 54, 126));
             button.setBackground(Color.orange);
             button.setBorder(b);
             button.setFont(new Font("MV Boli", Font.BOLD, 15));
@@ -409,7 +410,7 @@ public class myFrame extends JFrame {
 
             JButton matan = new JButton("Matan");
             matan.setBounds(210, 140, 80, 25);
-            matan.setForeground(Color.red.darker());
+            matan.setForeground(new Color(124, 54, 126));
             matan.setBackground(Color.orange);
             matan.setBorder(b);
             matan.setFont(new Font("MV Boli", Font.BOLD, 15));
@@ -426,7 +427,7 @@ public class myFrame extends JFrame {
 
             JButton button1 = new JButton("Start");
             button1.setBounds(120, 140, 80, 25);
-            button1.setForeground(Color.red.darker());
+            button1.setForeground(new Color(124, 54, 126));
             button1.setBackground(Color.orange);
             button1.setFont(new Font("MV Boli", Font.BOLD, 15));
             button1.setBorder(b);
@@ -436,13 +437,13 @@ public class myFrame extends JFrame {
             button1.addActionListener(e ->
                     Ex2.ID = Integer.parseInt(userText.getText()));
             button1.addActionListener(e -> Ex2.client.start());
-            button1.addActionListener(e ->  Ex2._win.setVisible(false));
+            button1.addActionListener(e -> Ex2._win.setVisible(false));
 
         }
 
         private void imageLogo() {
             JLabel temp = new JLabel();
-            temp.setIcon(new ImageIcon("data/backround.jpg"));
+            temp.setIcon(new ImageIcon("data/background1.png"));
             temp.setBounds(0, 0, 350, 197);
             this.add(temp);
         }
