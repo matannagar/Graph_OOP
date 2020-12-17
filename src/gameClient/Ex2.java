@@ -22,7 +22,7 @@ public class Ex2 implements Runnable {
     private static ArrayList<Integer> pair = new ArrayList<>();
     private static HashMap<Integer, Integer> edges = new HashMap<>();
     public static Thread client = new Thread(new Ex2());
-    private static HashMap<String ,Double> dij= new HashMap<>();
+    private static HashMap<String, Double> dij = new HashMap<>();
     private static long timeToSleep;
     private static long timeOfGame;
 
@@ -33,9 +33,8 @@ public class Ex2 implements Runnable {
             ID = Integer.valueOf(args[0]);
             numGame = Integer.valueOf(args[1]);
             client.start();
-        }
-        else {
-            _win = new myFrame("Login game", 350, 220, numGame);
+        } else {
+            _win = new myFrame("Login game", 350, 220);
             _win.initLogin();
         }
     }
@@ -51,23 +50,22 @@ public class Ex2 implements Runnable {
         init(game);
 
         game.startGame();
-        timeOfGame= game.timeToEnd();
-//        int ind = 1;
+        timeOfGame = game.timeToEnd();
         timeToSleep = 100;
 
         while (game.isRunning()) {
             moveAgents(game, gg);
             try {
-//                if (ind % 1 == 0) {
-                    _win.repaint();
-                    _win.setTimeToEnd(game.timeToEnd() / 10);
-//                }
+
+                _win.repaint();
+                _win.setTimeToEnd(game.timeToEnd() / 10);
+
                 Thread.sleep(timeToSleep);
-//                ind++;
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
-            if (game.timeToEnd() < 0.333*timeOfGame) timeToSleep = 90;
+            if (game.timeToEnd() < 0.333 * timeOfGame) timeToSleep = 90;
         }
         String res = game.toString();
         System.out.println(res);
@@ -102,7 +100,7 @@ public class Ex2 implements Runnable {
      */
     private void init(game_service game) {
 
-        _win = new myFrame("Catch Them All", 1000, 900, numGame);
+        _win = new myFrame("Catch Them All", 1000, 900);
         String pks = game.getPokemons();
         directed_weighted_graph gg = loadGraph(game.getGraph());
 
@@ -133,10 +131,9 @@ public class Ex2 implements Runnable {
                 CL_Pokemon c = pksArr.get(i);
 //                int nn = c.get_edge().getDest();
 //                if (c.getType() < 0) {
-                   int nn = c.get_edge().getSrc();
+                int nn = c.get_edge().getSrc();
 //                }
-                System.out.println(c.get_edge());
-                System.out.println(nn);
+
                 game.addAgent(nn);
                 pair.add(-1);
             }
@@ -210,14 +207,14 @@ public class Ex2 implements Runnable {
      */
     public static List<node_data> path(directed_weighted_graph g, int mySrc, int id, double sp, long timeToEnd) {
         timeToSleep = 100;
-        if (timeToEnd < 0.333*timeOfGame) timeToSleep = 90;
+        if (timeToEnd < 0.333 * timeOfGame) timeToSleep = 90;
         dw_graph_algorithms algo = new DWGraph_Algo();
         algo.init(g);
 
         //updates pokemon edges
         double minDistance = Double.MAX_VALUE;
         boolean flag = true;
-        int nodeDest = -1;
+        int nodeDest = 0;
         int pokSrc;
         int minDindex = 0;
 
@@ -235,13 +232,12 @@ public class Ex2 implements Runnable {
             //chooses the closest pokemon as a destination
             if (flag) {
                 //save the index of the pokemon that is closest to the agent
-                String s= mySrc+","+pokSrc;
+                String s = mySrc + "," + pokSrc;
                 double tempDistance;
-                if(!(dij.containsKey(s))){
+                if (!(dij.containsKey(s))) {
                     tempDistance = algo.shortestPathDist(mySrc, pokSrc);
-                    dij.put(s,tempDistance);
-                }
-                else tempDistance= dij.get(s);
+                    dij.put(s, tempDistance);
+                } else tempDistance = dij.get(s);
                 if (tempDistance < minDistance) {
                     minDistance = tempDistance;
                     minDindex = i;
@@ -258,7 +254,7 @@ public class Ex2 implements Runnable {
         path.add(g.getNode(d));
         // if an agent has maximun speed, is on a short edge and there are only 30 seconds to the game
         //get more moves.
-        if (_ar.getPokemons().get(minDindex).get_edge().getWeight() < 0.5 && sp >= 5 && timeToEnd < 0.5*timeOfGame)
+        if (_ar.getPokemons().get(minDindex).get_edge().getWeight() < 0.5 && sp >= 5 && timeToEnd < 0.5 * timeOfGame)
             timeToSleep = 50;
         return path;
     }

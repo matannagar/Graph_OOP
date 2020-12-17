@@ -27,17 +27,15 @@ import java.util.List;
 public class myFrame extends JFrame {
     private Arena _ar;
     private Range2Range _w2f;
-    private int numGame;
     private float time;
     private Login panel;
 
-    public myFrame(String s, int w, int h, int num) {
+    public myFrame(String s, int w, int h) {
         super(s);
         this.setSize(new Dimension(w, h));
         this.setLocationRelativeTo(null);
         this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        numGame = num;
         this.setVisible(true);
     }
 
@@ -226,7 +224,7 @@ public class myFrame extends JFrame {
             g.drawString("Score: ", 70, 70);
             g.setColor(Color.blue.darker().darker().darker());
             g.setFont(new Font("MV Boli", Font.PLAIN, 30));
-            g.drawString("" + numGame, 200, 30);
+            g.drawString("" + Ex2.numGame, 200, 30);
         }
 
         public void drawGrade(Graphics g) {
