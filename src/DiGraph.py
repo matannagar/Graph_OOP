@@ -43,14 +43,17 @@ class Edge:
 
 class DiGraph(GraphInterface):
 
-    def __init__(self, nodes=None, edges=None):
-        if edges is None:
-            edges = {}
-        if nodes is None:
-            nodes = {}
+    # def __init__(self, nodes=None, edges=None):
+    def __init__(self):
+        # if edges is None:
+        #     edges = {}
+        # if nodes is None:
+        #     nodes = {}
+        # self.nodes = nodes
+        # self.edges = edges
         self.mc = 0
-        self.nodes = nodes
-        self.edges = edges
+        self.nodes = {}
+        self.edges = {}
 
     def v_size(self) -> int:
         return len(self.nodes)
