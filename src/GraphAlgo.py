@@ -3,7 +3,6 @@ import sys
 from queue import Queue
 import heapq
 import random
-from random import randrange
 from typing import List
 import matplotlib.pyplot as plt
 from DiGraph import DiGraph
@@ -29,6 +28,9 @@ class GraphAlgo(GraphAlgoInterface):
     def __init__(self, graph: DiGraph = None):
         self.graph = graph
 
+    def get_graph(self) -> DiGraph:
+        return self.graph
+
     def load_from_json(self, file_name: str) -> bool:
         try:
             fp = open(file_name)
@@ -43,6 +45,8 @@ class GraphAlgo(GraphAlgoInterface):
                     posarr = str(n.get('pos')).split(",")
                     pos = (float(posarr[0]), float(posarr[1]), 0.0)
                     self.graph.add_node(node_id=n.get('id'), pos=pos)
+                else:
+                    self.graph.add_node(node_id=n.get('id'))
 
             for x in edges:
                 src = x.get('src')
@@ -55,6 +59,7 @@ class GraphAlgo(GraphAlgoInterface):
             return False
 
         return True
+
 
     def save_to_json(self, file_name: str) -> bool:
         if self.graph is None:
@@ -94,7 +99,6 @@ class GraphAlgo(GraphAlgoInterface):
             vertex[str(n)] = nodetemp
 
         vertex.get(str(id1)).tag = 0
-
         heap = []
         heapq.heappush(heap, vertex.get(str(id1)))
         flag = True
@@ -122,13 +126,13 @@ class GraphAlgo(GraphAlgoInterface):
             listShort = None
         else:
             # listShort.append(self.graph.get_node(dest.idNode))
-            listShort.append(dest.idNode)
+            listShort.append(int(dest.idNode))
             curr = dest
             while curr.parentId != -1:
                 parent = curr.parentId
                 curr = vertex.get(str(parent))
                 # listShort.append(self.graph.get_node(curr.idNode))
-                listShort.append(curr.idNode)
+                listShort.append(int(curr.idNode))
             listShort.reverse()
         tup = (dest.tag, listShort)
         return tup
@@ -237,74 +241,3 @@ class GraphAlgo(GraphAlgoInterface):
                 ver.pos = None
 
         plt.show()
-
-
-def main():
-    # graphAlgo = GraphAlgo()
-    #
-    # graph = DiGraph()
-    # for i in range(6):
-    #     graph.add_node(i)
-    #
-    # graph.add_edge(3, 1, 3.1)
-    # graph.add_edge(4, 3, 4.3)
-    # graph.add_edge(4, 5, 4.5)
-    # graph.add_edge(2, 4, 2.4)
-    # graph.add_edge(5, 2, 5.2)
-    # graph.add_edge(2, 5, 2.5)
-    #
-    # graphAlgo.__init__(graph)
-    # print(graphAlgo.connected_component(2))
-    # print(graphAlgo.connected_components())
-    #
-    # print(graphAlgo.shortest_path(2, 3))
-    #
-    g3 = DiGraph()
-    for i in range(6):
-        g3.add_node(i)
-    g3.add_edge(0, 1, 5)
-    g3.add_edge(0, 2, 1)
-    g3.add_edge(1, 2, 2)
-    g3.add_edge(2, 1, 3)
-    g3.add_edge(1, 3, 3)
-    g3.add_edge(3, 2, 3)
-    g3.add_edge(2, 4, 12)
-    g3.add_edge(4, 5, 1)
-    g3.add_edge(3, 5, 6)
-    g3.add_edge(3, 4, 2)
-    g3.add_edge(1, 4, 20)
-    #
-    # graphAlgo.__init__(g3)
-    # print(graphAlgo.shortest_path(0, 5))
-    # print(graphAlgo.shortest_path(0, 2))
-    # g3.remove_edge(1, 3)
-    # print(graphAlgo.shortest_path(0, 3))
-    #
-    graphAlgo = GraphAlgo()
-    # # graphAlgo.load_from_json("A0.json")
-    # graphAlgo.__init__(g3)
-    # graphAlgo.save_to_json("myGraph")
-    #
-    # g3.remove_node(2)
-    #
-    # graphAlgo.load_from_json("myGraph")
-    #
-    # graphAlgo.graph.remove_node(2)
-    #
-    # graphAlgo.load_from_json("A0.json")
-    # graphAlgo.plot_graph()
-    #
-    gr = DiGraph()
-    gr.add_node(node_id=0, pos=(7, 8, 0))
-    gr.add_node(node_id=1, pos=(3, 5, 0))
-    gr.add_node(node_id=2, pos=(2, 5, 0))
-    gr.add_edge(0, 1, 2)
-    gr.add_node(node_id=3)
-    gr.add_edge(3, 2, 4)
-    #
-    graphAlgo.__init__(gr)
-    graphAlgo.plot_graph()
-
-
-if __name__ == '__main__':
-    main()

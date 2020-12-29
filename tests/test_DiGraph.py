@@ -1,6 +1,6 @@
 import unittest
 
-from src.DiGraph import DiGraph
+from DiGraph import DiGraph
 
 
 def graph_creator() -> DiGraph:

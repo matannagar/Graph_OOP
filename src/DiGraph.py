@@ -1,4 +1,4 @@
-from src.GraphInterface import GraphInterface
+from GraphInterface import GraphInterface
 
 
 class Node:
@@ -30,31 +30,8 @@ class Node:
         return hash(self.id)
 
 
-# class Edge:
-#
-#     def __init__(self, src: int, dest: int, weight: float):
-#         self.src = src
-#         self.dest = dest
-#         # self.pos = None
-#         self.weight = weight
-#
-#     def __str__(self):
-#         return "Edge: {:d} -> {:d} : {:.1f}".format(self.src, self.dest, self.weight)
-#
-#     def __eq__(self, other):
-#         return self.src is other.src and self.dest is other.dest and self.weight is other.weight
-
-
 class DiGraph(GraphInterface):
-
-    # def __init__(self, nodes=None, edges=None):
     def __init__(self):
-        # if edges is None:
-        #     edges = {}
-        # if nodes is None:
-        #     nodes = {}
-        # self.nodes = nodes
-        # self.edges = edges
         self.mc = 0
         self.nodes = {}
         self.edges = {}
@@ -70,8 +47,10 @@ class DiGraph(GraphInterface):
 
     def add_edge(self, id1: int, id2: int, weight: float) -> bool:
         if not (str(id1) in self.nodes and str(id2) in self.nodes): return False
-        if id1 == id2: return False
-        if weight < 0: return False
+        if id1 == id2:
+            return False
+        if weight < 0:
+            return False
         if str(id1) + '->' + str(id2) in self.edges: return False
 
         n1 = self.nodes.get(str(id1))
@@ -91,7 +70,8 @@ class DiGraph(GraphInterface):
         return True
 
     def remove_node(self, node_id: int) -> bool:
-        if str(node_id) not in self.nodes: return False
+        if str(node_id) not in self.nodes:
+            return False
 
         iterator = iter(self.get_src(node_id).keys())
         while True:
@@ -112,9 +92,9 @@ class DiGraph(GraphInterface):
                 break
 
         self.mc = self.mc + 1
-
-        # self.nodes.get(str(node_id)).src.clean()
+        self.nodes.get(str(node_id)).src.clean()
         del self.nodes[str(node_id)]
+
         return True
 
     def get_src(self, id1: int) -> dict:
@@ -149,31 +129,14 @@ class DiGraph(GraphInterface):
             s += ('{} : {} \t '.format(key, weight))
         return s
 
+    def __repr__(self):
+        return str(self)
 
-def main():
-    # mylist = list(dict.fromkeys(mylist))
+    def get_all_v(self) -> dict:
+        return self.nodes
 
-    gr = DiGraph()
-    for x in range(5):
-        gr.add_node(x, None)
-    gr.add_edge(0, 1, 2.3)
-    gr.add_edge(1, 3, 2.4)
-    gr.add_edge(1, 2, 3.5)
-    gr.add_edge(2, 1, 8.9)
-    gr.add_edge(3, 4, 7.6)
-    gr.add_edge(3, 8, 0.9)
-    print(gr)
-    print(gr.remove_node(1))
-    print(gr)
-    print(gr.remove_node(2))
-    print(gr)
-    print(gr.remove_node(1))
+    def all_in_edges_of_node(self, id1: int) -> dict:
+        return self.get_all_v().get(str(id1)).dest
 
-    t = (3, 4, 7)
-    n = Node(0, pos=t)
-
-    print(n.pos)
-
-
-if __name__ == '__main__':
-    main()
+    def all_out_edges_of_node(self, id1: int) -> dict:
+        return self.get_all_v().get(str(id1)).src
