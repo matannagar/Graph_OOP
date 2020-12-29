@@ -1,6 +1,46 @@
 from src.GraphInterface import GraphInterface
 
 
+class Node:
+
+    def __init__(self, key: int = None, src=None, dest=None, pos: tuple = None, tag: int = 0):
+        if dest is None:
+            dest = {}
+        if src is None:
+            src = {}
+        self.id = key
+        self.src = src
+        self.dest = dest
+        self.pos = pos
+        self.tag = tag
+
+    def __str__(self):
+        return "Node: {:d}".format(self.id)
+
+    def __repr__(self):
+        return str(self)
+
+    def __eq__(self, other):
+        return self.id is other.id
+
+    def __hash__(self):
+        return hash(self.id)
+
+class Edge:
+
+    def __init__(self, src: int, dest: int, weight: float):
+        self.src = src
+        self.dest = dest
+        # self.pos = None
+        self.weight = weight
+
+    def __str__(self):
+        return "Edge: {:d} -> {:d} : {:.1f}".format(self.src, self.dest, self.weight)
+
+    def __eq__(self, other):
+        return self.src is other.src and self.dest is other.dest and self.weight is other.weight
+
+
 class DiGraph(GraphInterface):
 
     def __init__(self, nodes=None, edges=None):
@@ -90,6 +130,9 @@ class DiGraph(GraphInterface):
         self.mc = self.mc + 1
         return True
 
+    def get_node(self, id: int) -> Node:
+        return self.nodes.get(str(id))
+
     def __str__(self):
         s = "Graph: |V|={:d} , |E|={:d}\n\tNodes: ".format(self.v_size(), self.e_size())
         for key in self.nodes.keys():
@@ -100,51 +143,18 @@ class DiGraph(GraphInterface):
         return s
 
 
-class Node:
-
-    def __init__(self, key: int = None, src=None, dest=None, pos: tuple = None, tag: int = 0):
-        if dest is None:
-            dest = {}
-        if src is None:
-            src = {}
-        self.id = key
-        self.src = src
-        self.dest = dest
-        self.pos = pos
-        self.tag = tag
-
-    def __str__(self):
-        return "Node: {:d}".format(self.id)
-
-    def __eq__(self, other):
-        return self.id is other.id
-
-
-class Edge:
-
-    def __init__(self, src: int, dest: int, weight: float):
-        self.src = src
-        self.dest = dest
-        # self.pos = None
-        self.weight = weight
-
-    def __str__(self):
-        return "Edge: {:d} -> {:d} : {:.1f}".format(self.src, self.dest, self.weight)
-
-    def __eq__(self, other):
-        return self.src is other.src and self.dest is other.dest and self.weight is other.weight
-
-
 def main():
+    # mylist = list(dict.fromkeys(mylist))
+
     gr = DiGraph()
     for x in range(5):
         gr.add_node(x, None)
     gr.add_edge(0, 1, 2.3)
-    gr.add_edge(1,3,2.4)
-    gr.add_edge(1,2,3.5)
-    gr.add_edge(2,1,8.9)
-    gr.add_edge(3,4,7.6)
-    gr.add_edge(3,8,0.9)
+    gr.add_edge(1, 3, 2.4)
+    gr.add_edge(1, 2, 3.5)
+    gr.add_edge(2, 1, 8.9)
+    gr.add_edge(3, 4, 7.6)
+    gr.add_edge(3, 8, 0.9)
     print(gr)
     print(gr.remove_node(1))
     print(gr)

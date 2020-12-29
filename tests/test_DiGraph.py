@@ -28,6 +28,10 @@ class TestDiGraph(unittest.TestCase):
         self.assertEqual(8, graph.v_size(), "Added a new node")
         graph.add_node(41)
         self.assertEqual(8, graph.v_size(), "No node was supposed to be added")
+        graph.remove_node(4)
+        self.assertEqual(7, graph.v_size(), "Removed a node")
+        graph.remove_edge(0,6)
+        self.assertEqual(7,graph.v_size(), "Removed an edge")
 
     def test_e_size(self):
         graph = graph_creator()
@@ -95,6 +99,6 @@ class TestDiGraph(unittest.TestCase):
         self.assertEqual(True, graph.remove_edge(4, 0), "remove an edge")
         self.assertEqual(False, graph.remove_edge(4, 16), "No edges were supposed to be removed")
         self.assertEqual(False, graph.remove_edge(1, 5), "No edges were supposed to be removed")
-        self.assertEqual(True, graph.remove_edge(5, 1), "No edges were supposed to be removed")
+        self.assertEqual(True, graph.remove_edge(5, 1), "An edge was supposed to be removed")
         self.assertEqual(False, graph.remove_edge(10, 16), "No edges were supposed to be removed")
         self.assertEqual(False, graph.remove_edge(1, 1), "No edges were supposed to be removed")
