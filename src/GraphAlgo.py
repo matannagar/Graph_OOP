@@ -1,3 +1,4 @@
+import json
 import sys
 from queue import Queue
 import heapq
@@ -27,10 +28,48 @@ class GraphAlgo(GraphAlgoInterface):
         self.graph = graph
 
     def load_from_json(self, file_name: str) -> bool:
-        pass
+        try:
+            fp = open(file_name)
+
+            self.graph = DiGraph()
+            graph_file = json.load(fp)
+            edges = graph_file.get('Edges')
+            nodes = graph_file.get('Nodes')
+
+            for n in nodes:
+                self.graph.add_node(node_id=n.get('id'), pos=n.get('pos'))
+
+            for x in edges:
+                src = x.get('src')
+                dest = x.get('dest')
+                w = x.get('w')
+                self.graph.add_edge(src, dest, w)
+
+        except FileExistsError:
+            print("Graph was not loaded succesffuly")
+            return False
+
+        return True
 
     def save_to_json(self, file_name: str) -> bool:
-        pass
+
+        nodes = []
+        for n in self.graph.nodes:
+            id = self.graph.nodes.get(n).id
+            pos = self.graph.nodes.get(n).pos
+            nodes.append({"pos": pos, "id": id})
+
+        edges = []
+        for n in self.graph.nodes:
+            for dest in self.graph.nodes.get(n).src:
+                w= self.graph.nodes.get(n).src.get(dest)
+                edges.append({"src": int(n), "dest": int(dest), "w": w})
+
+        mygraph = {"Edges": edges, "Nodes": nodes}
+        with open(file_name,'w') as json_file:
+             json.dump(mygraph, json_file)
+
+        return True
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         if self.graph is None:
@@ -50,7 +89,8 @@ class GraphAlgo(GraphAlgoInterface):
 
         heap = []
         heapq.heappush(heap, vertex.get(str(id1)))
-        while heap:
+        flag = True
+        while heap and flag:
             heapq.heapify(heap)
             current = heapq.heappop(heap)
             if current.visit != 1:
@@ -63,9 +103,9 @@ class GraphAlgo(GraphAlgoInterface):
                     heapq.heappush(heap, b)
                 current.visit = 1
 
-                # if current.idNode==id2: dist=vertex.get(str(id2)).tag
+                if current.idNode == id2:
+                    flag = False
         dest = vertex.get(str(id2))  # NodeTemp
-        print(type(dest))
         if dest.tag == sys.maxsize:
             dest.tag = -1
 
@@ -74,7 +114,6 @@ class GraphAlgo(GraphAlgoInterface):
             listShort = None
         else:
             # listShort.append(self.graph.get_node(dest.idNode))
-            print(dest.idNode)
             listShort.append(dest.idNode)
             curr = dest
             while curr.parentId != -1:
@@ -82,7 +121,6 @@ class GraphAlgo(GraphAlgoInterface):
                 curr = vertex.get(str(parent))
                 # listShort.append(self.graph.get_node(curr.idNode))
                 listShort.append(curr.idNode)
-                print(type(curr.idNode))
             listShort.reverse()
         tup = (dest.tag, listShort)
         return tup
@@ -148,25 +186,25 @@ class GraphAlgo(GraphAlgoInterface):
 
 
 def main():
-    graphAlgo = GraphAlgo()
-
-    graph = DiGraph()
-    for i in range(6):
-        graph.add_node(i)
-
-    graph.add_edge(3, 1, 3.1)
-    graph.add_edge(4, 3, 4.3)
-    graph.add_edge(4, 5, 4.5)
-    graph.add_edge(2, 4, 2.4)
-    graph.add_edge(5, 2, 5.2)
-    graph.add_edge(2, 5, 2.5)
-
-    graphAlgo.__init__(graph)
-    print(graphAlgo.connected_component(2))
-    print(graphAlgo.connected_components())
-
-    print(graphAlgo.shortest_path(2, 3))
-
+    # graphAlgo = GraphAlgo()
+    #
+    # graph = DiGraph()
+    # for i in range(6):
+    #     graph.add_node(i)
+    #
+    # graph.add_edge(3, 1, 3.1)
+    # graph.add_edge(4, 3, 4.3)
+    # graph.add_edge(4, 5, 4.5)
+    # graph.add_edge(2, 4, 2.4)
+    # graph.add_edge(5, 2, 5.2)
+    # graph.add_edge(2, 5, 2.5)
+    #
+    # graphAlgo.__init__(graph)
+    # print(graphAlgo.connected_component(2))
+    # print(graphAlgo.connected_components())
+    #
+    # print(graphAlgo.shortest_path(2, 3))
+    #
     g3 = DiGraph()
     for i in range(6):
         g3.add_node(i)
@@ -181,13 +219,26 @@ def main():
     g3.add_edge(3, 5, 6)
     g3.add_edge(3, 4, 2)
     g3.add_edge(1, 4, 20)
+    #
+    # graphAlgo.__init__(g3)
+    # print(graphAlgo.shortest_path(0, 5))
+    # print(graphAlgo.shortest_path(0, 2))
+    # g3.remove_edge(1, 3)
+    # print(graphAlgo.shortest_path(0, 3))
 
+    graphAlgo = GraphAlgo()
+    # graphAlgo.load_from_json("A0.json")
     graphAlgo.__init__(g3)
-    print(graphAlgo.shortest_path(0, 5))
-    print(graphAlgo.shortest_path(0, 2))
-    g3.remove_edge(1, 3)
-    print(graphAlgo.shortest_path(0, 3))
+    print(g3)
+    graphAlgo.save_to_json("myGraph")
 
+    g3.remove_node(2)
+    print(g3)
+
+    graphAlgo.load_from_json("myGraph")
+    print(graphAlgo.graph)
+    graphAlgo.graph.remove_node(2)
+    print(graphAlgo.graph)
 
 if __name__ == '__main__':
     main()

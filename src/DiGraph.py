@@ -26,19 +26,19 @@ class Node:
     def __hash__(self):
         return hash(self.id)
 
-class Edge:
-
-    def __init__(self, src: int, dest: int, weight: float):
-        self.src = src
-        self.dest = dest
-        # self.pos = None
-        self.weight = weight
-
-    def __str__(self):
-        return "Edge: {:d} -> {:d} : {:.1f}".format(self.src, self.dest, self.weight)
-
-    def __eq__(self, other):
-        return self.src is other.src and self.dest is other.dest and self.weight is other.weight
+# class Edge:
+#
+#     def __init__(self, src: int, dest: int, weight: float):
+#         self.src = src
+#         self.dest = dest
+#         # self.pos = None
+#         self.weight = weight
+#
+#     def __str__(self):
+#         return "Edge: {:d} -> {:d} : {:.1f}".format(self.src, self.dest, self.weight)
+#
+#     def __eq__(self, other):
+#         return self.src is other.src and self.dest is other.dest and self.weight is other.weight
 
 
 class DiGraph(GraphInterface):
