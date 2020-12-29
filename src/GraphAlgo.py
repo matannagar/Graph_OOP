@@ -2,8 +2,10 @@ import json
 import sys
 from queue import Queue
 import heapq
+import random
+from random import randrange
 from typing import List
-
+import matplotlib.pyplot as plt
 from DiGraph import DiGraph
 from GraphAlgoInterface import GraphAlgoInterface
 
@@ -37,7 +39,10 @@ class GraphAlgo(GraphAlgoInterface):
             nodes = graph_file.get('Nodes')
 
             for n in nodes:
-                self.graph.add_node(node_id=n.get('id'), pos=n.get('pos'))
+                if n.get('pos') is not None:
+                    posarr = str(n.get('pos')).split(",")
+                    pos = (float(posarr[0]), float(posarr[1]), 0.0)
+                    self.graph.add_node(node_id=n.get('id'), pos=pos)
 
             for x in edges:
                 src = x.get('src')
@@ -46,12 +51,14 @@ class GraphAlgo(GraphAlgoInterface):
                 self.graph.add_edge(src, dest, w)
 
         except FileExistsError:
-            print("Graph was not loaded succesffuly")
+            print("Graph was not loaded successfully")
             return False
 
         return True
 
     def save_to_json(self, file_name: str) -> bool:
+        if self.graph is None:
+            return False
 
         nodes = []
         for n in self.graph.nodes:
@@ -62,12 +69,13 @@ class GraphAlgo(GraphAlgoInterface):
         edges = []
         for n in self.graph.nodes:
             for dest in self.graph.nodes.get(n).src:
-                w= self.graph.nodes.get(n).src.get(dest)
+                w = self.graph.nodes.get(n).src.get(dest)
                 edges.append({"src": int(n), "dest": int(dest), "w": w})
 
         mygraph = {"Edges": edges, "Nodes": nodes}
-        with open(file_name,'w') as json_file:
-             json.dump(mygraph, json_file)
+
+        with open(file_name, 'w') as json_file:
+            json.dump(mygraph, json_file)
 
         return True
 
@@ -182,7 +190,53 @@ class GraphAlgo(GraphAlgoInterface):
         return list1
 
     def plot_graph(self) -> None:
-        pass
+        xlist = []
+        ylist = []
+
+        # paints all the nodes in the graph
+        for x in self.graph.nodes:
+            pos = self.graph.get_node(x).pos
+            if pos is None:
+                self.graph.nodes.get(x).pos = (random.uniform(0.0, 50), random.uniform(0.0, 50), 0.0)
+                pos = self.graph.nodes.get(x).pos
+            xlist.append(pos[0])
+            ylist.append(pos[1])
+
+        plt.plot(xlist, ylist, '.', color='red')
+
+        # clear the x and y lists from the nodes
+        xlist.clear()
+        ylist.clear()
+        # loop over edges in the graph and draw them one by one
+        for e in self.graph.edges:
+            edge = str(e).split('->')
+            src = int(edge[0])
+            dest = int(edge[1])
+            # draws the arrow pointing in the edge direction --> (dest)
+            pos = self.graph.get_node(dest).pos
+
+            xlist.append(pos[0])
+            ylist.append(pos[1])
+            plt.plot(xlist, ylist, markersize=10, marker='*', color='red')
+
+            # draw the edge coming out from the src node to dest node
+            pos = self.graph.get_node(src).pos
+
+            xlist.append(pos[0])
+            ylist.append(pos[1])
+            plt.plot(xlist, ylist, '-', color='pink')
+
+            # clears the x and y lists for the next edge
+            xlist.clear()
+            ylist.clear()
+        plt.title("My Graph")
+
+        for key in self.graph.nodes:
+            ver = self.graph.nodes.get(key)
+            if not ver.info:
+                ver.pos = None
+
+        plt.show()
 
 
 def main():
@@ -225,20 +279,32 @@ def main():
     # print(graphAlgo.shortest_path(0, 2))
     # g3.remove_edge(1, 3)
     # print(graphAlgo.shortest_path(0, 3))
-
+    #
     graphAlgo = GraphAlgo()
+    # # graphAlgo.load_from_json("A0.json")
+    # graphAlgo.__init__(g3)
+    # graphAlgo.save_to_json("myGraph")
+    #
+    # g3.remove_node(2)
+    #
+    # graphAlgo.load_from_json("myGraph")
+    #
+    # graphAlgo.graph.remove_node(2)
+    #
     # graphAlgo.load_from_json("A0.json")
-    graphAlgo.__init__(g3)
-    print(g3)
-    graphAlgo.save_to_json("myGraph")
+    # graphAlgo.plot_graph()
+    #
+    gr = DiGraph()
+    gr.add_node(node_id=0, pos=(7, 8, 0))
+    gr.add_node(node_id=1, pos=(3, 5, 0))
+    gr.add_node(node_id=2, pos=(2, 5, 0))
+    gr.add_edge(0, 1, 2)
+    gr.add_node(node_id=3)
+    gr.add_edge(3, 2, 4)
+    #
+    graphAlgo.__init__(gr)
+    graphAlgo.plot_graph()
 
-    g3.remove_node(2)
-    print(g3)
-
-    graphAlgo.load_from_json("myGraph")
-    print(graphAlgo.graph)
-    graphAlgo.graph.remove_node(2)
-    print(graphAlgo.graph)
 
 if __name__ == '__main__':
     main()

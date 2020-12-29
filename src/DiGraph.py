@@ -13,6 +13,9 @@ class Node:
         self.dest = dest
         self.pos = pos
         self.tag = tag
+        self.info = True
+        if pos is None:
+            self.info = False
 
     def __str__(self):
         return "Node: {:d}".format(self.id)
@@ -25,6 +28,7 @@ class Node:
 
     def __hash__(self):
         return hash(self.id)
+
 
 # class Edge:
 #
@@ -81,7 +85,7 @@ class DiGraph(GraphInterface):
 
     def add_node(self, node_id: int, pos: tuple = None) -> bool:
         if str(node_id) in self.nodes: return False
-        node = Node(key=node_id)
+        node = Node(key=node_id, pos=pos)
         self.nodes[str(node_id)] = node
         self.mc = self.mc + 1
         return True
@@ -164,6 +168,11 @@ def main():
     print(gr.remove_node(2))
     print(gr)
     print(gr.remove_node(1))
+
+    t = (3, 4, 7)
+    n = Node(0, pos=t)
+
+    print(n.pos)
 
 
 if __name__ == '__main__':
