@@ -53,7 +53,7 @@ class GraphAlgo(GraphAlgoInterface):
                 dest = x.get('dest')
                 w = x.get('w')
                 self.graph.add_edge(src, dest, w)
-
+                #fp.close()
         except FileExistsError:
             print("Graph was not loaded successfully")
             return False

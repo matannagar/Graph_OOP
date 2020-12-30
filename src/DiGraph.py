@@ -1,5 +1,12 @@
 from GraphInterface import GraphInterface
 
+"""
+ * This class represents the set of operations applicable on a
+ * node (vertex) in a (directional) weighted graph.
+ *
+ * @author Reut-Maslansky & Matan-Ben-Nagar
+"""
+
 
 class Node:
 
@@ -30,21 +37,37 @@ class Node:
         return hash(self.id)
 
 
+"""
+ * This class represents an directional weighted graph.
+ *
+ * @param: Nodes- A HashMap contains all the vertexes in this graph.
+ * @param: Rdges- A HashMap contains all the edges in this graph.
+ * @param: mc- How many changes we does in this graph.
+ *
+ * @author Reut-Maslansky & Matan-Ben-Nagar
+"""
+
+
 class DiGraph(GraphInterface):
+    """*Default constructor"""
     def __init__(self):
         self.mc = 0
         self.nodes = {}
         self.edges = {}
-
+    """returns number of vertices in the graph"""
     def v_size(self) -> int:
         return len(self.nodes)
 
+    """returns number of edges in the graph"""
     def e_size(self) -> int:
         return len(self.edges)
 
+    """returns number of changes made in the graph"""
     def get_mc(self) -> int:
         return self.mc
 
+    """Connect an edge between src and dest, with an edge with weight >=0.
+     if the edge src-dest already exists - the method simply updates the weight of the edge."""
     def add_edge(self, id1: int, id2: int, weight: float) -> bool:
         if not (str(id1) in self.nodes and str(id2) in self.nodes): return False
         if id1 == id2:
@@ -62,6 +85,7 @@ class DiGraph(GraphInterface):
         self.mc = self.mc + 1
         return True
 
+    """Add a new node to the graph with the given key."""
     def add_node(self, node_id: int, pos: tuple = None) -> bool:
         if str(node_id) in self.nodes: return False
         node = Node(key=node_id, pos=pos)
@@ -69,6 +93,8 @@ class DiGraph(GraphInterface):
         self.mc = self.mc + 1
         return True
 
+    """	Delete the node (with the given ID) from the graph -
+    and removes all edges which starts or ends at this node."""
     def remove_node(self, node_id: int) -> bool:
         if str(node_id) not in self.nodes:
             return False
@@ -97,12 +123,15 @@ class DiGraph(GraphInterface):
 
         return True
 
+    """Returns a node src list (Nodes he has an edge TO them)"""
     def get_src(self, id1: int) -> dict:
         return self.nodes.get(str(id1)).src
 
+    """Returns a node dest list (Nodes he has an edge FROM them)"""
     def get_dest(self, id1: int) -> dict:
         return self.nodes.get(str(id1)).dest
 
+    """ Delete the edge from the graph between the vertexes."""
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
         if str(node_id1) not in self.nodes or str(node_id2) not in self.nodes: return False
         s = str(node_id1) + '->' + str(node_id2)
@@ -117,6 +146,7 @@ class DiGraph(GraphInterface):
         self.mc = self.mc + 1
         return True
 
+    """returns the node throw the key number."""
     def get_node(self, id: int) -> Node:
         return self.nodes.get(str(id))
 
@@ -132,6 +162,7 @@ class DiGraph(GraphInterface):
     def __repr__(self):
         return str(self)
 
+    "This method return a pointer for the collection representing all the nodes in the graph."
     def get_all_v(self) -> dict:
         return self.nodes
 
