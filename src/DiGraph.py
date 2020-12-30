@@ -167,6 +167,13 @@ class DiGraph(GraphInterface):
     def __repr__(self):
         return str(self)
 
+    def __eq__(self, other):
+        sorted(self.nodes)
+        sorted(other.nodes)
+        sorted(self.edges)
+        sorted(other.edges)
+        return self.nodes.__eq__(other.nodes) and self.edges.__eq__(other.edges)
+
     """return a dictionary of all the nodes in the Graph, each node is represented using apair  (key, node_data)"""
     def get_all_v(self) -> dict:
         return self.nodes

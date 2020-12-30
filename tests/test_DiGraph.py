@@ -48,6 +48,8 @@ class TestDiGraph(unittest.TestCase):
         self.assertEqual(8, graph.e_size(), "No edges were supposed to be added")
         graph.add_edge(1, 1, 1)
         self.assertEqual(8, graph.e_size(), "No edges were supposed to be added")
+        graph.remove_edge(4,0)
+        self.assertEqual(7,graph.e_size(),"Removed an edge")
 
     def test_get_mc(self):
         graph = graph_creator()

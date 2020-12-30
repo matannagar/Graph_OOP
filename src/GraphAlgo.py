@@ -83,7 +83,7 @@ class GraphAlgo(GraphAlgoInterface):
                 dest = x.get('dest')
                 w = x.get('w')
                 self.graph.add_edge(src, dest, w)
-                # fp.close()
+                fp.close()
         except FileExistsError:
             print("Graph was not loaded successfully")
             return False
@@ -161,7 +161,8 @@ class GraphAlgo(GraphAlgoInterface):
             return None
 
         if id1 == id2:
-            return 0, [self.graph.get_node(id1)]
+            # return 0, [self.graph.get_node(id1)]
+            return 0, [id1]
 
         vertex = {}
         for n in self.graph.nodes:
@@ -290,6 +291,9 @@ class GraphAlgo(GraphAlgoInterface):
         @return: None
         """
     def plot_graph(self) -> None:
+        if self.graph is None:
+            return
+
         xlist = []
         ylist = []
 
@@ -312,23 +316,28 @@ class GraphAlgo(GraphAlgoInterface):
             edge = str(e).split('->')
             src = int(edge[0])
             dest = int(edge[1])
+            w=self.graph.edges.get(e)
             # draws the arrow pointing in the edge direction --> (dest)
             pos = self.graph.get_node(dest).pos
 
             xlist.append(pos[0])
             ylist.append(pos[1])
-            plt.plot(xlist, ylist, markersize=10, marker='*', color='red')
+            plt.plot(xlist, ylist, markersize=10, marker='*', color='gray')
 
             # draw the edge coming out from the src node to dest node
             pos = self.graph.get_node(src).pos
 
             xlist.append(pos[0])
             ylist.append(pos[1])
-            plt.plot(xlist, ylist, '-', color='pink')
+            plt.plot(xlist, ylist, '-', label=(str(e)+" :"+str(w)))
+
 
             # clears the x and y lists for the next edge
             xlist.clear()
             ylist.clear()
+
+        plt.legend(loc='upper left')
+
         plt.title("My Graph")
 
         for key in self.graph.nodes:
