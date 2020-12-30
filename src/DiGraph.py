@@ -69,12 +69,14 @@ class DiGraph(GraphInterface):
     """Connect an edge between src and dest, with an edge with weight >=0.
      if the edge src-dest already exists - the method simply updates the weight of the edge."""
     def add_edge(self, id1: int, id2: int, weight: float) -> bool:
-        if not (str(id1) in self.nodes and str(id2) in self.nodes): return False
+        if not (str(id1) in self.nodes and str(id2) in self.nodes):
+            return False
         if id1 == id2:
             return False
         if weight < 0:
             return False
-        if str(id1) + '->' + str(id2) in self.edges: return False
+        if str(id1) + '->' + str(id2) in self.edges:
+            return False
 
         n1 = self.nodes.get(str(id1))
         n1.src[str(id2)] = weight
@@ -87,7 +89,8 @@ class DiGraph(GraphInterface):
 
     """Add a new node to the graph with the given key."""
     def add_node(self, node_id: int, pos: tuple = None) -> bool:
-        if str(node_id) in self.nodes: return False
+        if str(node_id) in self.nodes:
+            return False
         node = Node(key=node_id, pos=pos)
         self.nodes[str(node_id)] = node
         self.mc = self.mc + 1
@@ -133,9 +136,11 @@ class DiGraph(GraphInterface):
 
     """ Delete the edge from the graph between the vertexes."""
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
-        if str(node_id1) not in self.nodes or str(node_id2) not in self.nodes: return False
+        if str(node_id1) not in self.nodes or str(node_id2) not in self.nodes:
+            return False
         s = str(node_id1) + '->' + str(node_id2)
-        if s not in self.edges: return False
+        if s not in self.edges:
+            return False
 
         n1 = self.nodes.get(str(node_id1))
         n2 = self.nodes.get(str(node_id2))
