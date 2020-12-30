@@ -9,7 +9,7 @@ from GraphInterface import GraphInterface
 
 
 class Node:
-
+    """Default constructor"""
     def __init__(self, key: int = None, src=None, dest=None, pos: tuple = None, tag: int = 0):
         if dest is None:
             dest = {}
@@ -162,12 +162,18 @@ class DiGraph(GraphInterface):
     def __repr__(self):
         return str(self)
 
-    "This method return a pointer for the collection representing all the nodes in the graph."
+    """return a dictionary of all the nodes in the Graph, each node is represented using apair  (key, node_data)"""
     def get_all_v(self) -> dict:
         return self.nodes
 
+    """return a dictionary of all the nodes connected to (into) node_id ,
+            each node is represented using a pair (key, weight)
+             """
     def all_in_edges_of_node(self, id1: int) -> dict:
         return self.get_all_v().get(str(id1)).dest
 
+    """return a dictionary of all the nodes connected from node_id , each node is represented using a pair (key,
+            weight)
+            """
     def all_out_edges_of_node(self, id1: int) -> dict:
         return self.get_all_v().get(str(id1)).src
