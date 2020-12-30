@@ -1,9 +1,10 @@
 from GraphInterface import GraphInterface
 
 """
- * This class represents the set of operations applicable on a
+ * Node class represents the set of operations applicable on a
  * node (vertex) in a (directional) weighted graph.
- *
+ * Each node contains a unique ID number and hold's two lists: Src list and Dest list.
+ * Node can also contain a position for graphical purposes
  * @author Reut-Maslansky & Matan-Ben-Nagar
 """
 
@@ -39,12 +40,10 @@ class Node:
 
 """
  * This class represents an directional weighted graph.
- *
+ * A graph contains two lists: Vertex list and edges list.
  * @param: Nodes- A HashMap contains all the vertexes in this graph.
  * @param: Rdges- A HashMap contains all the edges in this graph.
  * @param: mc- How many changes we does in this graph.
- *
- * @author Reut-Maslansky & Matan-Ben-Nagar
 """
 
 
@@ -54,6 +53,7 @@ class DiGraph(GraphInterface):
         self.mc = 0
         self.nodes = {}
         self.edges = {}
+
     """returns number of vertices in the graph"""
     def v_size(self) -> int:
         return len(self.nodes)
@@ -96,7 +96,7 @@ class DiGraph(GraphInterface):
         self.mc = self.mc + 1
         return True
 
-    """	Delete the node (with the given ID) from the graph -
+    """	Deletes the node (with the given ID) from the graph -
     and removes all edges which starts or ends at this node."""
     def remove_node(self, node_id: int) -> bool:
         if str(node_id) not in self.nodes:
@@ -126,11 +126,11 @@ class DiGraph(GraphInterface):
 
         return True
 
-    """Returns a node src list (Nodes he has an edge TO them)"""
+    """Returns a node src list (Nodes he has an vector TO them)"""
     def get_src(self, id1: int) -> dict:
         return self.nodes.get(str(id1)).src
 
-    """Returns a node dest list (Nodes he has an edge FROM them)"""
+    """Returns a node dest list (Nodes he has an vector FROM them)"""
     def get_dest(self, id1: int) -> dict:
         return self.nodes.get(str(id1)).dest
 
@@ -177,8 +177,7 @@ class DiGraph(GraphInterface):
     def all_in_edges_of_node(self, id1: int) -> dict:
         return self.get_all_v().get(str(id1)).dest
 
-    """return a dictionary of all the nodes connected from node_id , each node is represented using a pair (key,
-            weight)
-            """
+    """return a dictionary of all the nodes connected from node_id , 
+    each node is represented using a pair (key,weight)"""
     def all_out_edges_of_node(self, id1: int) -> dict:
         return self.get_all_v().get(str(id1)).src

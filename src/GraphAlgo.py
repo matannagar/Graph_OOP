@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 from DiGraph import DiGraph
 from GraphAlgoInterface import GraphAlgoInterface
 
-"""Temporary Node class, ment to hold information regarding original nodes"""
+"""Temporary Node class, meant to hold information regarding original nodes
+and help implement Dijkstra's method"""
 
 
 class NodeTemp:
@@ -27,13 +28,13 @@ class NodeTemp:
 
 """
         * This class represents a directed (positive) Weighted Graph Theory algorithms including:
-        *      0. clone();
+        *      0. getGraph()
         *      1. init(graph);
-        *      2. isConnected();
-        *      3. double shortestPathDist(int src, int dest);
-        *      4. List<node_data> shortestPath(int src, int dest);
-        *      5. Save(file);
-        *      6. Load(file);
+        *      2. connectedComponent()
+        *      3. connectedComponents()
+        *      4. shortestPath
+        *      5. Save(file)-json;
+        *      6. Load(file)-json;
         *
         * @param: gr- a graph on which We'll operates the algorithms.
         *
@@ -50,7 +51,7 @@ class GraphAlgo(GraphAlgoInterface):
     def get_graph(self) -> DiGraph:
         return self.graph
 
-    """ /**
+    """
      * This method load a graph to this graph algorithm.
      * if the file was successfully loaded - the underlying graph
      * of this class will be changed (to the loaded one), in case the
@@ -60,7 +61,7 @@ class GraphAlgo(GraphAlgoInterface):
      *
      * @param file - file name
      * @return true - if the graph was successfully loaded.
-     */"""
+     """
     def load_from_json(self, file_name: str) -> bool:
         try:
             fp = open(file_name)
@@ -90,14 +91,13 @@ class GraphAlgo(GraphAlgoInterface):
 
         return True
 
-    """    /**
-     * Saves this weighted (undirected) graph to the given file name.
+    """
+     * Saves this weighted directed graph to the given file name.
      * we used he json method.
      *
      * @param file - the file name (may include a relative path).
      * @return true - if the file was successfully saved
-     *
-     */"""
+     """
     def save_to_json(self, file_name: str) -> bool:
         if self.graph is None:
             return False
@@ -130,30 +130,22 @@ class GraphAlgo(GraphAlgoInterface):
      * src--> n1-->n2-->...dest
      *
      * Note if no such path --> returns null;
-     * @param src - start node
-     * @param dest - end (target) node
-     * @return
      *
      *
      * This method based on Dijkstra Algorithm.
      * We use the private function- dij- that will return a HashMap.
-     *ALSO:
+     * ALSO:
      * In this HasMap, the data of this algorithm will save in a temporal Node- contains:
      *      1. The shortest weight from the source vertex to this vertex.
      *      2. The vertex neighbor that connect this vertex and update him this value of weight accepted.
-      /**
      * Returns the length of the shortest path between src to dest
      * if no such path, returns -1
-     *
-     * @param src - start node
-     * @param dest - end (target) node
-     * @return
      *
      * This method based on Dijkstra Algorithm.
      * The data of this algorithm will save in a temporal Node-
      * 1. The shortest weight from the source vertex to this vertex.
      * 2. The vertex neighbor that connect this vertex and update him this value of weight accepted.
-     */"""
+     """
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         if self.graph is None:
             return None
@@ -207,9 +199,10 @@ class GraphAlgo(GraphAlgoInterface):
         tup = (dest.tag, listShort)
         return tup
 
-    """ Finds the Strongly Connected Component(SCC) that node id1 is a part of.
-        @param id1: The node id
-        @return: The list of nodes in the SCC
+    """ 
+    Finds the Strongly Connected Component(SCC) that node id1 is a part of.
+    @param id1: The node id
+    @return: The list of nodes in the SCC
     """
     def connected_component(self, id1: int) -> list:
         if self.graph is None:
@@ -223,7 +216,7 @@ class GraphAlgo(GraphAlgoInterface):
         list2 = self.bfs(id1, 1)
         return list(set(list1) & set(list2))
 
-    """/**
+    """
      * bfs will pass over the nodes.
      *
      * @Return how many nodes we marked- then we will know if we pass all the nodes in the graph.
@@ -234,7 +227,7 @@ class GraphAlgo(GraphAlgoInterface):
      * and thus we will know if during the iterations we went over the amount of vertices that exist in the graph.
      * In this operation, of comparing the counter with the number of vertices in the graph -
      * we saved another pass over all the vertices in the graph - in a loop of o(v) where v is the number of vertices in the graph.
-     */"""
+     """
     def bfs(self, id1: int, flag: int) -> list:
         # resets all the visited nodes to unvisited
         for n in self.graph.nodes:
@@ -284,11 +277,11 @@ class GraphAlgo(GraphAlgoInterface):
         return list1
 
     """
-        Plots the graph.
-        If the nodes have a position, the nodes will be placed there.
-        Otherwise, they will be placed in a random but elegant manner.
-        @return: None
-        """
+    Plots the graph.
+    If the nodes have a position, the nodes will be placed there.
+    Otherwise, they will be placed in a random but elegant manner.
+    @return: None
+    """
     def plot_graph(self) -> None:
         xlist = []
         ylist = []
