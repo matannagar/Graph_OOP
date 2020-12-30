@@ -25,7 +25,7 @@ Let the node at which we are starting be called the initial node. Let the distan
 4.When we are done considering all of the unvisited neighbours of the current node, mark the current node as visited and remove it from the unvisited set. A visited node will never be checked again.
 5.If the destination node has been marked visited (when planning a route between two specific nodes) or if the smallest tentative distance among the nodes in the unvisited set is infinity (when planning a complete traversal; occurs when there is no connection between the initial node and remaining unvisited nodes), then stop. The algorithm has finished.
 6.Otherwise, select the unvisited node that is marked with the smallest tentative distance, set it as the new "current node", and go back to step 3.
-When planning a route, it is actually not necessary to wait until the destination node is "visited" as above: the algorithm can stop once the destination node has the smallest tentative distance among all "unvisited" nodes (and thus could be selected as the next "current")
+When planning a route, it is actually not necessary to wait until the destination node is "visited" as above: the algorithm can stop once the destination node has the smallest tentative distance among all "unvisited" nodes (and thus could be selected as the next "current")<br />
 <a href="https://ibb.co/Brw6Psk"><img src="https://i.ibb.co/LJvgPpK/dijkstra1.png" alt="dijkstra1" border="0"></a><br />
 
 More about- https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
