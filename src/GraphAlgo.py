@@ -105,7 +105,11 @@ class GraphAlgo(GraphAlgoInterface):
         nodes = []
         for n in self.graph.nodes:
             id = self.graph.nodes.get(n).id
-            pos = self.graph.nodes.get(n).pos
+            pos= self.graph.nodes.get(n).pos
+            if pos is not None:
+                pos_x = self.graph.nodes.get(n).pos[0]
+                pos_y= self.graph.nodes.get(n).pos[1]
+                pos=str(pos_x)+','+str(pos_y)+','+str(0.0)
             nodes.append({"pos": pos, "id": id})
 
         edges = []
