@@ -1,16 +1,17 @@
 from GraphInterface import GraphInterface
 
 """
- * Node class represents the set of operations applicable on a
- * node (vertex) in a (directional) weighted graph.
- * Each node contains a unique ID number and hold's two lists: Src list and Dest list.
- * Node can also contain a position for graphical purposes
- * @author Reut-Maslansky & Matan-Ben-Nagar
+    Node class represents the set of operations applicable on a
+    node (vertex) in a (directional) weighted graph.
+    Each node contains a unique ID number and hold's two lists: Src list and Dest list.
+    Node can also contain a position for graphical purposes
+    @author Reut-Maslansky & Matan-Ben-Nagar
 """
 
 
 class Node:
     """Default constructor"""
+
     def __init__(self, key: int = None, src=None, dest=None, pos: tuple = None, tag: int = 0):
         if dest is None:
             dest = {}
@@ -39,35 +40,40 @@ class Node:
 
 
 """
- * This class represents an directional weighted graph.
- * A graph contains two lists: Vertex list and edges list.
- * @param: Nodes- A HashMap contains all the vertexes in this graph.
- * @param: Rdges- A HashMap contains all the edges in this graph.
- * @param: mc- How many changes we does in this graph.
+    This class represents an directional weighted graph.
+    A graph contains two lists: Vertex list and edges list.
+    @param: Nodes- A HashMap contains all the vertexes in this graph.
+    @param: Rdges- A HashMap contains all the edges in this graph.
+    @param: mc- How many changes we does in this graph.
 """
 
 
 class DiGraph(GraphInterface):
-    """*Default constructor"""
+    """Default constructor"""
+
     def __init__(self):
         self.mc = 0
         self.nodes = {}
         self.edges = {}
 
     """returns number of vertices in the graph"""
+
     def v_size(self) -> int:
         return len(self.nodes)
 
     """returns number of edges in the graph"""
+
     def e_size(self) -> int:
         return len(self.edges)
 
     """returns number of changes made in the graph"""
+
     def get_mc(self) -> int:
         return self.mc
 
     """Connect an edge between src and dest, with an edge with weight >=0.
      if the edge src-dest already exists - the method simply updates the weight of the edge."""
+
     def add_edge(self, id1: int, id2: int, weight: float) -> bool:
         if not (str(id1) in self.nodes and str(id2) in self.nodes):
             return False
@@ -88,6 +94,7 @@ class DiGraph(GraphInterface):
         return True
 
     """Add a new node to the graph with the given key."""
+
     def add_node(self, node_id: int, pos: tuple = None) -> bool:
         if str(node_id) in self.nodes:
             return False
@@ -98,6 +105,7 @@ class DiGraph(GraphInterface):
 
     """	Deletes the node (with the given ID) from the graph -
     and removes all edges which starts or ends at this node."""
+
     def remove_node(self, node_id: int) -> bool:
         if str(node_id) not in self.nodes:
             return False
@@ -127,14 +135,17 @@ class DiGraph(GraphInterface):
         return True
 
     """Returns a node src list (Nodes he has an vector TO them)"""
+
     def get_src(self, id1: int) -> dict:
         return self.nodes.get(str(id1)).src
 
     """Returns a node dest list (Nodes he has an vector FROM them)"""
+
     def get_dest(self, id1: int) -> dict:
         return self.nodes.get(str(id1)).dest
 
     """ Delete the edge from the graph between the vertexes."""
+
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
         if str(node_id1) not in self.nodes or str(node_id2) not in self.nodes:
             return False
@@ -152,6 +163,7 @@ class DiGraph(GraphInterface):
         return True
 
     """returns the node throw the key number."""
+
     def get_node(self, id: int) -> Node:
         return self.nodes.get(str(id))
 
@@ -175,16 +187,18 @@ class DiGraph(GraphInterface):
         return self.nodes.__eq__(other.nodes) and self.edges.__eq__(other.edges)
 
     """return a dictionary of all the nodes in the Graph, each node is represented using apair  (key, node_data)"""
+
     def get_all_v(self) -> dict:
         return self.nodes
 
-    """return a dictionary of all the nodes connected to (into) node_id ,
-            each node is represented using a pair (key, weight)
-             """
+    """return a dictionary of all the nodes connected to (into) node_id, each node is represented using a pair (key, 
+    weight) """
+
     def all_in_edges_of_node(self, id1: int) -> dict:
         return self.get_all_v().get(str(id1)).dest
 
-    """return a dictionary of all the nodes connected from node_id , 
+    """return a dictionary of all the nodes connected from node_id, 
     each node is represented using a pair (key,weight)"""
+
     def all_out_edges_of_node(self, id1: int) -> dict:
         return self.get_all_v().get(str(id1)).src

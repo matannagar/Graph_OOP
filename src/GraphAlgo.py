@@ -48,6 +48,7 @@ class GraphAlgo(GraphAlgoInterface):
         self.graph = graph
 
     """Return the underlying graph of which this class works."""
+
     def get_graph(self) -> DiGraph:
         return self.graph
 
@@ -62,6 +63,7 @@ class GraphAlgo(GraphAlgoInterface):
     @param file - file name
     @return true - if the graph was successfully loaded.
     """
+
     def load_from_json(self, file_name: str) -> bool:
         try:
             fp = open(file_name)
@@ -98,6 +100,7 @@ class GraphAlgo(GraphAlgoInterface):
     @param file - the file name (may include a relative path).
     @return true - if the file was successfully saved
     """
+
     def save_to_json(self, file_name: str) -> bool:
         if self.graph is None:
             return False
@@ -105,11 +108,11 @@ class GraphAlgo(GraphAlgoInterface):
         nodes = []
         for n in self.graph.nodes:
             id = self.graph.nodes.get(n).id
-            pos= self.graph.nodes.get(n).pos
+            pos = self.graph.nodes.get(n).pos
             if pos is not None:
                 pos_x = self.graph.nodes.get(n).pos[0]
-                pos_y= self.graph.nodes.get(n).pos[1]
-                pos=str(pos_x)+','+str(pos_y)+','+str(0.0)
+                pos_y = self.graph.nodes.get(n).pos[1]
+                pos = str(pos_x) + ',' + str(pos_y) + ',' + str(0.0)
             nodes.append({"pos": pos, "id": id})
 
         edges = []
@@ -131,14 +134,20 @@ class GraphAlgo(GraphAlgoInterface):
     The data of this algorithm will save in a temporal Node, contains-
         1. The shortest weight from the source vertex to this vertex.
         2. The vertex neighbor that connect this vertex and update him this value of weight accepted.
+        (By default the vertex tag contains INF and the vertex parent points as a vertex with key -1).
         
     Returns Tuple contain:
         1. The length of the shortest path between src to dest
         If no such path, returns inf and an empty list
         2. The shortest path between src to dest - as an ordered List of nodes: src--> n1-->n2-->...dest
         If no such path --> returns an empty List.
+
+    The function goes through all the neighbors of the source vertex and does them "weight relief" if necessary-
+    That is, if we have reached a vertex whose weight can be reduced relative to its current weight, we will update the information contained the temporal vertex.
+    The implementation of the algorithm is done by a priority queue, which is implementation by a function of comparing the weights (tag) of the temporal vertexes in the queue.
     
-     """
+    """
+
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         if self.graph is None:
             return math.inf, None
@@ -187,6 +196,7 @@ class GraphAlgo(GraphAlgoInterface):
             listShort.reverse()
         tup = (dest.tag, listShort)
         return tup
+
     '''
     Finds the Strongly Connected Component(SCC) that node id1 is a part of.
     @param id1: The node id
@@ -197,6 +207,7 @@ class GraphAlgo(GraphAlgoInterface):
     After this we will "reverse" the graph's edges and will send the node to BFS one more time.
     Finally, we merge the lists and return the union.  
     '''
+
     def connected_component(self, id1: int) -> list:
         if self.graph is None:
             return []
@@ -209,14 +220,15 @@ class GraphAlgo(GraphAlgoInterface):
         return list(set(list1) & set(list2))
 
     """
-     * bfs will pass over the nodes that we can reach from the src node we will send to the function.
-     *
-     * @Return list of those nodes.
-     *
-     * The function receives a vertex key from which we will perform the test on the graph connected test.
-     * During the test we will mark the vertices in the graph in the "tag" that each vertex holds.
+     bfs will pass over the nodes that we can reach from the src node we will send to the function.
+     
+     @Return list of those nodes.
+     
+     The function receives a vertex key from which we will perform the test on the graph connected test.
+     During the test we will mark the vertices in the graph in the "tag" that each vertex holds.
  
      """
+
     def bfs(self, id1: int, flag: int) -> list:
         # resets all the visited nodes to unvisited
         for n in self.graph.nodes:
@@ -253,6 +265,7 @@ class GraphAlgo(GraphAlgoInterface):
     Finds all the Strongly Connected Component(SCC) in the graph.
     @return: The list all SCC
     """
+
     def connected_components(self) -> List[list]:
         # tempList=[List]
         tempList = []
@@ -271,6 +284,7 @@ class GraphAlgo(GraphAlgoInterface):
     Otherwise, they will be placed in a random but elegant manner.
     @return: None
     """
+
     def plot_graph(self) -> None:
         if self.graph is None:
             return
@@ -297,7 +311,7 @@ class GraphAlgo(GraphAlgoInterface):
             edge = str(e).split('->')
             src = int(edge[0])
             dest = int(edge[1])
-            w=self.graph.edges.get(e)
+            w = self.graph.edges.get(e)
             # draws the arrow pointing in the edge direction --> (dest)
             pos = self.graph.get_node(dest).pos
 
@@ -310,8 +324,7 @@ class GraphAlgo(GraphAlgoInterface):
 
             xlist.append(pos[0])
             ylist.append(pos[1])
-            plt.plot(xlist, ylist, '-', label=(str(e)+" :"+str(w)))
-
+            plt.plot(xlist, ylist, '-', label=(str(e) + " :" + str(w)))
 
             # clears the x and y lists for the next edge
             xlist.clear()
