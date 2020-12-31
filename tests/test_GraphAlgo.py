@@ -1,5 +1,4 @@
 import math
-from typing import List
 from unittest import TestCase
 
 from GraphAlgo import GraphAlgo
@@ -116,7 +115,7 @@ class TestGraphAlgo(TestCase):
         graph.remove_edge(1, 3)
         self.assertEqual((math.inf, None), algo.shortest_path(0, 3), "Removed this edge, and no path between this nodes")
         self.assertEqual((0, [3]), algo.shortest_path(3, 3), "No path between a node and itself")
-        self.assertEqual((math.inf, None), algo.shortest_path(13, 3), "Node 13 doesn't exist in the graph")
+        self.assertEqual((math.inf, []), algo.shortest_path(13, 3), "Node 13 doesn't exist in the graph")
 
         graph = None
         algo.__init__(graph)

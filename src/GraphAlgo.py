@@ -152,7 +152,7 @@ class GraphAlgo(GraphAlgoInterface):
         if self.graph is None:
             return math.inf, None
         if str(id1) not in self.graph.nodes or str(id2) not in self.graph.nodes:
-            return math.inf, None
+            return (math.inf, [])
 
         if id1 == id2:
             return 0, [id1]
@@ -267,11 +267,11 @@ class GraphAlgo(GraphAlgoInterface):
     """
 
     def connected_components(self) -> List[list]:
-        # tempList=[List]
+        if self.graph is None:
+            return []
         tempList = []
         for n in self.graph.nodes:
             tempList.append(self.connected_component(n))
-        # list1=[List]
         list1 = []
         for l in tempList:
             if l not in list1:

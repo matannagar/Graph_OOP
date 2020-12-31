@@ -2,3 +2,5 @@
 A0.json
 myGraph
 /venv
+/src/__pycache__
+/src/Ex3_main.py

@@ -129,7 +129,6 @@ class DiGraph(GraphInterface):
                 break
 
         self.mc = self.mc + 1
-        self.nodes.get(str(node_id)).src.clean()
         del self.nodes[str(node_id)]
 
         return True
