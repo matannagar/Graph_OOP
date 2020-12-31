@@ -1,40 +1,9 @@
+import math
 from typing import List
 from unittest import TestCase
 
 from GraphAlgo import GraphAlgo
 from DiGraph import DiGraph
-
-
-def main():
-    # graphAlgo.__init__(g3)
-    # print(graphAlgo.shortest_path(0, 5))
-    # print(graphAlgo.shortest_path(0, 2))
-    # g3.remove_edge(1, 3)
-    # print(graphAlgo.shortest_path(0, 3))
-    #
-    # graphAlgo = GraphAlgo()
-    # # # graphAlgo.load_from_json("A0.json")
-    # # graphAlgo.__init__(g3)
-    # # graphAlgo.save_to_json("myGraph")
-    # #
-    # # g3.remove_node(2)
-    # #
-    # # graphAlgo.load_from_json("myGraph")
-    # #
-    # # graphAlgo.graph.remove_node(2)
-    # #
-    # # graphAlgo.load_from_json("A0.json")
-    # # graphAlgo.plot_graph()
-    # #
-    #
-    # #
-    # graphAlgo.__init__(gr)
-    # graphAlgo.plot_graph()
-    print("")
-
-
-if __name__ == '__main__':
-    main()
 
 
 def generate_graph1() -> DiGraph():
@@ -136,7 +105,7 @@ class TestGraphAlgo(TestCase):
         graph = generate_graph2()
         algo.__init__(graph)
         self.assertEqual((0.8, [1, 2, 3]), algo.shortest_path(1, 3))
-        self.assertEqual((-1, None), algo.shortest_path(1, 5), 'No edge between 1,5')
+        self.assertEqual((math.inf, None), algo.shortest_path(1, 5), 'No edge between 1,5')
 
         graph = generate_graph3()
         algo.__init__(graph)
@@ -145,13 +114,13 @@ class TestGraphAlgo(TestCase):
 
         self.assertEqual((1, [0, 2]), algo.shortest_path(0, 2))
         graph.remove_edge(1, 3)
-        self.assertEqual((-1, None), algo.shortest_path(0, 3), "Removed this edge, and no path between this nodes")
+        self.assertEqual((math.inf, None), algo.shortest_path(0, 3), "Removed this edge, and no path between this nodes")
         self.assertEqual((0, [3]), algo.shortest_path(3, 3), "No path between a node and itself")
-        self.assertEqual(None, algo.shortest_path(13, 3), "Node 13 doesn't exist in the graph")
+        self.assertEqual((math.inf, None), algo.shortest_path(13, 3), "Node 13 doesn't exist in the graph")
 
         graph = None
         algo.__init__(graph)
-        self.assertEqual(None, algo.shortest_path(0, 3))
+        self.assertEqual((math.inf, None), algo.shortest_path(0, 3))
 
     def test_connected_component(self):
         algo = GraphAlgo()
@@ -200,6 +169,8 @@ class TestGraphAlgo(TestCase):
         graph.add_edge(2, 1, 3.4)
         list1 = [[graph.get_node(0)], algo.connected_component(2), [graph.get_node(4)], [graph.get_node(5)],
                  [graph.get_node(6)]]
+        self.assertEqual(list1, algo.connected_components())
+
 
     def test_plot_graph(self):
         algo = GraphAlgo()
@@ -219,4 +190,3 @@ class TestGraphAlgo(TestCase):
         graph = generate_graph4()
         algo.__init__(graph)
         algo.plot_graph()
-

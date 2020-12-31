@@ -1,11 +1,11 @@
 import json
-import sys
 from queue import Queue
 import heapq
 import random
 from typing import List
 import matplotlib.pyplot as plt
 from DiGraph import DiGraph
+import math
 from GraphAlgoInterface import GraphAlgoInterface
 
 """Temporary Node class, meant to hold information regarding original nodes
@@ -16,7 +16,7 @@ class NodeTemp:
     def __init__(self, id: int):
         self.idNode = id
         self.visit = 0
-        self.tag = sys.maxsize
+        self.tag = math.inf
         self.parentId = -1
 
     def __repr__(self):
@@ -27,18 +27,18 @@ class NodeTemp:
 
 
 """
-        * This class represents a directed (positive) Weighted Graph Theory algorithms including:
-        *      0. getGraph()
-        *      1. init(graph);
-        *      2. connectedComponent()
-        *      3. connectedComponents()
-        *      4. shortestPath
-        *      5. Save(file)-json;
-        *      6. Load(file)-json;
-        *
-        * @param: gr- a graph on which We'll operates the algorithms.
-        *
-        * @author Reut-Maslansky & Matan-Ben-Nagar
+This class represents a directed (positive) Weighted Graph Theory algorithms including:
+    0. getGraph()
+    1. init(graph);
+    2. connectedComponent()
+    3. connectedComponents()
+    4. shortestPath
+    5. Save(file)-json;
+    6. Load(file)-json;
+        
+@param: gr- a graph on which We'll operates the algorithms.
+        
+@author Reut-Maslansky & Matan-Ben-Nagar
 """
 
 
@@ -52,16 +52,16 @@ class GraphAlgo(GraphAlgoInterface):
         return self.graph
 
     """
-     * This method load a graph to this graph algorithm.
-     * if the file was successfully loaded - the underlying graph
-     * of this class will be changed (to the loaded one), in case the
-     * graph was not loaded the original graph should remain "as is".
-     *
-     * we used json method.
-     *
-     * @param file - file name
-     * @return true - if the graph was successfully loaded.
-     """
+    This method load a graph to this graph algorithm.
+    if the file was successfully loaded - the underlying graph
+    of this class will be changed (to the loaded one), in case the
+    graph was not loaded the original graph should remain "as is".
+    
+    we used json method.
+    
+    @param file - file name
+    @return true - if the graph was successfully loaded.
+    """
     def load_from_json(self, file_name: str) -> bool:
         try:
             fp = open(file_name)
@@ -92,12 +92,12 @@ class GraphAlgo(GraphAlgoInterface):
         return True
 
     """
-     * Saves this weighted directed graph to the given file name.
-     * we used he json method.
-     *
-     * @param file - the file name (may include a relative path).
-     * @return true - if the file was successfully saved
-     """
+    Saves this weighted directed graph to the given file name.
+    we used he json method.
+    
+    @param file - the file name (may include a relative path).
+    @return true - if the file was successfully saved
+    """
     def save_to_json(self, file_name: str) -> bool:
         if self.graph is None:
             return False
@@ -126,34 +126,26 @@ class GraphAlgo(GraphAlgoInterface):
         return True
 
     """
-     * returns the the shortest path between src to dest - as an ordered List of nodes:
-     * src--> n1-->n2-->...dest
-     *
-     * Note if no such path --> returns null;
-     *
-     *
-     * This method based on Dijkstra Algorithm.
-     * We use the private function- dij- that will return a HashMap.
-     * ALSO:
-     * In this HasMap, the data of this algorithm will save in a temporal Node- contains:
-     *      1. The shortest weight from the source vertex to this vertex.
-     *      2. The vertex neighbor that connect this vertex and update him this value of weight accepted.
-     * Returns the length of the shortest path between src to dest
-     * if no such path, returns -1
-     *
-     * This method based on Dijkstra Algorithm.
-     * The data of this algorithm will save in a temporal Node-
-     * 1. The shortest weight from the source vertex to this vertex.
-     * 2. The vertex neighbor that connect this vertex and update him this value of weight accepted.
+
+    This method based on Dijkstra Algorithm.
+    The data of this algorithm will save in a temporal Node, contains-
+        1. The shortest weight from the source vertex to this vertex.
+        2. The vertex neighbor that connect this vertex and update him this value of weight accepted.
+        
+    Returns Tuple contain:
+        1. The length of the shortest path between src to dest
+        If no such path, returns inf and an empty list
+        2. The shortest path between src to dest - as an ordered List of nodes: src--> n1-->n2-->...dest
+        If no such path --> returns an empty List.
+    
      """
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         if self.graph is None:
-            return None
+            return math.inf, None
         if str(id1) not in self.graph.nodes or str(id2) not in self.graph.nodes:
-            return None
+            return math.inf, None
 
         if id1 == id2:
-            # return 0, [self.graph.get_node(id1)]
             return 0, [id1]
 
         vertex = {}
@@ -181,53 +173,49 @@ class GraphAlgo(GraphAlgoInterface):
                 if current.idNode == id2:
                     flag = False
         dest = vertex.get(str(id2))  # NodeTemp
-        if dest.tag == sys.maxsize:
-            dest.tag = -1
 
         listShort = []
-        if dest.tag == -1:
+        if dest.tag == math.inf:
             listShort = None
         else:
-            # listShort.append(self.graph.get_node(dest.idNode))
             listShort.append(int(dest.idNode))
             curr = dest
             while curr.parentId != -1:
                 parent = curr.parentId
                 curr = vertex.get(str(parent))
-                # listShort.append(self.graph.get_node(curr.idNode))
                 listShort.append(int(curr.idNode))
             listShort.reverse()
         tup = (dest.tag, listShort)
         return tup
-
-    """ 
+    '''
     Finds the Strongly Connected Component(SCC) that node id1 is a part of.
     @param id1: The node id
     @return: The list of nodes in the SCC
-    """
+    
+    This method is based on the BFS Algorithm- with little changes.
+    We will send the node we want find his SSC and do BFS algorithm that will return the list of nodes that we can reach from this node.
+    After this we will "reverse" the graph's edges and will send the node to BFS one more time.
+    Finally, we merge the lists and return the union.  
+    '''
     def connected_component(self, id1: int) -> list:
         if self.graph is None:
-            return None
-        #   return []
+            return []
 
-        # check if we should return None or empty list
         if str(id1) not in self.graph.nodes.keys():
             return []
+
         list1 = self.bfs(id1, 0)
         list2 = self.bfs(id1, 1)
         return list(set(list1) & set(list2))
 
     """
-     * bfs will pass over the nodes.
+     * bfs will pass over the nodes that we can reach from the src node we will send to the function.
      *
-     * @Return how many nodes we marked- then we will know if we pass all the nodes in the graph.
+     * @Return list of those nodes.
      *
      * The function receives a vertex key from which we will perform the test on the graph connected test.
-     * During the test we will mark the vertices in the graph in the "info" that each vertex holds.
-     * At the end we will return the number of times we changed the vertex info,
-     * and thus we will know if during the iterations we went over the amount of vertices that exist in the graph.
-     * In this operation, of comparing the counter with the number of vertices in the graph -
-     * we saved another pass over all the vertices in the graph - in a loop of o(v) where v is the number of vertices in the graph.
+     * During the test we will mark the vertices in the graph in the "tag" that each vertex holds.
+ 
      """
     def bfs(self, id1: int, flag: int) -> list:
         # resets all the visited nodes to unvisited

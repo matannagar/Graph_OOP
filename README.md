@@ -34,7 +34,7 @@ More about- https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 Write in your Git Bash the follow:
 
 ```
-$ git clone https://github.com/Reut-Maslansky/ex2.git
+$ git clone https://github.com/Reut-Maslansky/ex3.git
 ```
 ### *Example of Weighted Graph:*
 ![Example of Weighted Graph](https://media.geeksforgeeks.org/wp-content/uploads/graphhh.png)
