@@ -150,7 +150,7 @@ class GraphAlgo(GraphAlgoInterface):
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         if self.graph is None:
-            return math.inf, None
+            return (math.inf,[])
         if str(id1) not in self.graph.nodes or str(id2) not in self.graph.nodes:
             return (math.inf, [])
 
@@ -184,9 +184,7 @@ class GraphAlgo(GraphAlgoInterface):
         dest = vertex.get(str(id2))  # NodeTemp
 
         listShort = []
-        if dest.tag == math.inf:
-            listShort = None
-        else:
+        if dest.tag != math.inf:
             listShort.append(int(dest.idNode))
             curr = dest
             while curr.parentId != -1:
@@ -269,13 +267,25 @@ class GraphAlgo(GraphAlgoInterface):
     def connected_components(self) -> List[list]:
         if self.graph is None:
             return []
+
+        # tempList = []
+        # for n in self.graph.nodes:
+        #     if not tempList:
+        #         tempList.append(self.connected_component(n))
+        #     else:
+        #         # for l in tempList:
+        #             # if (self.graph.get_node(n)) not in l:
+        #         tempList.append(self.connected_component(n))
+
         tempList = []
         for n in self.graph.nodes:
             tempList.append(self.connected_component(n))
+
         list1 = []
         for l in tempList:
             if l not in list1:
                 list1.append(l)
+        #         return tempList
         return list1
 
     """
@@ -325,6 +335,7 @@ class GraphAlgo(GraphAlgoInterface):
             xlist.append(pos[0])
             ylist.append(pos[1])
             plt.plot(xlist, ylist, '-', label=(str(e) + " :" + str(w)))
+            # plt.plot(xlist, ylist, '-')
 
             # clears the x and y lists for the next edge
             xlist.clear()
