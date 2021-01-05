@@ -1,4 +1,5 @@
 import json
+from logging import warning
 from queue import Queue
 import heapq
 import random
@@ -15,9 +16,9 @@ and help implement Dijkstra's method"""
 class NodeTemp:
     def __init__(self, id: int):
         self.idNode = id
-        self.visit = 0
         self.tag = math.inf
         self.parentId = -1
+        self.visit = 0
 
     def __repr__(self):
         return f'NodeTemp: {self.idNode} , tag= {self.tag}'
@@ -46,6 +47,8 @@ class GraphAlgo(GraphAlgoInterface):
 
     def __init__(self, graph: DiGraph = None):
         self.graph = graph
+        self.com_nod = []
+
 
     """Return the underlying graph of which this class works."""
 
@@ -150,7 +153,7 @@ class GraphAlgo(GraphAlgoInterface):
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         if self.graph is None:
-            return (math.inf,[])
+            return (math.inf, [])
         if str(id1) not in self.graph.nodes or str(id2) not in self.graph.nodes:
             return (math.inf, [])
 
@@ -213,9 +216,13 @@ class GraphAlgo(GraphAlgoInterface):
         if str(id1) not in self.graph.nodes.keys():
             return []
 
-        list1 = self.bfs(id1, 0)
-        list2 = self.bfs(id1, 1)
-        return list(set(list1) & set(list2))
+        lists = self.bfs(id1)
+        # resets all the visited nodes to unvisited
+        # נאפס רק בפעם הראשונה
+        for n in lists[1]:
+            n.tag = 0
+
+        return lists[0]
 
     """
      bfs will pass over the nodes that we can reach from the src node we will send to the function.
@@ -227,37 +234,54 @@ class GraphAlgo(GraphAlgoInterface):
  
      """
 
-    def bfs(self, id1: int, flag: int) -> list:
-        # resets all the visited nodes to unvisited
-        for n in self.graph.nodes:
-            self.graph.get_node(n).tag = 0
+    def bfs(self, id1: int) -> (list,list):
+        myList = []
+        list1 = []
 
         queue = Queue()
-        list1 = [self.graph.get_node(id1)]
-        self.graph.get_node(id1).tag = 1
+        # ---> first run from src
+        self.graph.get_node(id1).tag = 2 # maybe 2
+        list1.append(self.graph.get_node(id1))
+        myList.append(self.graph.get_node(id1))
 
-        neigh = self.graph.get_node(id1).src
-        if flag == 1:
-            neigh = self.graph.get_node(id1).dest
-        for n in neigh:
+        if str(id1) in self.com_nod:
+            self.com_nod.remove(str(id1))
+        for n in self.graph.get_node(id1).src:
             temp = self.graph.get_node(n)
-            queue.put(temp)
+            temp.tag = 1
             list1.append(temp)
+
+            queue.put(temp)
+
+        while not queue.empty():
+            n = queue.get()
+
+            for x in n.src:
+                temp2 = self.graph.get_node(x)
+                if temp2.tag == 0:
+                    temp2.tag = 1
+                    list1.append(temp2)
+                    queue.put(temp2)
+
+        for n in self.graph.get_node(id1).dest:
+            temp = self.graph.get_node(n)
+            if temp.tag == 1:
+                queue.put(temp)
 
         # mark src node as visited
         while not queue.empty():
             n = queue.get()
-            n.tag = 1
-            neigh = n.src
-            if flag == 1:
-                neigh = n.dest
-            for x in neigh:
-                temp2 = self.graph.get_node(x)
-                if temp2.tag == 0:
+            if n.tag == 1:
+                n.tag = 2
+                list1.append(n)
+                myList.append(n)
+                if str(n.id) in self.com_nod:
+                    self.com_nod.remove(str(n.id))
+                for x in n.dest:
+                    temp2 = self.graph.get_node(x)
                     queue.put(temp2)
-                    list1.append(temp2)
-        list1 = list(dict.fromkeys(list1))
-        return list1
+
+        return myList,list1
 
     """ 
     Finds all the Strongly Connected Component(SCC) in the graph.
@@ -265,28 +289,15 @@ class GraphAlgo(GraphAlgoInterface):
     """
 
     def connected_components(self) -> List[list]:
+
         if self.graph is None:
             return []
+        self.com_nod= list(self.graph.nodes.keys())
+        listAns = []
+        while self.com_nod:
+            listAns.append(self.connected_component(self.com_nod[0]))
 
-        # tempList = []
-        # for n in self.graph.nodes:
-        #     if not tempList:
-        #         tempList.append(self.connected_component(n))
-        #     else:
-        #         # for l in tempList:
-        #             # if (self.graph.get_node(n)) not in l:
-        #         tempList.append(self.connected_component(n))
-
-        tempList = []
-        for n in self.graph.nodes:
-            tempList.append(self.connected_component(n))
-
-        list1 = []
-        for l in tempList:
-            if l not in list1:
-                list1.append(l)
-        #         return tempList
-        return list1
+        return listAns
 
     """
     Plots the graph.

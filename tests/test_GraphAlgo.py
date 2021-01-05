@@ -127,30 +127,31 @@ class TestGraphAlgo(TestCase):
         algo.__init__(graph)
 
         list1 = [graph.get_node(2), graph.get_node(4), graph.get_node(5)]
-        self.assertEqual(list1, algo.connected_component(2), "Should return [2,4,5]")
+        self.assertEqual(list1, sorted(algo.connected_component(2)), "Should return [2,4,5]")
 
-        self.assertEqual(algo.connected_component(5), algo.connected_component(2),
+        self.assertEqual(sorted(algo.connected_component(5)), sorted(algo.connected_component(2)),
                          "2 and 5 have the same connected components")
 
         for x in range(1):
             list1 = [graph.get_node(x)]
-            self.assertEqual(list1, algo.connected_component(x), "Have no other connected components")
+            self.assertEqual(list1, sorted(algo.connected_component(x)), "Have no other connected components")
 
         graph = generate_graph2()
         algo.__init__(graph)
-        self.assertEqual([graph.get_node(1)], algo.connected_component(1), "Have no other connected components")
-        self.assertEqual([graph.get_node(2), graph.get_node(3)], algo.connected_component(2), "Should return [2,3]")
+        self.assertEqual([graph.get_node(1)], sorted(algo.connected_component(1)), "Have no other connected components")
+        self.assertEqual([graph.get_node(2), graph.get_node(3)], sorted(algo.connected_component(2)), "Should return [2,3]")
 
         graph.add_edge(2, 5, 1.2)
         list1 = [graph.get_node(1), graph.get_node(2), graph.get_node(3), graph.get_node(5)]
-        self.assertEqual(list1, algo.connected_component(2), "Should return [1,2,3,5]")
-        self.assertEqual(list1, algo.connected_component(5), "Should return [1,2,3,5]")
+        self.assertEqual(list1, sorted(algo.connected_component(2)), "Should return [1,2,3,5]")
+        self.assertEqual(list1, sorted(algo.connected_component(5)), "Should return [1,2,3,5]")
         graph.add_edge(6, 5, 1.3)
 
         list1 = [graph.get_node(0), graph.get_node(1), graph.get_node(2), graph.get_node(3), graph.get_node(5),
                  graph.get_node(6)]
-        self.assertEqual(list1, algo.connected_component(2), "Should return [0,1,2,3,5,6]")
-        self.assertEqual(list1, algo.connected_component(0), "Should return [0,1,2,3,5,6]")
+        self.assertEqual(list1,sorted(algo.connected_component(2)), "Should return [0,1,2,3,5,6]")
+        self.assertEqual(list1, sorted(algo.connected_component(0)), "Should return [0,1,2,3,5,6]")
+
 
     def test_connected_components(self):
         algo = GraphAlgo()
@@ -162,13 +163,14 @@ class TestGraphAlgo(TestCase):
 
         graph = generate_graph2()
         algo.__init__(graph)
-        list1 = [[graph.get_node(0)], [graph.get_node(1)], algo.connected_component(2), [graph.get_node(4)],
+        list1 = [[graph.get_node(0)], [graph.get_node(1)], sorted(algo.connected_component(2)), [graph.get_node(4)],
                  [graph.get_node(5)], [graph.get_node(6)]]
         self.assertEqual(list1, algo.connected_components())
         graph.add_edge(2, 1, 3.4)
-        list1 = [[graph.get_node(0)], algo.connected_component(2), [graph.get_node(4)], [graph.get_node(5)],
+        list1 = [[graph.get_node(0)], sorted(algo.connected_component(2)), [graph.get_node(4)], [graph.get_node(5)],
                  [graph.get_node(6)]]
         self.assertEqual(list1, algo.connected_components())
+        graph.remove_node(5)
 
     def test_plot_graph(self):
         algo = GraphAlgo()

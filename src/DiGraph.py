@@ -13,6 +13,7 @@ class Node:
     """Default constructor"""
 
     def __init__(self, key: int = None, src=None, dest=None, pos: tuple = None, tag: int = 0):
+        self.visit = False
         if dest is None:
             dest = {}
         if src is None:
@@ -37,6 +38,9 @@ class Node:
 
     def __hash__(self):
         return hash(self.id)
+
+    def __lt__(self, other):
+        return self.id<other.id
 
 
 """
