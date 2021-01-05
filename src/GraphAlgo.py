@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 from DiGraph import DiGraph
 import math
 from GraphAlgoInterface import GraphAlgoInterface
+import copy
+
 
 """Temporary Node class, meant to hold information regarding original nodes
 and help implement Dijkstra's method"""
@@ -47,8 +49,7 @@ class GraphAlgo(GraphAlgoInterface):
 
     def __init__(self, graph: DiGraph = None):
         self.graph = graph
-        self.com_nod = []
-
+        self.com_nod = {}
 
     """Return the underlying graph of which this class works."""
 
@@ -213,12 +214,11 @@ class GraphAlgo(GraphAlgoInterface):
         if self.graph is None:
             return []
 
-        if str(id1) not in self.graph.nodes.keys():
+        if str(id1) not in self.graph.nodes:
             return []
-
         lists = self.bfs(id1)
+
         # resets all the visited nodes to unvisited
-        # נאפס רק בפעם הראשונה
         for n in lists[1]:
             n.tag = 0
 
@@ -234,19 +234,19 @@ class GraphAlgo(GraphAlgoInterface):
  
      """
 
-    def bfs(self, id1: int) -> (list,list):
+    def bfs(self, id1: int) -> (list, list):
         myList = []
         list1 = []
+        node = self.graph.get_node(id1)
 
         queue = Queue()
         # ---> first run from src
-        self.graph.get_node(id1).tag = 2 # maybe 2
-        list1.append(self.graph.get_node(id1))
-        myList.append(self.graph.get_node(id1))
+        node.tag = 2
+        list1.append(node)
+        myList.append(node)
 
-        if str(id1) in self.com_nod:
-            self.com_nod.remove(str(id1))
-        for n in self.graph.get_node(id1).src:
+        self.com_nod.pop(str(id1), None)
+        for n in node.src:
             temp = self.graph.get_node(n)
             temp.tag = 1
             list1.append(temp)
@@ -263,7 +263,7 @@ class GraphAlgo(GraphAlgoInterface):
                     list1.append(temp2)
                     queue.put(temp2)
 
-        for n in self.graph.get_node(id1).dest:
+        for n in node.dest:
             temp = self.graph.get_node(n)
             if temp.tag == 1:
                 queue.put(temp)
@@ -275,13 +275,12 @@ class GraphAlgo(GraphAlgoInterface):
                 n.tag = 2
                 list1.append(n)
                 myList.append(n)
-                if str(n.id) in self.com_nod:
-                    self.com_nod.remove(str(n.id))
+                self.com_nod.pop(str(n.id), None)
                 for x in n.dest:
                     temp2 = self.graph.get_node(x)
                     queue.put(temp2)
 
-        return myList,list1
+        return myList, list1
 
     """ 
     Finds all the Strongly Connected Component(SCC) in the graph.
@@ -292,10 +291,12 @@ class GraphAlgo(GraphAlgoInterface):
 
         if self.graph is None:
             return []
-        self.com_nod= list(self.graph.nodes.keys())
+        self.com_nod = copy.deepcopy(self.graph.nodes)
+
         listAns = []
         while self.com_nod:
-            listAns.append(self.connected_component(self.com_nod[0]))
+            x = next(iter(self.com_nod))
+            listAns.append(self.connected_component(x))
 
         return listAns
 

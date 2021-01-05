@@ -19,20 +19,24 @@ if __name__ == '__main__':
         # measure load
         star_time = time.time()
 
-        # file_name = "100_25"
-        # file_name = "1K_250"
-        file_name = "../src/10K_500"
-        # file_name = "1M_1K"
-        graphAlgo.load_from_json(file_name)
-        end_time = time.time()
-        print(file_name, "py_load_time:", end_time - star_time)
+        # file_name = "../src/100_25"
+        # file_name = "../src/1K_250"
+        # file_name = "../src/10K_500"
+        file_name = "../src/1M_1K"
+        # file_name = "../src/100K_1K"
+        # file_name = "../src/1M"
 
-        # save the AlgoGraph into a variable
-        graph = graphAlgo.get_graph()
-        print("nodes:", graph.v_size(), "edges:", graph.e_size())
-        # # ***networkX tests***
-        # print("************NETWORKX GRAPH TESTS********************")
-        # # load time test
+
+        # graphAlgo.load_from_json(file_name)
+        # end_time = time.time()
+        # print(file_name, "py_load_time:", end_time - star_time)
+        #
+        # # save the AlgoGraph into a variable
+        # graph = graphAlgo.get_graph()
+        # print("nodes:", graph.v_size(), "edges:", graph.e_size())
+        # # # ***networkX tests***
+        # # print("************NETWORKX GRAPH TESTS********************")
+        # # # load time test
         # star_time = time.time()
         # # create DiGraph from the networkx library
         # g = nx.DiGraph()
@@ -47,18 +51,18 @@ if __name__ == '__main__':
         #     g.add_edge(src, dest, weight=w)
         # end_time = time.time()
         # print("nx_load_graph_time:", end_time - star_time)
-        #
+        # #
         # print("Nodes No.:", graph.v_size())
         # print("Edges No.:", graph.e_size())
-        #
-        # # test SCC algorithms
+        # #
+        # # # test SCC algorithms
         # star_time = time.time()
         # comp= nx.strongly_connected_components(g)
         # sccs = list(comp)
         # sccs.reverse()
         # end_time = time.time()
         # print("nx_connected_components_time:", end_time - star_time, " seconds")
-        #
+        # #
         # # test shortest path algorithm
         # star_time = time.time()
         # j = 50
@@ -76,13 +80,15 @@ if __name__ == '__main__':
         #  graphAlgo.connected_component(i)
         # end_time = time.time()
         # print("py_1/10 Connected_Component_Time:", end_time - star_time, "seconds")
-        # measure all SCC
+
+        # # measure all SCC
         star_time = time.time()
         sccs = list(graphAlgo.connected_components())
         # print(sccs)
         end_time = time.time()
         print("py_connected_components_time:", end_time - star_time)
-        # measure shortest Path and dist between random nodes
+        #
+        # # measure shortest Path and dist between random nodes
         # star_time = time.time()
         # j = 50
         # for i in range(50):
