@@ -1,6 +1,4 @@
 import json
-from logging import warning
-from queue import Queue
 import heapq
 import random
 from typing import List
@@ -8,9 +6,9 @@ import matplotlib.pyplot as plt
 from DiGraph import DiGraph
 import math
 from GraphAlgoInterface import GraphAlgoInterface
-import copy
+from collections import deque
 
-
+glob = {}
 """Temporary Node class, meant to hold information regarding original nodes
 and help implement Dijkstra's method"""
 
@@ -49,7 +47,6 @@ class GraphAlgo(GraphAlgoInterface):
 
     def __init__(self, graph: DiGraph = None):
         self.graph = graph
-        self.com_nod = {}
 
     """Return the underlying graph of which this class works."""
 
@@ -220,7 +217,7 @@ class GraphAlgo(GraphAlgoInterface):
 
         # resets all the visited nodes to unvisited
         for n in lists[1]:
-            n.tag = 0
+            lists[1][n].tag = 0
 
         return lists[0]
 
@@ -234,51 +231,50 @@ class GraphAlgo(GraphAlgoInterface):
  
      """
 
-    def bfs(self, id1: int) -> (list, list):
+    def bfs(self, id1: int) -> (list, dict):
         myList = []
-        list1 = []
+        list1 = {}
         node = self.graph.get_node(id1)
 
-        queue = Queue()
+        queue = deque()
         # ---> first run from src
         node.tag = 2
-        list1.append(node)
+        list1[node.id] = node
         myList.append(node)
 
-        self.com_nod.pop(str(id1), None)
+        glob[str(id1)] = id1
         for n in node.src:
             temp = self.graph.get_node(n)
             temp.tag = 1
-            list1.append(temp)
+            list1[temp.id] = temp
+            queue.append(temp)
 
-            queue.put(temp)
-
-        while not queue.empty():
-            n = queue.get()
+        while queue:
+            n = queue.popleft()
 
             for x in n.src:
                 temp2 = self.graph.get_node(x)
                 if temp2.tag == 0:
                     temp2.tag = 1
-                    list1.append(temp2)
-                    queue.put(temp2)
+                    list1[temp2.id] = temp2
+                    queue.append(temp2)
 
         for n in node.dest:
             temp = self.graph.get_node(n)
             if temp.tag == 1:
-                queue.put(temp)
+                queue.append(temp)
 
         # mark src node as visited
-        while not queue.empty():
-            n = queue.get()
+        while queue:
+            n = queue.popleft()
             if n.tag == 1:
                 n.tag = 2
-                list1.append(n)
+                list1[n.id] = n
                 myList.append(n)
-                self.com_nod.pop(str(n.id), None)
+                glob[str(n.id)] = n.id
                 for x in n.dest:
                     temp2 = self.graph.get_node(x)
-                    queue.put(temp2)
+                    queue.append(temp2)
 
         return myList, list1
 
@@ -288,15 +284,14 @@ class GraphAlgo(GraphAlgoInterface):
     """
 
     def connected_components(self) -> List[list]:
-
+        glob.clear()
         if self.graph is None:
             return []
-        self.com_nod = copy.deepcopy(self.graph.nodes)
-
         listAns = []
-        while self.com_nod:
-            x = next(iter(self.com_nod))
-            listAns.append(self.connected_component(x))
+
+        for i in self.graph.nodes:
+            if i not in glob:
+                listAns.append(self.connected_component(i))
 
         return listAns
 
