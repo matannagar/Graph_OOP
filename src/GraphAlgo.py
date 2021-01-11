@@ -1,6 +1,7 @@
 import json
 import heapq
 import random
+from queue import PriorityQueue
 from typing import List
 import matplotlib.pyplot as plt
 from DiGraph import DiGraph
@@ -164,12 +165,16 @@ class GraphAlgo(GraphAlgoInterface):
             vertex[str(n)] = nodetemp
 
         vertex.get(str(id1)).tag = 0
-        heap = []
-        heapq.heappush(heap, vertex.get(str(id1)))
+        heap = PriorityQueue()
+        # heap.__init__(self.graph.v_size())
+        heap.put(vertex.get(str(id1)))
+
+        # heapq.heappush(heap, vertex.get(str(id1)))
         flag = True
-        while heap and flag:
-            heapq.heapify(heap)
-            current = heapq.heappop(heap)
+        while not heap.empty() and flag:
+            # heapq.heapify(heap)
+            current = heap.get()
+            # current = heapq.heappop(heap)
             if current.visit != 1:
                 for n in self.graph.get_node(current.idNode).src:
                     b = vertex.get(n)
@@ -177,7 +182,8 @@ class GraphAlgo(GraphAlgoInterface):
                         if b.tag > current.tag + self.graph.edges.get(str(current.idNode) + '->' + str(n)):
                             b.tag = current.tag + self.graph.edges.get(str(current.idNode) + '->' + str(n))
                             b.parentId = current.idNode
-                    heapq.heappush(heap, b)
+                    # heapq.heappush(heap, b)
+                    heap.put(b)
                 current.visit = 1
 
                 if current.idNode == id2:
@@ -318,11 +324,11 @@ class GraphAlgo(GraphAlgoInterface):
             xlist.append(pos[0])
             ylist.append(pos[1])
 
+            label = "{:}".format(int(x))
+            plt.annotate(label, (pos[0], pos[1]), textcoords="offset points", xytext=(2, 3), ha='center',
+                         color=[0, 0.75, 0.75])
         plt.plot(xlist, ylist, '.', color='red')
 
-        # clear the x and y lists from the nodes
-        xlist.clear()
-        ylist.clear()
         # loop over edges in the graph and draw them one by one
         for e in self.graph.edges:
             edge = str(e).split('->')
@@ -332,23 +338,13 @@ class GraphAlgo(GraphAlgoInterface):
             # draws the arrow pointing in the edge direction --> (dest)
             pos = self.graph.get_node(dest).pos
 
-            xlist.append(pos[0])
-            ylist.append(pos[1])
-            plt.plot(xlist, ylist, markersize=10, marker='*', color='gray')
+            xy1 = (pos[0], pos[1])
 
             # draw the edge coming out from the src node to dest node
             pos = self.graph.get_node(src).pos
+            xy2 = (pos[0], pos[1])
 
-            xlist.append(pos[0])
-            ylist.append(pos[1])
-            plt.plot(xlist, ylist, '-', label=(str(e) + " :" + str(w)))
-            # plt.plot(xlist, ylist, '-')
-
-            # clears the x and y lists for the next edge
-            xlist.clear()
-            ylist.clear()
-
-        plt.legend(loc='upper left')
+            plt.annotate(text="", xy=xy1, xytext=xy2, arrowprops=dict(arrowstyle="->"))
 
         plt.title("My Graph")
 
