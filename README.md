@@ -37,4 +37,4 @@ Write in your Git Bash the follow:
 $ git clone https://github.com/Reut-Maslansky/ex3.git
 ```
 ### *Example of Weighted Graph:*
-![Example of Weighted Graph](https://media.geeksforgeeks.org/wp-content/uploads/graphhh.png)
+<a href="https://ibb.co/LtTX3XV"><img src="https://i.ibb.co/T8Qxsx9/graph.jpg" alt="graph" border="0"></a>
